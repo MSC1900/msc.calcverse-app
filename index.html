@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CalcVerse Pro — Production-Ready Online Calculators for Finance, Math, Fitness &amp; Science</title>
+  <title>CalcVerse Pro 2.0 — Secure Online Calculators for Finance, Math, Fitness &amp; Science</title>
   <meta name="description" content="CalcVerse is a free, high-precision online calculator platform with 24+ verified tools across Finance, Fitness & Health, Mathematics, Graphing, and Science with PDF, Excel, PNG, and Nostalgic Receipt exports." />
   <meta name="keywords" content="online calculator, scientific calculator, mortgage calculator, BMI calculator, compound interest, function grapher, unit converter, CalcVerse" />
   <meta property="og:title" content="CalcVerse Pro — Universal Online Calculator Suite" />
@@ -50,7 +50,12 @@
     };
   </script>
   <style>
-    html, body { font-family: 'Inter', system-ui, sans-serif; overflow-x: hidden; max-width: 100%; }
+    html, body { font-family: 'Inter', system-ui, sans-serif; overflow-x: hidden; max-width: 100%; -webkit-tap-highlight-color: transparent; }
+    @media (max-width: 640px) {
+      input[type="text"], input[type="email"], input[type="password"], input[type="number"], input[type="tel"], input[type="search"], input[type="date"], select, textarea {
+        font-size: 16px !important;
+      }
+    }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     .font-mono-num { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
@@ -188,7 +193,7 @@
           <div>
             <div class="flex items-center gap-2">
               <span class="font-extrabold text-xl tracking-tight bg-gradient-to-r from-indigo-600 to-cyan-500 bg-clip-text text-transparent">CalcVerse</span>
-              <span class="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-950/80 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800">Pro Suite</span>
+              <span class="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-950/80 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800">Pro 2.0</span>
             </div>
             <p class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">Math • Finance • Fitness • Science • Live Graphing</p>
           </div>
@@ -227,6 +232,9 @@
           <span class="flex items-center text-cyan-500"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
           <span class="hidden lg:inline">History</span>
           <span id="historyCountBadge" class="px-1.5 rounded-full bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 text-[10px] sm:text-[11px]">0</span>
+        </button>
+        <button id="soundToggleBtn" type="button" title="Toggle Celebration Sound" aria-label="Toggle celebration sound" class="p-1.5 sm:p-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition">
+          <span id="soundIcon" class="flex items-center"><svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></span>
         </button>
         <button id="themeToggleBtn" type="button" aria-label="Toggle color theme" class="p-1.5 sm:p-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition">
           <span id="themeIcon" class="flex items-center"><svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
@@ -586,7 +594,7 @@
   </main>
 
   <!-- Nostalgic Paper Receipt & Vintage Recipe Card Modal -->
-  <div id="nostalgicPaperModal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+  <div id="nostalgicPaperModal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm flex items-start sm:items-center justify-center p-2.5 sm:p-4 overflow-y-auto">
     <div class="bg-slate-900 text-white rounded-2xl border border-slate-700 max-w-lg w-full p-5 shadow-2xl space-y-4 my-auto">
       <div class="flex items-center justify-between border-b border-slate-800 pb-3">
         <div>
@@ -744,8 +752,40 @@
                     <input id="loginRememberCheck" type="checkbox" checked class="rounded text-indigo-600 focus:ring-indigo-500" />
                     <span>Keep me signed in</span>
                   </label>
+                  <button id="openForgotPwdBtn" type="button" class="font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">Forgot Password?</button>
                 </div>
                 <button type="submit" class="w-full py-2.5 rounded-xl text-sm font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm transition">Sign In to CalcVerse</button>
+              </form>
+
+              <!-- Forgot / Reset Password Form (Toggled inside Login Section) -->
+              <form id="forgotPwdForm" class="hidden space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-indigo-700 dark:text-indigo-300">Reset Your Password</span>
+                  <button id="backToLoginBtn" type="button" class="text-[11px] font-semibold text-slate-500 hover:text-indigo-600 hover:underline">Back to Login</button>
+                </div>
+                <div id="forgotInlineStatus" class="hidden px-3 py-2 rounded-xl text-xs font-semibold"></div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Registered Email Address</label>
+                  <div class="flex gap-1.5">
+                    <input id="forgotEmailInput" type="email" required placeholder="you@example.com" class="w-full px-3 py-2 rounded-xl text-xs bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                    <button id="sendResetCodeBtn" type="button" class="shrink-0 px-3 py-2 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white transition">Get Code</button>
+                  </div>
+                </div>
+                <div id="resetCodeBox" class="hidden space-y-2.5 pt-1">
+                  <div id="resetCodeNotice" class="p-2.5 rounded-xl text-[11px] font-mono bg-amber-50 dark:bg-amber-950/60 text-amber-900 dark:text-amber-200 border border-amber-200 dark:border-amber-800 flex items-center justify-between gap-2"></div>
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">6-Digit Reset Code</label>
+                    <input id="resetCodeInput" type="text" maxlength="6" placeholder="e.g. 482910" class="w-full px-3 py-2 rounded-xl text-sm font-mono bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">New Password</label>
+                    <div class="relative">
+                      <input id="resetNewPwdInput" type="password" minlength="4" placeholder="Min 4 chars" class="w-full pl-3 pr-16 py-2 rounded-xl text-sm bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                      <button id="toggleResetPwdBtn" type="button" class="absolute right-1.5 top-1/2 -translate-y-1/2 px-2 py-1 rounded-lg text-[11px] font-semibold bg-slate-200/80 dark:bg-slate-700 text-slate-700 dark:text-slate-200 transition">Show</button>
+                    </div>
+                  </div>
+                  <button type="submit" class="w-full py-2.5 rounded-xl text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm transition">Update Password</button>
+                </div>
               </form>
             </div>
 
@@ -754,23 +794,27 @@
 
       </div>
 
-      <!-- Logged-In Profile View -->
+      <!-- Logged-In User Profile & Dashboard (CalcVerse Pro 2.0) -->
       <div id="authProfileContainer" class="hidden space-y-4">
-        <div class="p-4 rounded-xl bg-gradient-to-r from-indigo-600/10 via-cyan-500/10 to-transparent border border-indigo-200/70 dark:border-indigo-800/70 flex items-center justify-between gap-3">
+        <div class="p-4 rounded-2xl bg-gradient-to-r from-indigo-600/12 via-cyan-500/10 to-transparent border border-indigo-200/70 dark:border-indigo-800/70 flex flex-wrap items-center justify-between gap-3">
           <div class="flex items-center gap-3 min-w-0">
-            <div id="profileAvatarCircle" class="w-12 h-12 rounded-full bg-indigo-600 text-white font-extrabold text-lg flex items-center justify-center shrink-0">U</div>
+            <div id="profileAvatarCircle" class="w-12 h-12 rounded-full bg-indigo-600 text-white font-extrabold text-lg flex items-center justify-center shrink-0 shadow-sm">U</div>
             <div class="min-w-0">
-              <div class="flex items-center gap-2">
+              <div class="flex flex-wrap items-center gap-2">
                 <h4 id="profileDisplayName" class="font-extrabold text-sm truncate">User</h4>
-                <span id="profileRoleBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300">Pro Member</span>
+                <span id="profileRoleBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300">Personal</span>
+                <span id="profileProviderBadge" class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300">Verified Session</span>
               </div>
               <p id="profileDisplayEmail" class="text-xs text-slate-500 dark:text-slate-400 truncate">user@example.com</p>
               <p id="profileMemberId" class="text-[10px] font-mono text-slate-400 mt-0.5">ID: CV-MEM-1001</p>
             </div>
           </div>
+          <div class="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-1 rounded-lg border border-emerald-200 dark:border-emerald-800">
+            HttpOnly Session Active
+          </div>
         </div>
 
-        <!-- Synced Workspace Stats -->
+        <!-- Synced Workspace Dashboard KPIs -->
         <div class="grid grid-cols-3 gap-2.5 text-center">
           <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800">
             <div id="profileStatFavs" class="text-base font-extrabold text-amber-500 font-mono-num">0</div>
@@ -785,6 +829,24 @@
             <div class="text-[11px] text-slate-500">History Logs</div>
           </div>
         </div>
+
+        <!-- Editable Profile Settings Form (Persisted to Cloudflare D1) -->
+        <form id="profileUpdateForm" class="p-3.5 rounded-xl bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-700 dark:text-slate-200">Account Profile Settings</span>
+            <button type="submit" class="px-3 py-1 rounded-lg text-[11px] font-bold bg-indigo-600 hover:bg-indigo-500 text-white transition">Save Profile</button>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <input id="profileEditNameInput" type="text" placeholder="Full Name" class="px-2.5 py-1.5 rounded-lg text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700" />
+            <input id="profileEditPhoneInput" type="tel" placeholder="Phone Number" class="px-2.5 py-1.5 rounded-lg text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700" />
+            <select id="profileEditRoleSelect" class="px-2.5 py-1.5 rounded-lg text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+              <option value="Personal">Personal &amp; Daily</option>
+              <option value="Student">Student</option>
+              <option value="Finance Pro">Finance Pro</option>
+              <option value="Engineering">Engineering</option>
+            </select>
+          </div>
+        </form>
 
         <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
           <button id="syncCloudAccountBtn" type="button" class="px-3 py-2 rounded-xl text-xs font-semibold bg-cyan-600 hover:bg-cyan-500 text-white transition">
@@ -841,10 +903,10 @@
         <div id="donateMethodInfoBox" class="p-3.5 rounded-xl bg-slate-50/90 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-300 space-y-2"></div>
       </div>
 
-      <!-- Optional Supporter Note -->
+      <!-- Optional Supporter Note (Full Multi-Line Paragraph Box) -->
       <div>
-        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Supporter Note (Optional)</label>
-        <input id="donateNoteInput" type="text" placeholder="Keep up the great calculators!" class="w-full px-3 py-2 rounded-xl text-xs bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-500" />
+        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Supporter Note / Transaction ID / Message (Optional)</label>
+        <textarea id="donateNoteInput" rows="4" placeholder="Write anything you like — your message, feedback, Transaction ID, or multi-line paragraph..." class="w-full px-3 py-2 rounded-xl text-xs leading-relaxed bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-500 resize-y min-h-[88px]"></textarea>
       </div>
 
       <div id="donateThankYouBanner" class="hidden p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-xs font-semibold text-emerald-800 dark:text-emerald-200"></div>
@@ -855,13 +917,19 @@
     </div>
   </div>
 
+  <!-- Celebration Confetti Canvas & Congratulation Toast -->
+  <canvas id="celebrationCanvas" class="fixed inset-0 z-50 pointer-events-none hidden"></canvas>
+  <div id="congratsBadge" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 hidden px-5 py-2.5 rounded-2xl bg-gradient-to-r from-indigo-600 via-emerald-500 to-cyan-500 text-white text-xs sm:text-sm font-extrabold shadow-2xl border border-white/30 backdrop-blur transition-all">
+    <span id="congratsBadgeText">Congratulations! Great Result!</span>
+  </div>
+
   <!-- Toast Notification -->
   <div id="toastBanner" class="fixed bottom-5 right-5 z-50 hidden px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-xs font-semibold shadow-lg border border-slate-700/50 transition-all">
     <span id="toastMessage">Copied to clipboard!</span>
   </div>
 
   <!-- Footer with Mandatory Google AdSense Compliance & SEO Legal Pages -->
-  <footer class="mt-12 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8">
+  <footer class="mt-12 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 pt-8 pb-24 sm:pb-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 space-y-5 text-xs text-slate-500 dark:text-slate-400">
       <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
@@ -909,7 +977,7 @@
   </footer>
 
   <!-- Legal & Monetization Compliance Modal (About, Contact, Privacy Policy, Terms, Disclaimer) -->
-  <div id="legalComplianceModal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+  <div id="legalComplianceModal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm flex items-start sm:items-center justify-center p-2.5 sm:p-4 overflow-y-auto">
     <div class="bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-2xl border border-slate-200 dark:border-slate-800 max-w-2xl w-full p-6 shadow-2xl space-y-4 my-auto max-h-[88vh] flex flex-col">
       <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3 shrink-0">
         <div class="flex flex-wrap items-center gap-1.5">
@@ -925,9 +993,9 @@
     </div>
   </div>
 
-  <!-- Centralized AdSense Management & Layout Inspector Modal -->
-  <div id="adManagerModal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-2xl border border-slate-200 dark:border-slate-800 max-w-2xl w-full p-6 shadow-2xl space-y-4 my-auto max-h-[90vh] flex flex-col">
+  <!-- Centralized Admin, AdSense, Users & Donations Management Modal -->
+  <div id="adManagerModal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm flex items-start sm:items-center justify-center p-2.5 sm:p-4 overflow-y-auto">
+    <div class="bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-2xl border border-slate-200 dark:border-slate-800 max-w-2xl w-full p-4 sm:p-6 shadow-2xl space-y-4 my-auto max-h-[92dvh] flex flex-col">
       <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3 shrink-0">
         <div>
           <h3 class="font-extrabold text-base flex items-center gap-2">
@@ -940,6 +1008,21 @@
       </div>
 
       <div class="overflow-y-auto space-y-4 pr-1 text-xs">
+        <!-- Admin Lock Gate (Requires Server-Verified ADMIN_KEY) -->
+        <div id="adminLockGate" class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 space-y-3">
+          <div class="font-bold text-sm text-slate-900 dark:text-white">Admin Authentication Required</div>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400">Enter your Cloudflare <code>ADMIN_KEY</code> secret to view registered users, donation submissions, and configuration settings.</p>
+          <div id="adminLockError" class="hidden px-3 py-2 rounded-lg text-xs font-semibold bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800"></div>
+          <div class="flex flex-col sm:flex-row gap-2">
+            <div class="relative flex-1">
+              <input id="adminKeyInput" type="password" placeholder="Enter ADMIN_KEY..." class="w-full pl-3 pr-14 py-2 rounded-xl text-xs font-mono bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+              <button id="toggleAdminKeyVisBtn" type="button" class="absolute right-1.5 top-1/2 -translate-y-1/2 px-2 py-1 rounded text-[10px] font-semibold bg-slate-200/80 dark:bg-slate-700 text-slate-700 dark:text-slate-200">Show</button>
+            </div>
+            <button id="unlockAdminPanelBtn" type="button" class="px-4 py-2 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm transition shrink-0">Unlock Admin</button>
+          </div>
+        </div>
+
+        <div id="adminProtectedContent" class="hidden space-y-4">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800">
           <div>
             <label class="block font-bold text-slate-700 dark:text-slate-200 mb-1">Google AdSense Publisher ID</label>
@@ -959,6 +1042,28 @@
               <input id="adCfgLazyLoadToggle" type="checkbox" checked class="rounded text-indigo-600" />
               <span>Lazy-Load Below-the-Fold Ad Units (Core Web Vitals)</span>
             </label>
+          </div>
+        </div>
+
+        <!-- Registered Users Viewer (Reads from Cloudflare D1 / Edge Store) -->
+        <div class="p-3.5 rounded-xl bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-200/80 dark:border-emerald-900/60 space-y-2.5">
+          <div class="flex items-center justify-between gap-2">
+            <div class="font-bold text-emerald-900 dark:text-emerald-200">Registered Users List (D1 Database)</div>
+            <button id="refreshAdminUsersBtn" type="button" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-emerald-600 hover:bg-emerald-500 text-white transition">Load Users</button>
+          </div>
+          <div id="adminUsersTableContainer" class="max-h-40 overflow-y-auto text-[11px] space-y-1 text-slate-600 dark:text-slate-300">
+            Click "Load Users" to view accounts stored in your Cloudflare D1 database.
+          </div>
+        </div>
+
+        <!-- Donation Submissions Viewer (Reads from Cloudflare D1 / Edge / Local) -->
+        <div class="p-3.5 rounded-xl bg-rose-50/60 dark:bg-rose-950/20 border border-rose-200/80 dark:border-rose-900/60 space-y-2.5">
+          <div class="flex items-center justify-between gap-2">
+            <div class="font-bold text-rose-900 dark:text-rose-200">Donation Submissions (D1 Database)</div>
+            <button id="refreshAdminDonationsBtn" type="button" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-rose-600 hover:bg-rose-500 text-white transition">Load Donations</button>
+          </div>
+          <div id="adminDonationsTableContainer" class="max-h-40 overflow-y-auto text-[11px] space-y-1 text-slate-600 dark:text-slate-300">
+            Click "Load Donations" to view supporter submissions (amount, payment method, Transaction ID / note).
           </div>
         </div>
 
@@ -993,7 +1098,10 @@
         </div>
       </div>
 
-      <div class="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-slate-200 dark:border-slate-800 shrink-0">
+        </div>
+      </div>
+
+      <div id="adminProtectedFooter" class="hidden flex-wrap items-center justify-between gap-2 pt-3 border-t border-slate-200 dark:border-slate-800 shrink-0">
         <button id="downloadAdsTxtBtn" type="button" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 transition">
           ⬇ Download ads.txt Template
         </button>
@@ -2547,6 +2655,7 @@
 
       document.getElementById('calcVisualContainer').innerHTML = res.visualHtml;
       document.getElementById('calcFormulaContainer').innerHTML = res.formulaSteps.map(s => `<div>• ${s}</div>`).join('');
+      checkAndCelebrateGoodResult(calc, vals, res);
     }
 
     // =========================================================================
@@ -4081,8 +4190,31 @@
       }
     }
 
-    function handleGoogleCredentialResponse(response) {
-      const payload = parseGoogleJwt(response && response.credential);
+    async function handleGoogleCredentialResponse(response) {
+      const credential = response && response.credential;
+      if (!credential) {
+        showAuthBanner('Google Sign-In did not return a valid ID token.');
+        return;
+      }
+      // Verify Google ID Token server-side on Cloudflare Worker first
+      const workerRes = await syncWithWorkerApi('/api/auth/google', { credential });
+      if (workerRes && workerRes.ok && workerRes.user) {
+        appState.currentUser = workerRes.user;
+        if (Array.isArray(workerRes.user.favorites)) appState.favorites = workerRes.user.favorites;
+        if (Array.isArray(workerRes.user.pins)) appState.pins = workerRes.user.pins;
+        if (Array.isArray(workerRes.user.history)) appState.history = workerRes.user.history;
+        safeSetStorage('calcverse_current_user', workerRes.user);
+        updateAuthUI();
+        renderFavorites(); renderPins(); renderHistory();
+        showToast(`Verified Google Sign-In as ${workerRes.user.name}!`);
+        return;
+      }
+      if (workerRes && workerRes.ok === false) {
+        showAuthBanner(workerRes.error || 'Google ID token verification failed.');
+        return;
+      }
+      // Local preview fallback when not running on a live Worker
+      const payload = parseGoogleJwt(credential);
       if (!payload || !payload.email) {
         showAuthBanner('Google Sign-In failed to verify account details.');
         return;
@@ -4090,25 +4222,37 @@
       const googleUser = {
         name: payload.name || payload.email.split('@')[0],
         email: payload.email.toLowerCase(),
-        role: 'Google Account',
-        provider: 'google',
+        role: 'Personal',
+        authProvider: 'google',
         memberId: 'CV-GGL-' + Math.floor(1000 + (payload.email.length * 193) % 8999),
         favorites: [...appState.favorites]
       };
-      const idx = appState.users.findIndex(u => u.email.toLowerCase() === googleUser.email);
-      if (idx === -1) appState.users.push(googleUser);
-      else appState.users[idx] = { ...appState.users[idx], ...googleUser };
-
       appState.currentUser = googleUser;
-      safeSetStorage('calcverse_users', appState.users);
       safeSetStorage('calcverse_current_user', googleUser);
-      syncWithWorkerApi('/api/auth/google', googleUser);
       updateAuthUI();
       showToast(`Signed in with Google as ${googleUser.name}!`);
     }
 
-    function initGoogleSignInButton() {
-      const cid = String(googleAuthConfig.clientId || '').trim();
+    async function resolveGoogleClientId() {
+      let cid = String(googleAuthConfig.clientId || '').trim();
+      const isLocalValid = cid && !cid.startsWith('YOUR_GOOGLE_CLIENT_ID') && cid.includes('.apps.googleusercontent.com');
+      if (!isLocalValid && location.protocol === 'https:' && location.hostname.endsWith('.workers.dev')) {
+        try {
+          const res = await fetch('/api/config', { method: 'GET' });
+          if (res.ok) {
+            const cfg = await res.json();
+            if (cfg && cfg.googleClientId && cfg.googleClientId.includes('.apps.googleusercontent.com')) {
+              cid = cfg.googleClientId.trim();
+              googleAuthConfig.clientId = cid;
+            }
+          }
+        } catch (_) {}
+      }
+      return cid;
+    }
+
+    async function initGoogleSignInButton() {
+      const cid = await resolveGoogleClientId();
       const isRealClientId = cid && !cid.startsWith('YOUR_GOOGLE_CLIENT_ID') && cid.includes('.apps.googleusercontent.com');
       const container = document.getElementById('googleSignInButtonContainer');
       const fallbackBtn = document.getElementById('fallbackGoogleSignInBtn');
@@ -4137,15 +4281,15 @@
       fallbackBtn.classList.remove('hidden');
     }
 
-    document.getElementById('fallbackGoogleSignInBtn').addEventListener('click', () => {
-      const cid = String(googleAuthConfig.clientId || '').trim();
+    document.getElementById('fallbackGoogleSignInBtn').addEventListener('click', async () => {
+      const cid = await resolveGoogleClientId();
       const isRealClientId = cid && !cid.startsWith('YOUR_GOOGLE_CLIENT_ID') && cid.includes('.apps.googleusercontent.com');
       if (!isRealClientId) {
         document.getElementById('googleAuthConfigHint').classList.remove('hidden');
-        showAuthBanner('Google Client ID is not configured yet. Add your Client ID in ?admin=ads or DEFAULT_GOOGLE_AUTH_CONFIG.');
+        showAuthBanner('Google Sign-In needs your Google OAuth Client ID. Add GOOGLE_CLIENT_ID in Cloudflare Worker Variables (or ?admin=ads).');
         return;
       }
-      initGoogleSignInButton();
+      await initGoogleSignInButton();
       if (window.google && window.google.accounts && window.google.accounts.id) {
         window.google.accounts.id.prompt();
       }
@@ -4179,6 +4323,17 @@
         document.getElementById('profileStatFavs').textContent = String(appState.favorites.length);
         document.getElementById('profileStatPins').textContent = String(appState.pins.length);
         document.getElementById('profileStatHist').textContent = String(appState.history.length);
+        const provBadge = document.getElementById('profileProviderBadge');
+        if (provBadge) {
+          const prov = appState.currentUser.authProvider || appState.currentUser.provider || 'password';
+          provBadge.textContent = prov.includes('google') ? 'Google Verified' : 'Email Verified';
+        }
+        const edName = document.getElementById('profileEditNameInput');
+        const edPhone = document.getElementById('profileEditPhoneInput');
+        const edRole = document.getElementById('profileEditRoleSelect');
+        if (edName) edName.value = appState.currentUser.name || '';
+        if (edPhone) edPhone.value = appState.currentUser.phone || '';
+        if (edRole) edRole.value = appState.currentUser.role || 'Personal';
       } else {
         headerIcon.innerHTML = '<svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
         headerLabel.textContent = 'Account';
@@ -4193,10 +4348,12 @@
         try {
           const res = await fetch(endpoint, {
             method: 'POST',
+            credentials: 'same-origin',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
           });
-          if (res.ok) return await res.json();
+          const data = await res.json().catch(() => null);
+          if (data) return { ...data, _status: res.status };
         } catch (err) {
           // Fallback to local storage cleanly
         }
@@ -4206,6 +4363,8 @@
 
     openAuthModalBtn.addEventListener('click', () => {
       authStatusBanner.classList.add('hidden');
+      if (forgotPwdForm) forgotPwdForm.classList.add('hidden');
+      if (loginForm) loginForm.classList.remove('hidden');
       updateAuthUI();
       initGoogleSignInButton();
       authModal.classList.remove('hidden');
@@ -4223,6 +4382,155 @@
       const isPwd = inp.type === 'password';
       inp.type = isPwd ? 'text' : 'password';
       e.currentTarget.textContent = isPwd ? 'Hide' : 'Show';
+    });
+
+    // Forgot & Reset Password Flow (Inline feedback + Worker/Local mode sync)
+    const forgotPwdForm = document.getElementById('forgotPwdForm');
+    const resetCodeBox = document.getElementById('resetCodeBox');
+    const resetCodeNotice = document.getElementById('resetCodeNotice');
+    const forgotInlineStatus = document.getElementById('forgotInlineStatus');
+    let pendingResetCode = null;
+    let pendingResetEmail = '';
+    let pendingResetMode = 'local'; // 'worker' | 'local'
+
+    function showForgotStatus(msg, isError = true) {
+      if (!forgotInlineStatus) return;
+      forgotInlineStatus.textContent = msg;
+      forgotInlineStatus.className = isError
+        ? 'px-3 py-2 rounded-xl text-xs font-semibold bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800'
+        : 'px-3 py-2 rounded-xl text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800';
+      forgotInlineStatus.classList.remove('hidden');
+    }
+
+    document.getElementById('openForgotPwdBtn').addEventListener('click', () => {
+      authStatusBanner.classList.add('hidden');
+      forgotInlineStatus.classList.add('hidden');
+      loginForm.classList.add('hidden');
+      forgotPwdForm.classList.remove('hidden');
+      resetCodeBox.classList.add('hidden');
+      const typedLoginEmail = document.getElementById('loginEmailInput').value.trim();
+      if (typedLoginEmail && typedLoginEmail.includes('@')) {
+        document.getElementById('forgotEmailInput').value = typedLoginEmail;
+      }
+      document.getElementById('forgotEmailInput').focus();
+    });
+
+    document.getElementById('backToLoginBtn').addEventListener('click', () => {
+      authStatusBanner.classList.add('hidden');
+      forgotInlineStatus.classList.add('hidden');
+      forgotPwdForm.classList.add('hidden');
+      loginForm.classList.remove('hidden');
+    });
+
+    document.getElementById('toggleResetPwdBtn').addEventListener('click', e => {
+      const inp = document.getElementById('resetNewPwdInput');
+      const isPwd = inp.type === 'password';
+      inp.type = isPwd ? 'text' : 'password';
+      e.currentTarget.textContent = isPwd ? 'Hide' : 'Show';
+    });
+
+    async function requestPasswordResetCode() {
+      const email = document.getElementById('forgotEmailInput').value.trim().toLowerCase();
+      if (!email || !email.includes('@')) {
+        showForgotStatus('Please enter a valid registered email address.');
+        return;
+      }
+      forgotInlineStatus.classList.add('hidden');
+      authStatusBanner.classList.add('hidden');
+
+      const btn = document.getElementById('sendResetCodeBtn');
+      const oldLabel = btn.textContent;
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
+
+      try {
+        const workerRes = await syncWithWorkerApi('/api/auth/forgot', { email });
+        if (workerRes && workerRes.ok) {
+          pendingResetEmail = email;
+          pendingResetCode = workerRes.code || null;
+          pendingResetMode = 'worker';
+          if (workerRes.emailed) {
+            resetCodeNotice.innerHTML = `<span>Reset code sent to <strong>${email}</strong>. Enter it below.</span>`;
+          } else {
+            resetCodeNotice.innerHTML = `<span>Recovery Code: <strong>${workerRes.code}</strong></span><button type="button" id="autoFillResetCodeBtn" class="px-2 py-0.5 rounded bg-amber-600 text-white text-[10px] font-bold">Auto-Fill</button>`;
+          }
+          resetCodeBox.classList.remove('hidden');
+          const afBtn = document.getElementById('autoFillResetCodeBtn');
+          if (afBtn) afBtn.addEventListener('click', () => { document.getElementById('resetCodeInput').value = workerRes.code; document.getElementById('resetNewPwdInput').focus(); });
+          showForgotStatus('Code generated! Enter the 6-digit code and your new password below.', false);
+          document.getElementById('resetCodeInput').focus();
+          return;
+        }
+
+        const localMatch = appState.users.find(u => u.email.toLowerCase() === email);
+        if (!localMatch) {
+          showForgotStatus((workerRes && workerRes.error) || 'No account found with that email. Please open a free account first.');
+          return;
+        }
+
+        pendingResetEmail = email;
+        pendingResetCode = String(Math.floor(100000 + Math.random() * 900000));
+        pendingResetMode = 'local';
+        resetCodeNotice.innerHTML = `<span>Recovery Code: <strong>${pendingResetCode}</strong></span><button type="button" id="autoFillResetCodeBtn" class="px-2 py-0.5 rounded bg-amber-600 text-white text-[10px] font-bold">Auto-Fill</button>`;
+        resetCodeBox.classList.remove('hidden');
+        const afBtn = document.getElementById('autoFillResetCodeBtn');
+        if (afBtn) afBtn.addEventListener('click', () => { document.getElementById('resetCodeInput').value = pendingResetCode; document.getElementById('resetNewPwdInput').focus(); });
+        showForgotStatus('Code generated! Enter the 6-digit code and your new password below.', false);
+        document.getElementById('resetCodeInput').focus();
+      } finally {
+        btn.textContent = oldLabel;
+        btn.disabled = false;
+      }
+    }
+
+    document.getElementById('sendResetCodeBtn').addEventListener('click', requestPasswordResetCode);
+
+    forgotPwdForm.addEventListener('submit', async e => {
+      e.preventDefault();
+      // If user pressed Enter before clicking Get Code, trigger Get Code automatically
+      if (resetCodeBox.classList.contains('hidden')) {
+        await requestPasswordResetCode();
+        return;
+      }
+      const code = document.getElementById('resetCodeInput').value.trim();
+      const newPassword = document.getElementById('resetNewPwdInput').value;
+      if (!code || !newPassword || newPassword.length < 4) {
+        showForgotStatus('Enter the 6-digit reset code and a new password (min 4 characters).');
+        return;
+      }
+
+      if (pendingResetMode === 'worker') {
+        const workerRes = await syncWithWorkerApi('/api/auth/reset', {
+          email: pendingResetEmail,
+          code,
+          newPassword
+        });
+        if (workerRes && workerRes.ok === false) {
+          showForgotStatus(workerRes.error || 'Invalid or expired reset code.');
+          return;
+        }
+      } else {
+        if (code !== pendingResetCode) {
+          showForgotStatus('Invalid reset code. Please check the 6-digit code above.');
+          return;
+        }
+      }
+
+      // Sync updated password to local cache as well
+      const idx = appState.users.findIndex(u => u.email.toLowerCase() === pendingResetEmail);
+      if (idx !== -1) {
+        appState.users[idx].password = newPassword;
+        safeSetStorage('calcverse_users', appState.users);
+      }
+
+      forgotPwdForm.reset();
+      forgotInlineStatus.classList.add('hidden');
+      forgotPwdForm.classList.add('hidden');
+      loginForm.classList.remove('hidden');
+      document.getElementById('loginEmailInput').value = pendingResetEmail;
+      document.getElementById('loginPasswordInput').value = '';
+      showAuthBanner('Password updated successfully! You can now sign in with your new password.', false);
+      showToast('Password updated! Please sign in.');
     });
 
     document.getElementById('syncCloudAccountBtn').addEventListener('click', async () => {
@@ -4276,14 +4584,26 @@
       safeSetStorage('calcverse_current_user', newUser);
       signupForm.reset();
       updateAuthUI();
-      showToast(`Welcome to CalcVerse, ${name}! Account opened `);
+      showToast(`Welcome to CalcVerse, ${name}! Account opened`);
+      triggerCongratulation(`Welcome to CalcVerse, ${name}!`);
     });
 
-    // Handle Login
-    loginForm.addEventListener('submit', e => {
+    // Handle Login (Checks Worker D1 API first, with seamless local fallback)
+    loginForm.addEventListener('submit', async e => {
       e.preventDefault();
       const emailOrUser = document.getElementById('loginEmailInput').value.trim().toLowerCase();
       const password = document.getElementById('loginPasswordInput').value;
+      const remember = document.getElementById('loginRememberCheck').checked;
+
+      const workerRes = await syncWithWorkerApi('/api/auth/login', { email: emailOrUser, password, remember });
+      if (workerRes && workerRes.ok && workerRes.user) {
+        appState.currentUser = workerRes.user;
+        safeSetStorage('calcverse_current_user', workerRes.user);
+        loginForm.reset();
+        updateAuthUI();
+        showToast(`Signed in as ${workerRes.user.name}!`);
+        return;
+      }
 
       const matched = appState.users.find(u =>
         (u.email.toLowerCase() === emailOrUser || u.name.toLowerCase() === emailOrUser) &&
@@ -4291,7 +4611,7 @@
       );
 
       if (!matched) {
-        showAuthBanner('Invalid email/username or password. Please check your credentials or open a new account.');
+        showAuthBanner((workerRes && workerRes.error) || 'Invalid email/username or password. Please check your credentials or open a new account.');
         return;
       }
 
@@ -4299,16 +4619,60 @@
       safeSetStorage('calcverse_current_user', matched);
       loginForm.reset();
       updateAuthUI();
-      showToast(`Signed in as ${matched.name}! `);
+      showToast(`Signed in as ${matched.name}!`);
     });
 
-    // Sign Out
-    document.getElementById('logoutAccountBtn').addEventListener('click', () => {
+    // Profile Update Handler (Saves to Cloudflare D1 + localStorage)
+    const profileUpdateForm = document.getElementById('profileUpdateForm');
+    if (profileUpdateForm) {
+      profileUpdateForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        if (!appState.currentUser) return;
+        const name = document.getElementById('profileEditNameInput').value.trim();
+        const phone = document.getElementById('profileEditPhoneInput').value.trim();
+        const role = document.getElementById('profileEditRoleSelect').value;
+        if (name.length < 2) {
+          showToast('Please enter a valid name');
+          return;
+        }
+        appState.currentUser.name = name;
+        appState.currentUser.phone = phone;
+        appState.currentUser.role = role;
+        safeSetStorage('calcverse_current_user', appState.currentUser);
+        await syncWithWorkerApi('/api/auth/profile', { email: appState.currentUser.email, name, phone, role });
+        updateAuthUI();
+        showToast('Profile updated & saved!');
+      });
+    }
+
+    // Restore Server Session Cookie (/api/auth/me) on Page Load
+    async function restoreServerSession() {
+      if (location.protocol !== 'https:' || !location.hostname.endsWith('.workers.dev')) return;
+      try {
+        const res = await fetch('/api/auth/me', { method: 'GET', credentials: 'same-origin' });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.ok && data.user) {
+            appState.currentUser = data.user;
+            if (Array.isArray(data.user.favorites) && data.user.favorites.length) appState.favorites = data.user.favorites;
+            if (Array.isArray(data.user.pins)) appState.pins = data.user.pins;
+            if (Array.isArray(data.user.history)) appState.history = data.user.history;
+            safeSetStorage('calcverse_current_user', data.user);
+            updateAuthUI();
+            renderFavorites(); renderPins(); renderHistory();
+          }
+        }
+      } catch (_) {}
+    }
+
+    // Secure Sign Out (Revokes Server Session Cookie + Clears Local State)
+    document.getElementById('logoutAccountBtn').addEventListener('click', async () => {
+      await syncWithWorkerApi('/api/auth/logout', {});
       appState.currentUser = null;
       safeSetStorage('calcverse_current_user', null);
       authStatusBanner.classList.add('hidden');
       updateAuthUI();
-      showToast('Signed out of your CalcVerse account');
+      showToast('Securely signed out of your CalcVerse account');
     });
 
     // Export Account Backup (.JSON)
@@ -4565,15 +4929,138 @@
           </div>
           <div class="flex items-center gap-1.5">
             <span class="text-[11px] text-slate-400">Slot ID:</span>
-            <input type="text" data-ad-slot-input="${p.id}" value="${p.slotId}" class="px-2.5 py-1 rounded-lg font-mono text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 w-44" />
+            <input type="text" data-ad-slot-input="${p.id}" value="${p.slotId}" class="px-2.5 py-1.5 rounded-lg font-mono text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 w-full sm:w-44" />
           </div>
         </div>
       `).join('');
     }
 
-    if (new URLSearchParams(window.location.search).get('admin') === 'ads') {
-      document.getElementById('openAdManagerBtn').classList.remove('hidden');
-    }
+    document.getElementById('adminKeyInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        document.getElementById('unlockAdminPanelBtn').click();
+      }
+    });
+
+
+
+    let sessionAdminKey = '';
+
+    document.getElementById('toggleAdminKeyVisBtn').addEventListener('click', e => {
+      const inp = document.getElementById('adminKeyInput');
+      const isPwd = inp.type === 'password';
+      inp.type = isPwd ? 'text' : 'password';
+      e.currentTarget.textContent = isPwd ? 'Hide' : 'Show';
+    });
+
+    document.getElementById('unlockAdminPanelBtn').addEventListener('click', async () => {
+      const keyVal = document.getElementById('adminKeyInput').value.trim();
+      const errBox = document.getElementById('adminLockError');
+      errBox.classList.add('hidden');
+      if (!keyVal) {
+        errBox.textContent = 'Please enter your ADMIN_KEY.';
+        errBox.classList.remove('hidden');
+        return;
+      }
+      if (location.protocol === 'https:' && location.hostname.endsWith('.workers.dev')) {
+        try {
+          const res = await fetch('/api/admin/verify', {
+            method: 'POST',
+            headers: { 'x-admin-key': keyVal }
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok || !data.ok) {
+            errBox.textContent = data.error || 'Invalid ADMIN_KEY.';
+            errBox.classList.remove('hidden');
+            return;
+          }
+        } catch (err) {
+          errBox.textContent = 'Could not verify ADMIN_KEY with server.';
+          errBox.classList.remove('hidden');
+          return;
+        }
+      }
+      sessionAdminKey = keyVal;
+      document.getElementById('adminLockGate').classList.add('hidden');
+      document.getElementById('adminProtectedContent').classList.remove('hidden');
+      const foot = document.getElementById('adminProtectedFooter');
+      foot.classList.remove('hidden');
+      foot.classList.add('flex');
+      showToast('Admin panel unlocked!');
+    });
+
+    document.getElementById('refreshAdminUsersBtn').addEventListener('click', async () => {
+      const box = document.getElementById('adminUsersTableContainer');
+      box.textContent = 'Loading registered users...';
+      try {
+        const res = await fetch('/api/admin/users', { method: 'GET', headers: { 'x-admin-key': sessionAdminKey } });
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          box.textContent = data.error || 'Unauthorized or could not load users.';
+          return;
+        }
+        const list = data.users || [];
+        if (list.length === 0) {
+          box.textContent = `No registered users yet (Storage: ${data.storage || 'Edge'}).`;
+          return;
+        }
+        box.innerHTML = `<div class="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 mb-1">Total: ${list.length} user(s) • Storage: ${data.storage}</div>` +
+          list.map(u => `
+            <div class="p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-2">
+              <div class="min-w-0">
+                <div class="font-bold truncate">${u.name} (${u.role || 'Personal'})</div>
+                <div class="text-[10px] text-slate-500 truncate">${u.email}${u.phone ? ' • ' + u.phone : ''}</div>
+              </div>
+              <span class="text-[10px] font-mono text-slate-400 shrink-0">${u.auth_provider || 'password'}</span>
+            </div>
+          `).join('');
+      } catch (e) {
+        box.textContent = 'Local preview mode (deploy worker.js to Cloudflare to view live D1 users).';
+      }
+    });
+
+    document.getElementById('refreshAdminDonationsBtn').addEventListener('click', async () => {
+      const box = document.getElementById('adminDonationsTableContainer');
+      box.textContent = 'Loading donation submissions...';
+      try {
+        const res = await fetch('/api/admin/donations', { method: 'GET', headers: { 'x-admin-key': sessionAdminKey } });
+        const data = await res.json();
+        if (res.ok && data && data.ok) {
+          const list = data.donations || [];
+          if (list.length === 0) {
+            box.textContent = `No donation submissions yet (Storage: ${data.storage || 'D1'}).`;
+            return;
+          }
+          box.innerHTML = `<div class="text-[10px] font-bold text-rose-700 dark:text-rose-300 mb-1">Total: ${list.length} submission(s) • Storage: ${data.storage}</div>` +
+            list.map(d => `
+              <div class="p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-2">
+                <div class="min-w-0">
+                  <div class="font-bold truncate">$${d.amount} — ${d.method}</div>
+                  <div class="text-[11px] text-slate-600 dark:text-slate-300 whitespace-pre-wrap break-words mt-1">${d.note ? d.note : 'No note'}${d.donor_email ? ' • ' + d.donor_email : ''}</div>
+                </div>
+                <span class="text-[10px] font-mono text-slate-400 shrink-0">${String(d.created_at || '').slice(0, 10)}</span>
+              </div>
+            `).join('');
+          return;
+        }
+      } catch (_) {}
+
+      const localList = safeGetStorage('calcverse_donations', []);
+      if (localList.length === 0) {
+        box.textContent = 'No donation submissions recorded yet.';
+        return;
+      }
+      box.innerHTML = `<div class="text-[10px] font-bold text-rose-700 dark:text-rose-300 mb-1">Total: ${localList.length} submission(s) • Storage: Browser Local</div>` +
+        localList.map(d => `
+          <div class="p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-2">
+            <div class="min-w-0">
+              <div class="font-bold truncate">$${d.amount} — ${d.method}</div>
+              <div class="text-[11px] text-slate-600 dark:text-slate-300 whitespace-pre-wrap break-words mt-1">${d.note ? d.note : 'No note'}</div>
+            </div>
+            <span class="text-[10px] font-mono text-slate-400 shrink-0">${String(d.created_at || '').slice(0, 10)}</span>
+          </div>
+        `).join('');
+    });
 
     document.getElementById('openAdManagerBtn').addEventListener('click', () => {
       renderAdManagerModal();
@@ -4844,12 +5331,27 @@
       });
     });
 
-    document.getElementById('submitDonateBtn').addEventListener('click', () => {
+    document.getElementById('submitDonateBtn').addEventListener('click', async () => {
       const note = document.getElementById('donateNoteInput').value.trim();
-      const methodLabel = donateState.method === 'mobile' ? 'Mobile Wallet' : 'BNB Chain (BEP-20)';
-      donateThankYouBanner.textContent = `Thank you for your $${donateState.amount} ${methodLabel} support!${note ? ' Ref/Note: "' + note + '"' : ''} `;
+      const methodLabel = donateState.method === 'mobile' ? 'Mobile Wallet (01319034491)' : 'BNB Chain (BEP-20)';
+      const entry = {
+        amount: Number(donateState.amount || 5),
+        method: methodLabel,
+        note: note || '',
+        donorEmail: (appState.currentUser && appState.currentUser.email) || '',
+        created_at: new Date().toISOString()
+      };
+      const localDonations = safeGetStorage('calcverse_donations', []);
+      localDonations.unshift(entry);
+      safeSetStorage('calcverse_donations', localDonations.slice(0, 100));
+
+      await syncWithWorkerApi('/api/donations', entry);
+
+      document.getElementById('donateNoteInput').value = '';
+      donateThankYouBanner.textContent = `Thank you for your $${entry.amount} ${methodLabel} support!${note ? ' Ref/Note: "' + note + '"' : ''} Your submission has been recorded.`;
       donateThankYouBanner.classList.remove('hidden');
-      showToast(`Recorded $${donateState.amount} ${methodLabel} support! `);
+      showToast(`Recorded $${entry.amount} ${methodLabel} support!`);
+      triggerCongratulation(`Thank you for your $${entry.amount} support!`);
     });
 
     // Global Classy Click Ripple Effect on All Interactive Clicks
@@ -4866,6 +5368,153 @@
       }, 540);
     }, { passive: true });
 
+    // =========================================================================
+    // CONGRATULATION SOUND (WEB AUDIO API) & CONFETTI VISUAL EFFECTS ENGINE
+    // =========================================================================
+    let celebrationSoundEnabled = safeGetStorage('calcverse_sound_on', true);
+    let lastCelebrationAt = 0;
+    let celebrationAnimId = null;
+    let congratsTimer = null;
+    let hasUserInteracted = false;
+
+    const SOUND_ON_SVG = '<svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>';
+    const SOUND_OFF_SVG = '<svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>';
+
+    document.addEventListener('pointerdown', () => { hasUserInteracted = true; }, { once: true, passive: true });
+    document.addEventListener('keydown', () => { hasUserInteracted = true; }, { once: true, passive: true });
+
+    function updateSoundIcon() {
+      const el = document.getElementById('soundIcon');
+      if (el) el.innerHTML = celebrationSoundEnabled ? SOUND_ON_SVG : SOUND_OFF_SVG;
+    }
+
+    document.getElementById('soundToggleBtn').addEventListener('click', () => {
+      celebrationSoundEnabled = !celebrationSoundEnabled;
+      safeSetStorage('calcverse_sound_on', celebrationSoundEnabled);
+      updateSoundIcon();
+      showToast(celebrationSoundEnabled ? 'Celebration sound enabled' : 'Celebration sound muted');
+    });
+
+    function playCongratulationChime() {
+      if (!celebrationSoundEnabled || !hasUserInteracted) return;
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const notes = [523.25, 659.25, 783.99, 1046.5]; // C5 - E5 - G5 - C6 bright triad chime
+        const now = ctx.currentTime;
+        notes.forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + idx * 0.085);
+          gain.gain.setValueAtTime(0.001, now + idx * 0.085);
+          gain.gain.exponentialRampToValueAtTime(0.14, now + idx * 0.085 + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.0008, now + idx * 0.085 + 0.42);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + idx * 0.085);
+          osc.stop(now + idx * 0.085 + 0.45);
+        });
+        setTimeout(() => { try { ctx.close(); } catch (_) {} }, 1100);
+      } catch (_) {}
+    }
+
+    function launchConfettiBurst() {
+      const canvas = document.getElementById('celebrationCanvas');
+      if (!canvas) return;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      canvas.classList.remove('hidden');
+      const ctx = canvas.getContext('2d');
+      const colors = ['#6366f1', '#10b981', '#38bdf8', '#f59e0b', '#ec4899', '#a855f7'];
+      const particles = Array.from({ length: 72 }, () => ({
+        x: canvas.width * (0.25 + Math.random() * 0.5),
+        y: canvas.height * 0.32,
+        vx: (Math.random() - 0.5) * 11,
+        vy: -Math.random() * 10 - 3,
+        size: 5 + Math.random() * 6,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        rot: Math.random() * Math.PI * 2,
+        vrot: (Math.random() - 0.5) * 0.22,
+        life: 1
+      }));
+
+      if (celebrationAnimId) cancelAnimationFrame(celebrationAnimId);
+      function step() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let alive = false;
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.28;
+          p.rot += p.vrot;
+          p.life -= 0.015;
+          if (p.life > 0 && p.y < canvas.height + 20) {
+            alive = true;
+            ctx.save();
+            ctx.globalAlpha = Math.max(0, p.life);
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.rot);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.65);
+            ctx.restore();
+          }
+        });
+        if (alive) {
+          celebrationAnimId = requestAnimationFrame(step);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          canvas.classList.add('hidden');
+          celebrationAnimId = null;
+        }
+      }
+      celebrationAnimId = requestAnimationFrame(step);
+    }
+
+    function triggerCongratulation(message) {
+      const now = Date.now();
+      if (now - lastCelebrationAt < 2500) return; // Prevent rapid spam while typing
+      lastCelebrationAt = now;
+      playCongratulationChime();
+      launchConfettiBurst();
+      const badge = document.getElementById('congratsBadge');
+      const txt = document.getElementById('congratsBadgeText');
+      if (badge && txt) {
+        txt.textContent = message || 'Congratulations! Great Result!';
+        badge.classList.remove('hidden');
+        if (congratsTimer) clearTimeout(congratsTimer);
+        congratsTimer = setTimeout(() => badge.classList.add('hidden'), 2800);
+      }
+    }
+
+    function checkAndCelebrateGoodResult(calc, vals, res) {
+      if (!hasUserInteracted || !calc || !res) return;
+      if (calc.id === 'bmi' && String(res.summaryLabel).includes('Normal Weight')) {
+        triggerCongratulation('Congratulations! Your BMI is in the Healthy Normal range!');
+      } else if (calc.id === 'gpa') {
+        const gpaVal = parseFloat(res.summaryLabel);
+        if (isFinite(gpaVal) && gpaVal >= 3.5) {
+          triggerCongratulation(`Congratulations! Excellent GPA (${gpaVal.toFixed(2)})`);
+        }
+      } else if (calc.id === 'roi') {
+        const roiVal = parseFloat(res.summaryLabel);
+        if (isFinite(roiVal) && roiVal >= 20) {
+          triggerCongratulation(`Congratulations! Strong Return on Investment (${roiVal.toFixed(1)}%)`);
+        }
+      } else if (calc.id === 'password') {
+        const bits = parseFloat(res.summaryLabel);
+        if (isFinite(bits) && bits >= 80) {
+          triggerCongratulation('Congratulations! Strong Military-Grade Password Entropy!');
+        }
+      } else if (calc.id === 'compound' || calc.id === 'retirement') {
+        const cleaned = parseFloat(String(res.summaryLabel).replace(/[^0-9.]/g, ''));
+        if (isFinite(cleaned) && cleaned >= 100000) {
+          triggerCongratulation('Congratulations! Strong Long-Term Wealth Milestone!');
+        }
+      }
+    }
+
     // Init App
     (function initApp() {
       const savedDark = safeGetStorage('calcverse_dark', false);
@@ -4880,9 +5529,20 @@
       renderHistory();
       renderDirectory();
       renderActiveWorkspace();
+      updateSoundIcon();
       updateAuthUI();
+      restoreServerSession();
       renderAllAdPlacements();
       initCookieConsent();
+      if (new URLSearchParams(window.location.search).get('admin') === 'ads') {
+        document.getElementById('openAdManagerBtn').classList.remove('hidden');
+        renderAdManagerModal();
+        document.getElementById('adManagerModal').classList.remove('hidden');
+        setTimeout(() => {
+          const kInp = document.getElementById('adminKeyInput');
+          if (kInp) kInp.focus();
+        }, 150);
+      }
     })();
   </script>
 </body>
