@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CalcVerse Pro 2.0 — Secure Online Calculators for Finance, Math, Fitness &amp; Science</title>
+  <meta name="theme-color" content="#f8fafc" id="metaThemeColor" />
+  <title>CalcVerse Pro — Secure Online Calculators for Finance, Math, Fitness &amp; Science</title>
   <meta name="description" content="CalcVerse is a free, high-precision online calculator platform with 24+ verified tools across Finance, Fitness & Health, Mathematics, Graphing, and Science with PDF, Excel, PNG, and Nostalgic Receipt exports." />
   <meta name="keywords" content="online calculator, scientific calculator, mortgage calculator, BMI calculator, compound interest, function grapher, unit converter, CalcVerse" />
   <meta property="og:title" content="CalcVerse Pro — Universal Online Calculator Suite" />
@@ -48,6 +49,16 @@
         }
       }
     };
+    (function () {
+      try {
+        var raw = localStorage.getItem('calcverse_dark');
+        if (raw === 'true' || raw === '"true"') {
+          document.documentElement.classList.add('dark');
+          var m = document.getElementById('metaThemeColor');
+          if (m) m.setAttribute('content', '#020617');
+        }
+      } catch (e) {}
+    })();
   </script>
   <style>
     html, body { font-family: 'Inter', system-ui, sans-serif; overflow-x: hidden; max-width: 100%; -webkit-tap-highlight-color: transparent; }
@@ -107,37 +118,49 @@
       overflow: hidden;
       transition: min-height 0.2s ease;
     }
-    /* Frosted Glassmorphism Theme & Ambient Mesh Backdrop */
+    /* Atomic Flicker-Free Theme Switching & Native Color Scheme */
+    html { color-scheme: light; background-color: #f8fafc; }
+    html.dark { color-scheme: dark; background-color: #020617; }
+    html.theme-switching,
+    html.theme-switching *,
+    html.theme-switching *::before,
+    html.theme-switching *::after {
+      transition: none !important;
+      animation-duration: 0s !important;
+    }
+    /* Lightweight GPU-Safe Ambient Theme Backdrop (No Fixed-Attachment Flicker) */
     body {
+      background-color: #f8fafc;
+      color: #0f172a;
       background-image:
-        radial-gradient(at 10% 10%, rgba(99, 102, 241, 0.14) 0px, transparent 50%),
-        radial-gradient(at 90% 15%, rgba(56, 189, 248, 0.14) 0px, transparent 48%),
-        radial-gradient(at 50% 90%, rgba(16, 185, 129, 0.08) 0px, transparent 55%);
-      background-attachment: fixed;
+        radial-gradient(at 10% 10%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+        radial-gradient(at 90% 15%, rgba(56, 189, 248, 0.12) 0px, transparent 48%);
+      background-attachment: scroll;
     }
-    .dark body, html.dark body {
+    html.dark body {
+      background-color: #020617;
+      color: #f1f5f9;
       background-image:
-        radial-gradient(at 10% 10%, rgba(79, 70, 229, 0.22) 0px, transparent 50%),
-        radial-gradient(at 90% 15%, rgba(14, 165, 233, 0.18) 0px, transparent 48%),
-        radial-gradient(at 50% 90%, rgba(16, 185, 129, 0.10) 0px, transparent 55%);
+        radial-gradient(at 10% 10%, rgba(79, 70, 229, 0.20) 0px, transparent 50%),
+        radial-gradient(at 90% 15%, rgba(14, 165, 233, 0.16) 0px, transparent 48%);
     }
-    section.bg-white, div.bg-white, aside, footer, header {
-      backdrop-filter: blur(14px) saturate(160%);
-      -webkit-backdrop-filter: blur(14px) saturate(160%);
+    header {
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
     .glass-card {
-      background: rgba(255, 255, 255, 0.72);
-      backdrop-filter: blur(16px) saturate(170%);
-      -webkit-backdrop-filter: blur(16px) saturate(170%);
+      background: rgba(255, 255, 255, 0.86);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.75);
     }
-    .dark .glass-card {
-      background: rgba(15, 23, 42, 0.68);
+    html.dark .glass-card {
+      background: rgba(15, 23, 42, 0.82);
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
     }
-    /* Classy Tactile Click & Radial Ripple Micro-Interaction */
+    /* Classy Tactile Click Micro-Interaction (Transform/Opacity Only for Zero Theme Flicker) */
     button, [role="button"] {
-      transition: transform 0.16s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease, background-color 0.18s ease, border-color 0.18s ease, opacity 0.18s ease;
+      transition: transform 0.14s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.14s ease;
     }
     button:active:not(:disabled), [role="button"]:active {
       transform: scale(0.965);
@@ -179,66 +202,75 @@
     }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
 
   <!-- Top Navigation Bar -->
   <header class="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-b border-slate-200 dark:border-slate-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
-      <!-- Brand Logo -->
-      <div class="flex items-center gap-3">
-        <button id="brandHomeBtn" type="button" class="flex items-center gap-2.5 text-left group focus:outline-none">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-cyan-500 flex items-center justify-center text-white font-bold text-lg shadow-sm group-hover:shadow-indigo-500/25 transition">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 sm:py-3 flex flex-col gap-2">
+      <!-- Row 1: Brand Name (Top of Header) -->
+      <div class="w-full flex items-center justify-between gap-2">
+        <button id="brandHomeBtn" type="button" class="flex items-center gap-2 text-left group focus:outline-none">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-cyan-500 flex items-center justify-center text-white font-bold text-lg shadow-sm group-hover:shadow-indigo-500/25 transition shrink-0">
             <span>∑</span>
           </div>
           <div>
-            <div class="flex items-center gap-2">
-              <span class="font-extrabold text-xl tracking-tight bg-gradient-to-r from-indigo-600 to-cyan-500 bg-clip-text text-transparent">CalcVerse</span>
-              <span class="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-950/80 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800">Pro 2.0</span>
+            <div class="flex items-center gap-1.5">
+              <span class="font-extrabold text-lg sm:text-xl tracking-tight bg-gradient-to-r from-indigo-600 to-cyan-500 bg-clip-text text-transparent">CalcVerse</span>
+              <span class="inline-block text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-950/80 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800">Pro</span>
             </div>
             <p class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">Math • Finance • Fitness • Science • Live Graphing</p>
           </div>
         </button>
       </div>
 
-      <!-- Global Smart Search & Omnibox (Calculators + Synonyms + Instant Math Solver) -->
-      <div class="flex-1 max-w-xl mx-auto w-full order-3 md:order-2" id="searchBoxContainer">
-        <div class="relative">
-          <svg class="w-4 h-4 text-indigo-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z" />
-          </svg>
-          <input id="globalSearchInput" type="search" autocomplete="off" placeholder="Search tools, keywords (EMI, diet, CIDR) or type math (250*18%)..." class="w-full pl-10 pr-24 py-2 text-sm rounded-xl bg-slate-100 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-900 transition" />
-          <div class="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1">
-            <button id="clearSearchInputBtn" type="button" title="Clear search" class="hidden px-1.5 py-0.5 rounded text-xs font-bold text-slate-400 hover:text-rose-500 hover:bg-slate-200/60 dark:hover:bg-slate-700 transition">×</button>
-            <span class="hidden sm:inline-block text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-200/80 dark:bg-slate-700 text-slate-600 dark:text-slate-300" title="Press / to focus, ↑↓ to navigate, Enter to open">/ • ↵</span>
-          </div>
-          <!-- Smart Command Palette & Search Dropdown -->
-          <div id="searchDropdown" class="hidden absolute left-0 right-0 mt-1.5 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 max-h-[26rem] overflow-y-auto z-50 divide-y divide-slate-100 dark:divide-slate-800"></div>
-        </div>
-      </div>
-
-      <!-- Top-Right Utility Actions (Saved, Pinboard, History, Theme) -->
-      <div class="flex items-center gap-1.5 sm:gap-2 order-2 md:order-3">
-        <button id="toggleFavoritesBtn" type="button" title="Saved Calculators" class="px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1 transition">
-          <span class="text-amber-500 flex items-center"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
-          <span class="hidden sm:inline">Saved</span>
-          <span id="favCountBadge" class="px-1.5 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-[10px] sm:text-[11px]">0</span>
-        </button>
-        <button id="toggleCompareDrawerBtn" type="button" title="Scenario Pinboard" class="px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1 transition">
-          <span class="flex items-center text-emerald-500"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M16 3l4 4-4 4"/><path d="M20 7H4"/><path d="M8 21l-4-4 4-4"/><path d="M4 17h16"/></svg></span>
-          <span class="hidden lg:inline">Pinboard</span>
-          <span id="pinCountBadge" class="px-1.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[10px] sm:text-[11px]">0</span>
-        </button>
-        <button id="toggleHistoryDrawerBtn" type="button" title="Calculation History" class="px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1 transition">
-          <span class="flex items-center text-cyan-500"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
-          <span class="hidden lg:inline">History</span>
-          <span id="historyCountBadge" class="px-1.5 rounded-full bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 text-[10px] sm:text-[11px]">0</span>
-        </button>
+      <!-- Row 2: Right-Aligned Controls (Sound, Dark/Light, Bug & Solving, Account) -->
+      <div class="w-full flex items-center justify-end gap-1.5">
         <button id="soundToggleBtn" type="button" title="Toggle Celebration Sound" aria-label="Toggle celebration sound" class="p-1.5 sm:p-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition">
           <span id="soundIcon" class="flex items-center"><svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></span>
         </button>
         <button id="themeToggleBtn" type="button" aria-label="Toggle color theme" class="p-1.5 sm:p-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition">
           <span id="themeIcon" class="flex items-center"><svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
         </button>
+        <button id="openFeedbackModalBtn" type="button" title="Report Bug or Solving Advice" aria-label="Report bug or submit solving advice" class="p-1.5 sm:p-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-rose-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50/70 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition">
+          <span class="flex items-center"><svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/><path d="M12 20v-9"/><path d="M6.53 9C4.6 8.8 3 7.1 3 5"/><path d="M6 13H2"/><path d="M3 21c0-2.1 1.7-3.9 3.8-4"/><path d="M20.97 5c0 2.1-1.6 3.8-3.5 4"/><path d="M22 13h-4"/><path d="M17.2 17c2.1.1 3.8 1.9 3.8 4"/></svg></span>
+        </button>
+        <button id="openAuthModalBtn" type="button" title="Account & Login" class="px-3 py-1.5 sm:py-2 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm flex items-center gap-1.5 whitespace-nowrap transition">
+          <span id="authHeaderIcon" class="flex items-center"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+          <span id="authHeaderLabel" class="max-w-[96px] sm:max-w-[140px] truncate">Account</span>
+        </button>
+      </div>
+
+      <!-- Row 3: Global Smart Search & Quick Utility Strip (Saved, Pinboard, History) -->
+      <div class="w-full flex flex-col sm:flex-row items-stretch sm:items-center gap-2" id="searchBoxContainer">
+        <div class="relative flex-1">
+          <svg class="w-4 h-4 text-indigo-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z" />
+          </svg>
+          <input id="globalSearchInput" type="search" autocomplete="off" placeholder="Search tools, keywords (EMI, diet, CIDR) or type math (250*18%)..." class="w-full pl-10 pr-20 py-2 text-sm rounded-xl bg-slate-100 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-900 transition" />
+          <div class="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1">
+            <button id="clearSearchInputBtn" type="button" title="Clear search" class="hidden px-1.5 py-0.5 rounded text-xs font-bold text-slate-400 hover:text-rose-500 hover:bg-slate-200/60 dark:hover:bg-slate-700 transition">×</button>
+            <span class="hidden sm:inline-block text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-200/80 dark:bg-slate-700 text-slate-600 dark:text-slate-300" title="Press / to focus, ↑↓ to navigate, Enter to open">/</span>
+          </div>
+          <!-- Smart Command Palette & Search Dropdown -->
+          <div id="searchDropdown" class="hidden absolute left-0 right-0 mt-1.5 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 max-h-[26rem] overflow-y-auto z-50 divide-y divide-slate-100 dark:divide-slate-800"></div>
+        </div>
+        <div class="flex items-center justify-between sm:justify-end gap-1.5 shrink-0">
+          <button id="toggleFavoritesBtn" type="button" title="Saved Calculators" class="flex-1 sm:flex-none justify-center px-2.5 py-1.5 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1 transition">
+            <span class="text-amber-500 flex items-center"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+            <span>Saved</span>
+            <span id="favCountBadge" class="px-1.5 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-[10px]">0</span>
+          </button>
+          <button id="toggleCompareDrawerBtn" type="button" title="Scenario Pinboard" class="flex-1 sm:flex-none justify-center px-2.5 py-1.5 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1 transition">
+            <span class="flex items-center text-emerald-500"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M16 3l4 4-4 4"/><path d="M20 7H4"/><path d="M8 21l-4-4 4-4"/><path d="M4 17h16"/></svg></span>
+            <span>Pin</span>
+            <span id="pinCountBadge" class="px-1.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[10px]">0</span>
+          </button>
+          <button id="toggleHistoryDrawerBtn" type="button" title="Calculation History" class="flex-1 sm:flex-none justify-center px-2.5 py-1.5 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1 transition">
+            <span class="flex items-center text-cyan-500"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+            <span>History</span>
+            <span id="historyCountBadge" class="px-1.5 rounded-full bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 text-[10px]">0</span>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -247,11 +279,12 @@
       <div class="max-w-7xl mx-auto px-2 sm:px-6 py-2 flex items-center gap-1.5">
         <button id="filterSwipeLeftBtn" type="button" aria-label="Scroll filters left" class="hidden shrink-0 w-7 h-7 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 items-center justify-center text-slate-600 dark:text-slate-300 text-sm font-bold shadow-sm hover:border-indigo-500 transition">‹</button>
         <div id="categoryFilterTrack" style="touch-action: pan-x; -webkit-overflow-scrolling: touch;" class="flex items-center gap-2 overflow-x-auto no-scrollbar flex-1 py-0.5 cursor-grab active:cursor-grabbing select-none">
-          <button type="button" data-cat-filter="all" class="cat-pill shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-indigo-600 text-white shadow-sm whitespace-nowrap transition">All Calculators (24)</button>
-          <button type="button" data-cat-filter="Financial" class="cat-pill shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 whitespace-nowrap transition"><span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span>Financial (7)</span></span></button>
-          <button type="button" data-cat-filter="Fitness & Health" class="cat-pill shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 whitespace-nowrap transition"><span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><span>Fitness &amp; Health (5)</span></span></button>
-          <button type="button" data-cat-filter="Math" class="cat-pill shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 whitespace-nowrap transition"><span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z"/><path d="m14.5 12.5 2-2"/><path d="m11.5 9.5 2-2"/><path d="m8.5 6.5 2-2"/><path d="m17.5 15.5 2-2"/></svg><span>Math &amp; Graphing (6)</span></span></button>
-          <button type="button" data-cat-filter="Science & Utility" class="cat-pill shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 whitespace-nowrap transition"><span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/></svg><span>Science &amp; Utility (6)</span></span></button>
+          <button type="button" data-cat-filter="all" class="cat-pill shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-indigo-600 text-white shadow-sm whitespace-nowrap transition">All Calculators (37)</button>
+          <button type="button" data-cat-filter="Financial" class="cat-pill shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 whitespace-nowrap transition"><span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span>Financial (11)</span></span></button>
+          <button type="button" data-cat-filter="Fitness & Health" class="cat-pill shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 whitespace-nowrap transition"><span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><span>Fitness &amp; Health (8)</span></span></button>
+          <button type="button" data-cat-filter="Math" class="cat-pill shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 whitespace-nowrap transition"><span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z"/><path d="m14.5 12.5 2-2"/><path d="m11.5 9.5 2-2"/><path d="m8.5 6.5 2-2"/><path d="m17.5 15.5 2-2"/></svg><span>Math &amp; Graphing (9)</span></span></button>
+          <button type="button" data-cat-filter="Science & Utility" class="cat-pill shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 whitespace-nowrap transition"><span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/></svg><span>Science &amp; Utility (7)</span></span></button>
+          <button type="button" data-cat-filter="Everyday & Home" class="cat-pill shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 whitespace-nowrap transition"><span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Everyday &amp; Home (2)</span></span></button>
         </div>
         <button id="filterSwipeRightBtn" type="button" aria-label="Scroll filters right" class="hidden shrink-0 w-7 h-7 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 items-center justify-center text-slate-600 dark:text-slate-300 text-sm font-bold shadow-sm hover:border-indigo-500 transition">›</button>
       </div>
@@ -321,14 +354,14 @@
       <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
         <div>
           <h2 class="text-xl font-extrabold tracking-tight">Complete Calculator Directory</h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400">Browse all 24 interactive calculators across Finance, Fitness &amp; Health, Mathematics, Science &amp; Everyday Utilities</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Browse all 25 interactive calculators across Finance, Fitness &amp; Health, Mathematics, Science &amp; Everyday Utilities</p>
         </div>
         <div class="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
           <div id="activeSearchFilterBadge" class="hidden items-center gap-1.5 px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 font-semibold">
             <span>Filter: "<span id="activeSearchQueryText"></span>"</span>
             <button id="resetDirectorySearchBtn" type="button" class="hover:text-rose-500 font-bold ml-1">×</button>
           </div>
-          <div>Showing <span id="visibleCalcCount" class="font-bold text-slate-900 dark:text-white">24</span> tools</div>
+          <div>Showing <span id="visibleCalcCount" class="font-bold text-slate-900 dark:text-white">25</span> tools</div>
         </div>
       </div>
 
@@ -794,7 +827,7 @@
 
       </div>
 
-      <!-- Logged-In User Profile & Dashboard (CalcVerse Pro 2.0) -->
+      <!-- Logged-In User Profile & Dashboard (CalcVerse Pro) -->
       <div id="authProfileContainer" class="hidden space-y-4">
         <div class="p-4 rounded-2xl bg-gradient-to-r from-indigo-600/12 via-cyan-500/10 to-transparent border border-indigo-200/70 dark:border-indigo-800/70 flex flex-wrap items-center justify-between gap-3">
           <div class="flex items-center gap-3 min-w-0">
@@ -810,7 +843,7 @@
             </div>
           </div>
           <div class="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-1 rounded-lg border border-emerald-200 dark:border-emerald-800">
-            HttpOnly Session Active
+            Cloud Sync Active
           </div>
         </div>
 
@@ -850,7 +883,7 @@
 
         <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
           <button id="syncCloudAccountBtn" type="button" class="px-3 py-2 rounded-xl text-xs font-semibold bg-cyan-600 hover:bg-cyan-500 text-white transition">
-            <span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg><span>Sync to Worker</span></span>
+            <span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg><span>Sync Now</span></span>
           </button>
           <button id="exportAccountDataBtn" type="button" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">
             <span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span>Backup Account (.JSON)</span></span>
@@ -911,9 +944,14 @@
 
       <div id="donateThankYouBanner" class="hidden p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-xs font-semibold text-emerald-800 dark:text-emerald-200"></div>
 
-      <button id="submitDonateBtn" type="button" class="w-full py-2.5 rounded-xl text-sm font-bold bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white shadow-md transition">
-        Proceed to Support ($<span id="donateSelectedAmtText">5</span>)
-      </button>
+      <div class="space-y-2 pt-1">
+        <button id="submitDonateBtn" type="button" class="w-full py-2.5 rounded-xl text-sm font-bold bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white shadow-md transition">
+          Proceed to Support ($<span id="donateSelectedAmtText">5</span>)
+        </button>
+        <button id="skipDonateModalBtn" type="button" class="w-full py-2 rounded-xl text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          Skip for Now
+        </button>
+      </div>
     </div>
   </div>
 
@@ -921,6 +959,59 @@
   <canvas id="celebrationCanvas" class="fixed inset-0 z-50 pointer-events-none hidden"></canvas>
   <div id="congratsBadge" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 hidden px-5 py-2.5 rounded-2xl bg-gradient-to-r from-indigo-600 via-emerald-500 to-cyan-500 text-white text-xs sm:text-sm font-extrabold shadow-2xl border border-white/30 backdrop-blur transition-all">
     <span id="congratsBadgeText">Congratulations! Great Result!</span>
+  </div>
+
+  <!-- Bug Report & Solving Advice Modal (Auto Date & Time Stamped for Admin) -->
+  <div id="feedbackModal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm flex items-start sm:items-center justify-center p-2.5 sm:p-4 overflow-y-auto">
+    <div class="glass-card bg-white/95 dark:bg-slate-900/95 text-slate-900 dark:text-white rounded-2xl border border-white/60 dark:border-slate-700/70 max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-4 my-auto max-h-[92dvh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-slate-200/80 dark:border-slate-800 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-rose-500 to-indigo-600 text-white flex items-center justify-center shadow-sm"><svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/><path d="M12 20v-9"/><path d="M6.53 9C4.6 8.8 3 7.1 3 5"/><path d="M6 13H2"/><path d="M3 21c0-2.1 1.7-3.9 3.8-4"/><path d="M20.97 5c0 2.1-1.6 3.8-3.5 4"/><path d="M22 13h-4"/><path d="M17.2 17c2.1.1 3.8 1.9 3.8 4"/></svg></div>
+          <div>
+            <h3 class="font-extrabold text-base">Bug Report &amp; Solving Advice</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Help us improve CalcVerse calculators &amp; formulas</p>
+          </div>
+        </div>
+        <button id="closeFeedbackModalBtn" type="button" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center text-slate-500">×</button>
+      </div>
+
+      <!-- Automatic Live Date & Time Stamp Badge -->
+      <div class="px-3 py-2 rounded-xl bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 flex items-center justify-between text-[11px] font-mono text-slate-600 dark:text-slate-300">
+        <span>Auto Timestamp:</span>
+        <strong id="feedbackAutoTimestamp" class="text-indigo-600 dark:text-indigo-400">--</strong>
+      </div>
+
+      <div id="feedbackStatusBanner" class="hidden px-3 py-2 rounded-xl text-xs font-semibold"></div>
+
+      <form id="feedbackForm" class="space-y-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Report Type</label>
+            <select id="feedbackTypeSelect" class="w-full px-3 py-2 rounded-xl text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="Bug Report">Bug Report</option>
+              <option value="Solving / Formula Advice">Solving / Formula Advice</option>
+              <option value="UI / Mobile Issue">UI / Mobile Issue</option>
+              <option value="New Calculator Request">New Calculator Request</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Your Name / Email (Optional)</label>
+            <input id="feedbackSenderInput" type="text" placeholder="Optional contact" class="w-full px-3 py-2 rounded-xl text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Related Calculator / Page</label>
+          <input id="feedbackCalcInput" type="text" placeholder="e.g. Mortgage Calculator" class="w-full px-3 py-2 rounded-xl text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Describe the Bug or Solving Advice</label>
+          <textarea id="feedbackMessageInput" rows="4" required placeholder="Explain the issue or share your solving advice in detail..." class="w-full px-3 py-2 rounded-xl text-xs leading-relaxed bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-y min-h-[92px]"></textarea>
+        </div>
+        <button type="submit" class="w-full py-2.5 rounded-xl text-sm font-bold bg-gradient-to-r from-rose-500 to-indigo-600 hover:from-rose-400 hover:to-indigo-500 text-white shadow-md transition">
+          Submit Bug / Advice
+        </button>
+      </form>
+    </div>
   </div>
 
   <!-- Toast Notification -->
@@ -956,13 +1047,10 @@
           <button type="button" data-legal-page="terms" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Terms &amp; Conditions</button>
           <button type="button" data-legal-page="disclaimer" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Disclaimer</button>
           <button id="openCookieSettingsBtn" type="button" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Cookie Consent</button>
+          <a href="/sitemap.html" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Sitemap</a>
         </nav>
 
         <div class="flex flex-wrap items-center gap-2.5">
-          <button id="openAuthModalBtn" type="button" class="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold flex items-center gap-1.5 shadow-sm transition">
-            <span id="authHeaderIcon" class="flex items-center"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
-            <span id="authHeaderLabel">Account</span>
-          </button>
           <button id="openDonateModalBtn" type="button" class="px-3 py-1 rounded-lg bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white font-bold flex items-center gap-1.5 shadow-sm transition">
             <span class="flex items-center"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg></span>
             <span>Donate</span>
@@ -1067,6 +1155,28 @@
           </div>
         </div>
 
+        <!-- Bug Reports & Solving Advice Viewer (With Automatic Date & Time) -->
+        <div class="p-3.5 rounded-xl bg-sky-50/60 dark:bg-sky-950/20 border border-sky-200/80 dark:border-sky-900/60 space-y-2.5">
+          <div class="flex items-center justify-between gap-2">
+            <div class="font-bold text-sky-900 dark:text-sky-200">Bug Reports &amp; Solving Advice (Auto-Timestamped)</div>
+            <button id="refreshAdminFeedbackBtn" type="button" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-sky-600 hover:bg-sky-500 text-white transition">Load Reports</button>
+          </div>
+          <div id="adminFeedbackTableContainer" class="max-h-44 overflow-y-auto text-[11px] space-y-1.5 text-slate-600 dark:text-slate-300">
+            Click "Load Reports" to view bug reports and solving advice with exact date and time.
+          </div>
+        </div>
+
+        <!-- Contact Us Messages Viewer (With Automatic Date & Time) -->
+        <div class="p-3.5 rounded-xl bg-violet-50/60 dark:bg-violet-950/20 border border-violet-200/80 dark:border-violet-900/60 space-y-2.5">
+          <div class="flex items-center justify-between gap-2">
+            <div class="font-bold text-violet-900 dark:text-violet-200">Contact Us Messages (D1 Database)</div>
+            <button id="refreshAdminContactsBtn" type="button" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-violet-600 hover:bg-violet-500 text-white transition">Load Messages</button>
+          </div>
+          <div id="adminContactsTableContainer" class="max-h-44 overflow-y-auto text-[11px] space-y-1.5 text-slate-600 dark:text-slate-300">
+            Click "Load Messages" to view Contact Us submissions.
+          </div>
+        </div>
+
         <!-- Google Sign-In OAuth Client ID Configuration -->
         <div class="p-3.5 rounded-xl bg-indigo-50/60 dark:bg-indigo-950/20 border border-indigo-200/80 dark:border-indigo-900/60 space-y-2">
           <div class="font-bold text-indigo-900 dark:text-indigo-200">Google Sign-In (OAuth 2.0 Client ID)</div>
@@ -1096,8 +1206,6 @@
           <div class="font-bold text-slate-700 dark:text-slate-200">Individual Ad Placements &amp; Configurable Slot IDs (7 Units)</div>
           <div id="adPlacementsConfigList" class="space-y-2"></div>
         </div>
-      </div>
-
         </div>
       </div>
 
@@ -1193,14 +1301,220 @@
       document.body.removeChild(ta);
     }
 
+    const CURRENCIES = [
+      { code: 'USD', symbol: '$', name: 'US Dollar ($)', decimals: 2 },
+      { code: 'BDT', symbol: '৳', name: 'Bangladeshi Taka (৳)', decimals: 2 },
+      { code: 'EUR', symbol: '€', name: 'Euro (€)', decimals: 2 },
+      { code: 'GBP', symbol: '£', name: 'British Pound (£)', decimals: 2 },
+      { code: 'INR', symbol: '₹', name: 'Indian Rupee (₹)', decimals: 2 },
+      { code: 'AED', symbol: 'د.إ', name: 'UAE Dirham (د.إ)', decimals: 2 },
+      { code: 'SAR', symbol: '﷼', name: 'Saudi Riyal (﷼)', decimals: 2 },
+      { code: 'CAD', symbol: 'C$', name: 'Canadian Dollar (C$)', decimals: 2 },
+      { code: 'AUD', symbol: 'A$', name: 'Australian Dollar (A$)', decimals: 2 },
+      { code: 'JPY', symbol: '¥', name: 'Japanese Yen (¥)', decimals: 0 },
+      { code: 'CNY', symbol: '¥', name: 'Chinese Yuan (¥)', decimals: 2 },
+      { code: 'SGD', symbol: 'S$', name: 'Singapore Dollar (S$)', decimals: 2 },
+      { code: 'MYR', symbol: 'RM', name: 'Malaysian Ringgit (RM)', decimals: 2 },
+      { code: 'PKR', symbol: 'Rs', name: 'Pakistani Rupee (Rs)', decimals: 2 }
+    ];
+
+    // Worldwide Exchange Rate Directory (36 Major Currencies + Live API Sync)
+    const WORLD_CURRENCIES = [
+      { code: 'USD', symbol: '$', name: 'US Dollar', rate: 1.00 },
+      { code: 'BDT', symbol: '৳', name: 'Bangladeshi Taka', rate: 124.41 },
+      { code: 'EUR', symbol: '€', name: 'Euro', rate: 0.92 },
+      { code: 'GBP', symbol: '£', name: 'British Pound', rate: 0.79 },
+      { code: 'INR', symbol: '₹', name: 'Indian Rupee', rate: 84.10 },
+      { code: 'AED', symbol: 'د.إ', name: 'UAE Dirham', rate: 3.6725 },
+      { code: 'SAR', symbol: '﷼', name: 'Saudi Riyal', rate: 3.75 },
+      { code: 'QAR', symbol: 'QR', name: 'Qatari Riyal', rate: 3.64 },
+      { code: 'KWD', symbol: 'KD', name: 'Kuwaiti Dinar', rate: 0.307 },
+      { code: 'OMR', symbol: 'OMR', name: 'Omani Rial', rate: 0.385 },
+      { code: 'PKR', symbol: 'Rs', name: 'Pakistani Rupee', rate: 278.50 },
+      { code: 'LKR', symbol: 'Rs', name: 'Sri Lankan Rupee', rate: 293.00 },
+      { code: 'NPR', symbol: 'Rs', name: 'Nepalese Rupee', rate: 134.50 },
+      { code: 'MYR', symbol: 'RM', name: 'Malaysian Ringgit', rate: 4.42 },
+      { code: 'SGD', symbol: 'S$', name: 'Singapore Dollar', rate: 1.34 },
+      { code: 'THB', symbol: '฿', name: 'Thai Baht', rate: 34.50 },
+      { code: 'IDR', symbol: 'Rp', name: 'Indonesian Rupiah', rate: 15800.00 },
+      { code: 'PHP', symbol: '₱', name: 'Philippine Peso', rate: 58.50 },
+      { code: 'VND', symbol: '₫', name: 'Vietnamese Dong', rate: 25350.00 },
+      { code: 'JPY', symbol: '¥', name: 'Japanese Yen', rate: 153.50 },
+      { code: 'CNY', symbol: '¥', name: 'Chinese Yuan', rate: 7.22 },
+      { code: 'KRW', symbol: '₩', name: 'South Korean Won', rate: 1390.00 },
+      { code: 'HKD', symbol: 'HK$', name: 'Hong Kong Dollar', rate: 7.78 },
+      { code: 'CAD', symbol: 'C$', name: 'Canadian Dollar', rate: 1.39 },
+      { code: 'AUD', symbol: 'A$', name: 'Australian Dollar', rate: 1.53 },
+      { code: 'NZD', symbol: 'NZ$', name: 'New Zealand Dollar', rate: 1.68 },
+      { code: 'CHF', symbol: 'CHF', name: 'Swiss Franc', rate: 0.88 },
+      { code: 'SEK', symbol: 'kr', name: 'Swedish Krona', rate: 10.85 },
+      { code: 'NOK', symbol: 'kr', name: 'Norwegian Krone', rate: 11.02 },
+      { code: 'TRY', symbol: '₺', name: 'Turkish Lira', rate: 34.40 },
+      { code: 'RUB', symbol: '₽', name: 'Russian Ruble', rate: 98.00 },
+      { code: 'BRL', symbol: 'R$', name: 'Brazilian Real', rate: 5.78 },
+      { code: 'MXN', symbol: 'MX$', name: 'Mexican Peso', rate: 20.15 },
+      { code: 'ZAR', symbol: 'R', name: 'South African Rand', rate: 18.05 },
+      { code: 'EGP', symbol: 'E£', name: 'Egyptian Pound', rate: 49.20 },
+      { code: 'NGN', symbol: '₦', name: 'Nigerian Naira', rate: 1650.00 }
+    ];
+
+    const fxState = {
+      rates: Object.fromEntries(WORLD_CURRENCIES.map(c => [c.code, c.rate])),
+      pairRates: {},
+      isLive: false,
+      sourceLabel: 'Reference',
+      updatedAt: 'Reference Rates',
+      loading: false
+    };
+
+    async function fetchPairLiveRate(fromCode, toCode, force = false) {
+      if (!fromCode || !toCode || fromCode === toCode) return;
+      const pairKey = `${fromCode}-${toCode}`;
+      const cached = fxState.pairRates[pairKey];
+      if (!force && cached && (Date.now() - cached.ts) < 300000) return;
+      if (location.protocol !== 'https:' && location.protocol !== 'http:') return;
+      try {
+        const res = await fetch(`/api/fx/pair?from=${encodeURIComponent(fromCode)}&to=${encodeURIComponent(toCode)}`, { method: 'GET' });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.ok && isFinite(Number(data.rate)) && Number(data.rate) > 0) {
+            fxState.pairRates[pairKey] = {
+              rate: Number(data.rate),
+              source: data.source || 'Google Finance',
+              updatedAt: data.updatedAt || 'Just now',
+              ts: Date.now()
+            };
+            if (typeof appState !== 'undefined' && appState.activeCalcId === 'currency_converter') {
+              updateActiveCalculationOutput();
+            }
+          }
+        }
+      } catch (e) {}
+    }
+
+    async function fetchLiveFxRates(showFeedback = false) {
+      if (fxState.loading) return;
+      fxState.loading = true;
+      try {
+        let data = null;
+        if (location.protocol === 'https:' || location.protocol === 'http:') {
+          try {
+            const r1 = await fetch('/api/fx', { method: 'GET' });
+            if (r1.ok) {
+              const j1 = await r1.json();
+              if (j1 && j1.ok && j1.rates) data = j1;
+            }
+          } catch (e) {}
+        }
+        if (!data) {
+          try {
+            const r2 = await fetch('https://open.er-api.com/v6/latest/USD', { method: 'GET' });
+            if (r2.ok) {
+              const j2 = await r2.json();
+              if (j2 && j2.result === 'success' && j2.rates) {
+                data = { rates: j2.rates, updatedAt: j2.time_last_update_utc || new Date().toUTCString() };
+              }
+            }
+          } catch (e) {}
+        }
+        if (!data) {
+          try {
+            const r3 = await fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json', { method: 'GET' });
+            if (r3.ok) {
+              const j3 = await r3.json();
+              if (j3 && j3.usd) {
+                const upperRates = {};
+                Object.keys(j3.usd).forEach(k => { upperRates[k.toUpperCase()] = j3.usd[k]; });
+                data = { rates: upperRates, updatedAt: j3.date ? `${j3.date} UTC` : new Date().toUTCString() };
+              }
+            }
+          } catch (e) {}
+        }
+        if (data && data.rates) {
+          Object.keys(data.rates).forEach(code => {
+            if (isFinite(Number(data.rates[code]))) fxState.rates[code] = Number(data.rates[code]);
+          });
+          fxState.isLive = true;
+          fxState.updatedAt = String(data.updatedAt || 'Updated just now').replace(/ \+0000$/, ' UTC');
+          if (showFeedback) showToast('Live worldwide exchange rates updated!');
+          if (typeof appState !== 'undefined' && appState.activeCalcId === 'currency_converter') {
+            updateActiveCalculationOutput();
+          }
+        } else if (showFeedback) {
+          showToast('Using built-in worldwide reference rates (offline mode).');
+        }
+      } finally {
+        fxState.loading = false;
+      }
+    }
+
+    window.swapFxCurrencies = function () {
+      const vals = appState.inputValues && appState.inputValues.currency_converter;
+      if (!vals) return;
+      const tmp = vals.fromCur;
+      vals.fromCur = vals.toCur;
+      vals.toCur = tmp;
+      renderActiveWorkspace();
+    };
+
+
+    function getActiveCurrency() {
+      const code = (typeof appState !== 'undefined' && appState.currency) ? appState.currency : safeGetStorage('calcverse_currency', 'USD');
+      return CURRENCIES.find(c => c.code === code) || CURRENCIES[0];
+    }
+
     function fmtCurrency(val) {
-      if (!isFinite(val)) return '$0.00';
-      return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 }).format(val);
+      const cur = getActiveCurrency();
+      if (!isFinite(val)) return `${cur.symbol}${cur.decimals === 0 ? '0' : '0.00'}`;
+      const neg = val < 0 ? '-' : '';
+      const absFormatted = Math.abs(val).toLocaleString('en-US', {
+        minimumFractionDigits: cur.decimals,
+        maximumFractionDigits: cur.decimals
+      });
+      return `${neg}${cur.symbol}${absFormatted}`;
     }
 
     function fmtNum(val, dec = 2) {
       if (!isFinite(val)) return '0';
       return Number(val).toLocaleString('en-US', { maximumFractionDigits: dec });
+    }
+
+    // Measurement Unit Conversion Helpers (cm / m / ft / in, kg / lb, km / mi / m / ft)
+    function toCm(val, unit) {
+      const n = Number(val) || 0;
+      if (unit === 'm') return n * 100;
+      if (unit === 'ft') return n * 30.48;
+      if (unit === 'in') return n * 2.54;
+      return n;
+    }
+    function fromCm(cm, unit) {
+      const n = Number(cm) || 0;
+      if (unit === 'm') return Number((n / 100).toFixed(2));
+      if (unit === 'ft') return Number((n / 30.48).toFixed(2));
+      if (unit === 'in') return Number((n / 2.54).toFixed(1));
+      return Number(n.toFixed(1));
+    }
+    function toKg(val, unit) {
+      const n = Number(val) || 0;
+      return unit === 'lb' ? n * 0.45359237 : n;
+    }
+    function fromKg(kg, unit) {
+      const n = Number(kg) || 0;
+      return unit === 'lb' ? Number((n / 0.45359237).toFixed(1)) : Number(n.toFixed(1));
+    }
+    function toKm(val, unit) {
+      const n = Number(val) || 0;
+      if (unit === 'mi') return n * 1.60934;
+      if (unit === 'm') return n / 1000;
+      if (unit === 'ft') return n * 0.0003048;
+      return n;
+    }
+    function fromKm(km, unit) {
+      const n = Number(km) || 0;
+      if (unit === 'mi') return Number((n / 1.60934).toFixed(2));
+      if (unit === 'm') return Number((n * 1000).toFixed(0));
+      if (unit === 'ft') return Number((n / 0.0003048).toFixed(0));
+      return Number(n.toFixed(2));
     }
 
     // =========================================================================
@@ -1785,6 +2099,182 @@
         }
       },
 
+      {
+        id: 'currency_converter',
+        name: 'Worldwide Currency Converter (Live FX)',
+        category: 'Financial',
+        icon: '<svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+        popular: true,
+        desc: 'Convert 36+ worldwide currencies with live exchange rates, inverse rate & global comparison table',
+        inputs: [
+          { key: 'amount', label: 'Amount to Convert', type: 'number', default: 100, min: 0, step: 1 },
+          { key: 'fromCur', label: 'From Currency', type: 'select', default: 'USD', options: WORLD_CURRENCIES.map(c => ({ v: c.code, l: `${c.code} — ${c.name} (${c.symbol})` })) },
+          { key: 'toCur', label: 'To Currency', type: 'select', default: 'BDT', options: WORLD_CURRENCIES.map(c => ({ v: c.code, l: `${c.code} — ${c.name} (${c.symbol})` })) }
+        ],
+        compute(v) {
+          const amt = Math.max(0, Number(v.amount) || 0);
+          const fromCode = v.fromCur || 'USD';
+          const toCode = v.toCur || 'BDT';
+          const fromMeta = WORLD_CURRENCIES.find(c => c.code === fromCode) || WORLD_CURRENCIES[0];
+          const toMeta = WORLD_CURRENCIES.find(c => c.code === toCode) || WORLD_CURRENCIES[1];
+          const rFrom = fxState.rates[fromCode] || fromMeta.rate || 1;
+          const rTo = fxState.rates[toCode] || toMeta.rate || 1;
+          const pairKey = `${fromCode}-${toCode}`;
+          const pairInfo = fxState.pairRates[pairKey];
+          if (fromCode !== toCode && (!pairInfo || (Date.now() - pairInfo.ts) > 300000)) {
+            fetchPairLiveRate(fromCode, toCode, false);
+          }
+          const unitRate = fromCode === toCode ? 1 : (pairInfo ? pairInfo.rate : (rTo / rFrom));
+          const invRate = unitRate > 0 ? (1 / unitRate) : 0;
+          const converted = amt * unitRate;
+          const activeFeedTitle = pairInfo ? pairInfo.source : (fxState.isLive ? 'Live Market' : 'Reference');
+          const activeFeedSub = pairInfo ? pairInfo.updatedAt : fxState.updatedAt;
+          const fmtFx = (n, code) => {
+            const dec = ['JPY', 'KRW', 'VND', 'IDR'].includes(code) ? 0 : 2;
+            return Number(n).toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+          };
+          const quickCodes = ['USD', 'BDT', 'EUR', 'GBP', 'INR', 'AED', 'SAR', 'JPY'];
+          const quickCards = quickCodes.map(code => {
+            const meta = WORLD_CURRENCIES.find(c => c.code === code);
+            const rate = fxState.rates[code] || (meta ? meta.rate : 1);
+            const val = (amt / rFrom) * rate;
+            return `<div class="p-2 rounded-lg bg-white dark:bg-slate-900 border ${code === toCode ? 'border-indigo-400 dark:border-indigo-600' : 'border-slate-200 dark:border-slate-800'}"><div class="text-[10px] font-semibold text-slate-500">${code} (${meta ? meta.symbol : ''})</div><div class="font-bold font-mono-num text-xs mt-0.5">${fmtFx(val, code)}</div></div>`;
+          }).join('');
+
+          return {
+            summaryLabel: `${toMeta.symbol}${fmtFx(converted, toCode)} ${toCode}`,
+            kpis: [
+              { label: `Converted (${toCode})`, value: `${toMeta.symbol}${fmtFx(converted, toCode)}`, sub: `${fromMeta.symbol}${fmtFx(amt, fromCode)} ${fromCode} → ${toCode}` },
+              { label: 'Exchange Rate', value: `1 ${fromCode} = ${unitRate.toFixed(4)} ${toCode}`, sub: `Inverse: 1 ${toCode} = ${invRate.toFixed(6)} ${fromCode}` },
+              { label: 'Rate Feed', value: activeFeedTitle, sub: activeFeedSub }
+            ],
+            visualHtml: `
+              <div class="space-y-2.5">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <span class="text-xs font-semibold text-slate-600 dark:text-slate-300">Worldwide Quick Comparison (${fromMeta.symbol}${fmtFx(amt, fromCode)} ${fromCode})</span>
+                  <div class="flex items-center gap-1.5">
+                    <button type="button" onclick="window.swapFxCurrencies()" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition">Swap ⇄</button>
+                    <button type="button" onclick="fetchPairLiveRate('${fromCode}','${toCode}',true);fetchLiveFxRates(true)" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition">Refresh Live</button>
+                    <a href="https://www.google.com/finance/quote/${fromCode}-${toCode}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-indigo-400 transition">Google Finance ↗</a>
+                  </div>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">${quickCards}</div>
+              </div>
+            `,
+            formulaSteps: [
+              `Cross-Rate Formula: Converted = Amount × (Rate[${toCode}] ÷ Rate[${fromCode}])`,
+              `1 USD Base: ${fromCode} = ${rFrom.toFixed(4)} | ${toCode} = ${rTo.toFixed(4)}`,
+              `Result: ${amt} ${fromCode} × ${unitRate.toFixed(6)} = ${fmtFx(converted, toCode)} ${toCode}`
+            ]
+          };
+        }
+      },
+
+      {
+        id: 'discount_tax',
+        name: 'Discount, VAT & Sales Tax Calculator',
+        category: 'Financial',
+        icon: '<svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>',
+        popular: true,
+        desc: 'Compute final sale price, savings amount, and VAT/Sales Tax on any item or order',
+        inputs: [
+          { key: 'price', label: 'Original Price ($)', type: 'number', default: 120, min: 0, step: 1 },
+          { key: 'qty', label: 'Quantity', type: 'number', default: 1, min: 1, step: 1 },
+          { key: 'discountPct', label: 'Discount (%)', type: 'number', default: 20, min: 0, max: 100, step: 1 },
+          { key: 'taxPct', label: 'VAT / Sales Tax (%)', type: 'number', default: 7.5, min: 0, max: 100, step: 0.5 }
+        ],
+        compute(v) {
+          const subtotal = Math.max(0, v.price) * Math.max(1, v.qty);
+          const discountAmt = subtotal * (Math.max(0, Math.min(100, v.discountPct)) / 100);
+          const afterDiscount = subtotal - discountAmt;
+          const taxAmt = afterDiscount * (Math.max(0, v.taxPct) / 100);
+          const finalTotal = afterDiscount + taxAmt;
+          return {
+            summaryLabel: fmtCurrency(finalTotal),
+            kpis: [
+              { label: 'Final Payable Total', value: fmtCurrency(finalTotal), sub: `Includes ${fmtCurrency(taxAmt)} tax (${v.taxPct}%)` },
+              { label: 'Total You Save', value: fmtCurrency(discountAmt), sub: `${v.discountPct}% off ${fmtCurrency(subtotal)}` },
+              { label: 'Price After Discount', value: fmtCurrency(afterDiscount), sub: `Before VAT / Sales Tax` }
+            ],
+            visualHtml: `<div class="text-xs text-slate-600 dark:text-slate-300">Subtotal <strong>${fmtCurrency(subtotal)}</strong> − Discount <strong>${fmtCurrency(discountAmt)}</strong> + Tax <strong>${fmtCurrency(taxAmt)}</strong> = <strong class="text-indigo-600 dark:text-indigo-400">${fmtCurrency(finalTotal)}</strong></div>`,
+            formulaSteps: [
+              `Subtotal = ${fmtCurrency(v.price)} × ${v.qty} = ${fmtCurrency(subtotal)}`,
+              `Discounted Price = ${fmtCurrency(subtotal)} × (1 − ${v.discountPct}/100) = ${fmtCurrency(afterDiscount)}`,
+              `Final Total = ${fmtCurrency(afterDiscount)} + ${v.taxPct}% Tax (${fmtCurrency(taxAmt)}) = ${fmtCurrency(finalTotal)}`
+            ]
+          };
+        }
+      },
+      {
+        id: 'tip',
+        name: 'Tip & Restaurant Bill Split Calculator',
+        category: 'Financial',
+        icon: '<svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+        popular: false,
+        desc: 'Split dining or group bills evenly with custom tip percentages and per-person breakdown',
+        inputs: [
+          { key: 'bill', label: 'Bill Amount ($)', type: 'number', default: 85, min: 0, step: 1 },
+          { key: 'tipPct', label: 'Tip Percentage (%)', type: 'number', default: 15, min: 0, max: 100, step: 1 },
+          { key: 'people', label: 'Number of People', type: 'number', default: 4, min: 1, step: 1 }
+        ],
+        compute(v) {
+          const bill = Math.max(0, v.bill);
+          const people = Math.max(1, Math.round(v.people || 1));
+          const totalTip = bill * (Math.max(0, v.tipPct) / 100);
+          const grandTotal = bill + totalTip;
+          const perPerson = grandTotal / people;
+          const tipPerPerson = totalTip / people;
+          return {
+            summaryLabel: `${fmtCurrency(perPerson)} / person`,
+            kpis: [
+              { label: 'Total Per Person', value: fmtCurrency(perPerson), sub: `Split evenly across ${people} people` },
+              { label: 'Total Tip Amount', value: fmtCurrency(totalTip), sub: `${fmtCurrency(tipPerPerson)} tip per person` },
+              { label: 'Grand Total Bill', value: fmtCurrency(grandTotal), sub: `Bill ${fmtCurrency(bill)} + ${v.tipPct}% tip` }
+            ],
+            visualHtml: `<div class="grid grid-cols-3 gap-2 text-center text-xs"><div class="p-2 rounded-lg bg-slate-50 dark:bg-slate-800/70"><div class="text-slate-500">10% Tip</div><div class="font-bold">${fmtCurrency((bill * 1.10) / people)}/ea</div></div><div class="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/50"><div class="text-indigo-600 dark:text-indigo-400">15% Tip</div><div class="font-bold">${fmtCurrency((bill * 1.15) / people)}/ea</div></div><div class="p-2 rounded-lg bg-slate-50 dark:bg-slate-800/70"><div class="text-slate-500">20% Tip</div><div class="font-bold">${fmtCurrency((bill * 1.20) / people)}/ea</div></div></div>`,
+            formulaSteps: [
+              `Total Tip = ${fmtCurrency(bill)} × ${v.tipPct}% = ${fmtCurrency(totalTip)}`,
+              `Per Person = (${fmtCurrency(bill)} + ${fmtCurrency(totalTip)}) ÷ ${people} = ${fmtCurrency(perPerson)}`
+            ]
+          };
+        }
+      },
+      {
+        id: 'budget_savings',
+        name: 'Monthly Budget & Savings Goal Calculator',
+        category: 'Financial',
+        icon: '<svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.7-1 2-2h2v-4h-2c0-1-.5-1.5-1-2V5z"/><path d="M2 9v1c0 1.1.9 2 2 2h1"/></svg>',
+        popular: true,
+        desc: 'Apply the 50/30/20 budget rule and calculate months needed to hit your savings goal',
+        inputs: [
+          { key: 'income', label: 'Monthly Net Income ($)', type: 'number', default: 3000, min: 0, step: 100 },
+          { key: 'needsPct', label: 'Needs Allocation (%)', type: 'number', default: 50, min: 0, max: 100, step: 5 },
+          { key: 'wantsPct', label: 'Wants Allocation (%)', type: 'number', default: 30, min: 0, max: 100, step: 5 },
+          { key: 'goal', label: 'Target Savings Goal ($)', type: 'number', default: 12000, min: 0, step: 500 }
+        ],
+        compute(v) {
+          const inc = Math.max(0, v.income);
+          const needs = inc * (Math.max(0, v.needsPct) / 100);
+          const wants = inc * (Math.max(0, v.wantsPct) / 100);
+          const savePct = Math.max(0, 100 - v.needsPct - v.wantsPct);
+          const savings = Math.max(0, inc - needs - wants);
+          const months = savings > 0 ? Math.ceil(Math.max(0, v.goal) / savings) : 0;
+          return {
+            summaryLabel: `${fmtCurrency(savings)}/mo Saved`,
+            kpis: [
+              { label: `Monthly Savings (${savePct.toFixed(0)}%)`, value: fmtCurrency(savings), sub: `${fmtCurrency(savings * 12)} saved per year` },
+              { label: 'Time to Reach Goal', value: savings > 0 ? `${months} months` : 'N/A', sub: savings > 0 ? `≈ ${(months / 12).toFixed(1)} years for ${fmtCurrency(v.goal)}` : 'Increase savings allocation' },
+              { label: 'Needs / Wants Split', value: `${fmtCurrency(needs)} / ${fmtCurrency(wants)}`, sub: `${v.needsPct}% Needs • ${v.wantsPct}% Wants` }
+            ],
+            visualHtml: `<div class="w-full h-4 rounded-full overflow-hidden flex bg-slate-200 dark:bg-slate-800"><div style="width:${Math.min(100, v.needsPct)}%" class="bg-indigo-500 h-full" title="Needs"></div><div style="width:${Math.min(100, v.wantsPct)}%" class="bg-amber-400 h-full" title="Wants"></div><div style="width:${savePct}%" class="bg-emerald-500 h-full" title="Savings"></div></div>`,
+            formulaSteps: [
+              `Needs (${v.needsPct}%) = ${fmtCurrency(needs)} | Wants (${v.wantsPct}%) = ${fmtCurrency(wants)}`,
+              `Monthly Savings (${savePct.toFixed(0)}%) = ${fmtCurrency(savings)} → Goal Time = ${fmtCurrency(v.goal)} ÷ ${fmtCurrency(savings)} = ${months} months`
+            ]
+          };
+        }
+      },
+
       // ---------------- FITNESS & HEALTH (5) ----------------
       {
         id: 'bmi',
@@ -1794,14 +2284,26 @@
         popular: true,
         desc: 'Body Mass Index, WHO category scale, Ponderal index & healthy weight range',
         inputs: [
-          { key: 'heightCm', label: 'Height (cm)', type: 'number', default: 175, min: 100, max: 240, step: 1 },
-          { key: 'weightKg', label: 'Weight (kg)', type: 'number', default: 72, min: 25, max: 250, step: 0.5 }
+          { key: 'heightUnit', label: 'Height Unit', type: 'select', default: 'cm', unitKind: 'length', converts: ['heightVal'], options: [
+            {v: 'cm', l: 'Centimetres (cm)'}, {v: 'm', l: 'Metres (m)'}, {v: 'ft', l: 'Feet (ft)'}, {v: 'in', l: 'Inches (in)'}
+          ]},
+          { key: 'heightVal', label: 'Height', type: 'number', default: 175, min: 0.5, step: 0.1 },
+          { key: 'weightUnit', label: 'Weight Unit', type: 'select', default: 'kg', unitKind: 'weight', converts: ['weightVal'], options: [
+            {v: 'kg', l: 'Kilograms (kg)'}, {v: 'lb', l: 'Pounds (lb)'}
+          ]},
+          { key: 'weightVal', label: 'Weight', type: 'number', default: 72, min: 1, step: 0.5 }
         ],
         compute(v) {
-          const hM = v.heightCm / 100;
-          const bmi = v.weightKg / (hM * hM);
-          const minHealthy = 18.5 * hM * hM;
-          const maxHealthy = 24.9 * hM * hM;
+          const hUnit = v.heightUnit || 'cm';
+          const wUnit = v.weightUnit || 'kg';
+          const heightCm = Math.max(30, toCm(v.heightVal, hUnit));
+          const weightKg = Math.max(1, toKg(v.weightVal, wUnit));
+          const hM = heightCm / 100;
+          const bmi = weightKg / (hM * hM);
+          const minHealthyKg = 18.5 * hM * hM;
+          const maxHealthyKg = 24.9 * hM * hM;
+          const minDisp = wUnit === 'lb' ? `${fromKg(minHealthyKg, 'lb')} lb` : `${minHealthyKg.toFixed(1)} kg`;
+          const maxDisp = wUnit === 'lb' ? `${fromKg(maxHealthyKg, 'lb')} lb` : `${maxHealthyKg.toFixed(1)} kg`;
           let cat = 'Normal Weight';
           let badgeColor = 'text-emerald-600 dark:text-emerald-400';
           if (bmi < 18.5) { cat = 'Underweight'; badgeColor = 'text-cyan-600 dark:text-cyan-400'; }
@@ -1813,8 +2315,8 @@
             summaryLabel: `BMI ${bmi.toFixed(1)} (${cat})`,
             kpis: [
               { label: 'Your BMI Score', value: bmi.toFixed(1), sub: `${cat} (WHO Standard)` },
-              { label: 'Healthy Weight Range', value: `${minHealthy.toFixed(1)} – ${maxHealthy.toFixed(1)} kg`, sub: `For ${v.heightCm} cm height` },
-              { label: 'Ponderal Index', value: `${(v.weightKg / Math.pow(hM, 3)).toFixed(1)} kg/m³`, sub: `Height-cubed ratio` }
+              { label: 'Healthy Weight Range', value: `${minDisp} – ${maxDisp}`, sub: `For ${v.heightVal} ${hUnit} (${hM.toFixed(2)} m)` },
+              { label: 'Ponderal Index', value: `${(weightKg / Math.pow(hM, 3)).toFixed(1)} kg/m³`, sub: `Weight: ${weightKg.toFixed(1)} kg / ${fromKg(weightKg, 'lb')} lb` }
             ],
             visualHtml: `
               <div class="space-y-2">
@@ -1834,8 +2336,8 @@
             `,
             formulaSteps: [
               `Formula: BMI = Weight (kg) ÷ [Height (m)]²`,
-              `Height in meters = ${v.heightCm} cm ÷ 100 = ${hM.toFixed(2)} m`,
-              `BMI = ${v.weightKg} ÷ (${hM.toFixed(2)})² = ${bmi.toFixed(2)} kg/m² (${cat})`
+              `Converted: ${v.heightVal} ${hUnit} = ${hM.toFixed(2)} m | ${v.weightVal} ${wUnit} = ${weightKg.toFixed(1)} kg`,
+              `BMI = ${weightKg.toFixed(1)} ÷ (${hM.toFixed(2)})² = ${bmi.toFixed(2)} kg/m² (${cat})`
             ]
           };
         }
@@ -1850,8 +2352,14 @@
         inputs: [
           { key: 'sex', label: 'Biological Sex', type: 'select', default: 'male', options: [{v: 'male', l: 'Male'}, {v: 'female', l: 'Female'}] },
           { key: 'age', label: 'Age (Years)', type: 'number', default: 29, min: 15, max: 100, step: 1 },
-          { key: 'heightCm', label: 'Height (cm)', type: 'number', default: 176, min: 120, max: 230, step: 1 },
-          { key: 'weightKg', label: 'Weight (kg)', type: 'number', default: 74, min: 35, max: 220, step: 1 },
+          { key: 'heightUnit', label: 'Height Unit', type: 'select', default: 'cm', unitKind: 'length', converts: ['heightVal'], options: [
+            {v: 'cm', l: 'Centimetres (cm)'}, {v: 'm', l: 'Metres (m)'}, {v: 'ft', l: 'Feet (ft)'}, {v: 'in', l: 'Inches (in)'}
+          ]},
+          { key: 'heightVal', label: 'Height', type: 'number', default: 176, min: 0.5, step: 0.1 },
+          { key: 'weightUnit', label: 'Weight Unit', type: 'select', default: 'kg', unitKind: 'weight', converts: ['weightVal'], options: [
+            {v: 'kg', l: 'Kilograms (kg)'}, {v: 'lb', l: 'Pounds (lb)'}
+          ]},
+          { key: 'weightVal', label: 'Weight', type: 'number', default: 74, min: 1, step: 0.5 },
           { key: 'activity', label: 'Activity Multiplier', type: 'select', default: 1.55, options: [
             {v: 1.2, l: 'Sedentary (1.2×)'},
             {v: 1.375, l: 'Light Exercise 1-3d/wk (1.375×)'},
@@ -1860,9 +2368,11 @@
           ]}
         ],
         compute(v) {
+          const heightCm = Math.max(50, toCm(v.heightVal, v.heightUnit || 'cm'));
+          const weightKg = Math.max(10, toKg(v.weightVal, v.weightUnit || 'kg'));
           const bmr = v.sex === 'male'
-            ? (10 * v.weightKg) + (6.25 * v.heightCm) - (5 * v.age) + 5
-            : (10 * v.weightKg) + (6.25 * v.heightCm) - (5 * v.age) - 161;
+            ? (10 * weightKg) + (6.25 * heightCm) - (5 * v.age) + 5
+            : (10 * weightKg) + (6.25 * heightCm) - (5 * v.age) - 161;
           const tdee = bmr * Number(v.activity);
           const cutCal = tdee - 500;
           const bulkCal = tdee + 350;
@@ -1895,7 +2405,7 @@
               </div>
             `,
             formulaSteps: [
-              `Mifflin-St Jeor BMR = 10(${v.weightKg}) + 6.25(${v.heightCm}) − 5(${v.age}) ${v.sex === 'male' ? '+ 5' : '− 161'} = ${Math.round(bmr)} kcal/day`,
+              `Mifflin-St Jeor BMR = 10(${weightKg.toFixed(1)} kg) + 6.25(${heightCm.toFixed(1)} cm) − 5(${v.age}) ${v.sex === 'male' ? '+ 5' : '− 161'} = ${Math.round(bmr)} kcal/day`,
               `TDEE = BMR × Activity (${v.activity}) = ${Math.round(tdee)} kcal/day`,
               `Macros: Protein = (0.30 × ${Math.round(tdee)}) ÷ 4 = ${protG}g | Carbs = ${carbG}g | Fat = ${fatG}g`
             ]
@@ -1910,22 +2420,36 @@
         popular: false,
         desc: 'Estimate body fat percentage, fat mass, and lean body mass using circumference measurements',
         inputs: [
-          { key: 'heightCm', label: 'Height (cm)', type: 'number', default: 178, min: 130, max: 230, step: 1 },
-          { key: 'weightKg', label: 'Weight (kg)', type: 'number', default: 78, min: 35, max: 220, step: 0.5 },
-          { key: 'waistCm', label: 'Waist Circumference (cm)', type: 'number', default: 84, min: 50, max: 180, step: 0.5 },
-          { key: 'neckCm', label: 'Neck Circumference (cm)', type: 'number', default: 38, min: 25, max: 65, step: 0.5 }
+          { key: 'lengthUnit', label: 'Length Unit', type: 'select', default: 'cm', unitKind: 'length', converts: ['heightVal', 'waistVal', 'neckVal'], options: [
+            {v: 'cm', l: 'Centimetres (cm)'}, {v: 'm', l: 'Metres (m)'}, {v: 'ft', l: 'Feet (ft)'}, {v: 'in', l: 'Inches (in)'}
+          ]},
+          { key: 'heightVal', label: 'Height', type: 'number', default: 178, min: 0.5, step: 0.1 },
+          { key: 'waistVal', label: 'Waist Circumference', type: 'number', default: 84, min: 0.3, step: 0.1 },
+          { key: 'neckVal', label: 'Neck Circumference', type: 'number', default: 38, min: 0.1, step: 0.1 },
+          { key: 'weightUnit', label: 'Weight Unit', type: 'select', default: 'kg', unitKind: 'weight', converts: ['weightVal'], options: [
+            {v: 'kg', l: 'Kilograms (kg)'}, {v: 'lb', l: 'Pounds (lb)'}
+          ]},
+          { key: 'weightVal', label: 'Weight', type: 'number', default: 78, min: 1, step: 0.5 }
         ],
         compute(v) {
-          const diff = Math.max(10, v.waistCm - v.neckCm);
-          const bf = Math.max(3, Math.min(55, 495 / (1.0324 - 0.19077 * Math.log10(diff) + 0.15456 * Math.log10(v.heightCm)) - 450));
-          const fatMass = v.weightKg * (bf / 100);
-          const leanMass = v.weightKg - fatMass;
+          const lUnit = v.lengthUnit || 'cm';
+          const wUnit = v.weightUnit || 'kg';
+          const heightCm = Math.max(50, toCm(v.heightVal, lUnit));
+          const waistCm = Math.max(20, toCm(v.waistVal, lUnit));
+          const neckCm = Math.max(10, toCm(v.neckVal, lUnit));
+          const weightKg = Math.max(10, toKg(v.weightVal, wUnit));
+          const diff = Math.max(10, waistCm - neckCm);
+          const bf = Math.max(3, Math.min(55, 495 / (1.0324 - 0.19077 * Math.log10(diff) + 0.15456 * Math.log10(heightCm)) - 450));
+          const fatMassKg = weightKg * (bf / 100);
+          const leanMassKg = weightKg - fatMassKg;
+          const leanDisp = wUnit === 'lb' ? `${fromKg(leanMassKg, 'lb')} lb` : `${leanMassKg.toFixed(1)} kg`;
+          const fatDisp = wUnit === 'lb' ? `${fromKg(fatMassKg, 'lb')} lb` : `${fatMassKg.toFixed(1)} kg`;
           return {
             summaryLabel: `${bf.toFixed(1)}% Body Fat`,
             kpis: [
               { label: 'Estimated Body Fat', value: `${bf.toFixed(1)}%`, sub: `U.S. Navy Method` },
-              { label: 'Lean Body Mass', value: `${leanMass.toFixed(1)} kg`, sub: `${(100 - bf).toFixed(1)}% of total weight` },
-              { label: 'Total Fat Mass', value: `${fatMass.toFixed(1)} kg`, sub: `Waist-to-Height: ${(v.waistCm / v.heightCm).toFixed(2)}` }
+              { label: 'Lean Body Mass', value: leanDisp, sub: `${(100 - bf).toFixed(1)}% of total weight` },
+              { label: 'Total Fat Mass', value: fatDisp, sub: `Waist-to-Height: ${(waistCm / heightCm).toFixed(2)}` }
             ],
             visualHtml: `
               <div class="w-full h-5 rounded-full overflow-hidden flex bg-slate-200 dark:bg-slate-800">
@@ -1934,8 +2458,8 @@
               </div>
             `,
             formulaSteps: [
-              `U.S. Navy Formula: BF% = 495 / [1.0324 − 0.19077×log₁₀(waist − neck) + 0.15456×log₁₀(height)] − 450`,
-              `Fat Mass = ${v.weightKg} kg × ${bf.toFixed(1)}% = ${fatMass.toFixed(1)} kg | Lean Mass = ${leanMass.toFixed(1)} kg`
+              `Converted: Height = ${heightCm.toFixed(1)} cm | Waist = ${waistCm.toFixed(1)} cm | Neck = ${neckCm.toFixed(1)} cm`,
+              `Fat Mass = ${fatDisp} | Lean Mass = ${leanDisp}`
             ]
           };
         }
@@ -1948,15 +2472,20 @@
         popular: false,
         desc: 'Calculate min/km, min/mile, km/h speed & projected 5K, 10K, Half & Full Marathon times',
         inputs: [
-          { key: 'distKm', label: 'Distance (km)', type: 'number', default: 10, min: 0.1, step: 0.5 },
+          { key: 'distUnit', label: 'Distance Unit', type: 'select', default: 'km', unitKind: 'distance', converts: ['distVal'], options: [
+            {v: 'km', l: 'Kilometres (km)'}, {v: 'mi', l: 'Miles (mi)'}, {v: 'm', l: 'Metres (m)'}, {v: 'ft', l: 'Feet (ft)'}
+          ]},
+          { key: 'distVal', label: 'Distance', type: 'number', default: 10, min: 0.1, step: 0.5 },
           { key: 'minutes', label: 'Total Time (Minutes)', type: 'number', default: 48, min: 1, step: 1 },
           { key: 'seconds', label: 'Additional Seconds', type: 'number', default: 30, min: 0, max: 59, step: 5 }
         ],
         compute(v) {
-          const totalMin = v.minutes + (v.seconds / 60);
-          const paceKm = totalMin / Math.max(0.1, v.distKm);
+          const dUnit = v.distUnit || 'km';
+          const distKm = Math.max(0.05, toKm(v.distVal, dUnit));
+          const totalMin = Math.max(0.1, v.minutes + (v.seconds / 60));
+          const paceKm = totalMin / distKm;
           const paceMi = paceKm * 1.60934;
-          const speedKmh = (v.distKm / totalMin) * 60;
+          const speedKmh = (distKm / totalMin) * 60;
           const fmtPace = p => {
             const m = Math.floor(p);
             const s = Math.round((p - m) * 60);
@@ -1979,7 +2508,7 @@
             `,
             formulaSteps: [
               `Total Minutes = ${v.minutes} + (${v.seconds}/60) = ${totalMin.toFixed(2)} min`,
-              `Pace = ${totalMin.toFixed(2)} min ÷ ${v.distKm} km = ${fmtPace(paceKm)} min/km (${speedKmh.toFixed(2)} km/h)`
+              `Distance = ${v.distVal} ${dUnit} (${distKm.toFixed(2)} km) | Pace = ${fmtPace(paceKm)} /km (${fmtPace(paceMi)} /mi, ${speedKmh.toFixed(2)} km/h)`
             ]
           };
         }
@@ -1993,10 +2522,15 @@
         desc: 'Compare Devine, Robinson, Miller & Hamwi clinical ideal body weight formulas',
         inputs: [
           { key: 'sex', label: 'Sex', type: 'select', default: 'male', options: [{v: 'male', l: 'Male'}, {v: 'female', l: 'Female'}] },
-          { key: 'heightCm', label: 'Height (cm)', type: 'number', default: 175, min: 140, max: 220, step: 1 }
+          { key: 'heightUnit', label: 'Height Unit', type: 'select', default: 'cm', unitKind: 'length', converts: ['heightVal'], options: [
+            {v: 'cm', l: 'Centimetres (cm)'}, {v: 'm', l: 'Metres (m)'}, {v: 'ft', l: 'Feet (ft)'}, {v: 'in', l: 'Inches (in)'}
+          ]},
+          { key: 'heightVal', label: 'Height', type: 'number', default: 175, min: 0.5, step: 0.1 }
         ],
         compute(v) {
-          const inchesOver5Ft = Math.max(0, (v.heightCm / 2.54) - 60);
+          const hUnit = v.heightUnit || 'cm';
+          const heightCm = Math.max(100, toCm(v.heightVal, hUnit));
+          const inchesOver5Ft = Math.max(0, (heightCm / 2.54) - 60);
           const devine = (v.sex === 'male' ? 50 : 45.5) + 2.3 * inchesOver5Ft;
           const robinson = (v.sex === 'male' ? 52 : 49) + (v.sex === 'male' ? 1.9 : 1.7) * inchesOver5Ft;
           const miller = (v.sex === 'male' ? 56.2 : 53.1) + (v.sex === 'male' ? 1.41 : 1.36) * inchesOver5Ft;
@@ -2008,10 +2542,132 @@
               { label: 'Miller Formula', value: `${miller.toFixed(1)} kg`, sub: `${(miller * 2.20462).toFixed(1)} lbs` }
             ],
             visualHtml: `
-              <div class="text-xs text-slate-600 dark:text-slate-300">Height: <strong>${v.heightCm} cm</strong> (${inchesOver5Ft.toFixed(1)} inches above 5 ft)</div>
+              <div class="text-xs text-slate-600 dark:text-slate-300">Height: <strong>${v.heightVal} ${hUnit}</strong> (${heightCm.toFixed(1)} cm / ${inchesOver5Ft.toFixed(1)} in above 5 ft)</div>
             `,
             formulaSteps: [
               `Devine Formula: Base (${v.sex === 'male' ? '50' : '45.5'} kg) + 2.3 kg × inches over 60" = ${devine.toFixed(1)} kg`
+            ]
+          };
+        }
+      },
+
+      {
+        id: 'pregnancy',
+        name: 'Pregnancy & Due Date Calculator',
+        category: 'Fitness & Health',
+        icon: '<svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/></svg>',
+        popular: true,
+        desc: 'Estimate due date, current gestational week, trimester, and conception window (Naegele Rule)',
+        inputs: [
+          { key: 'lmpDate', label: 'First Day of Last Period (LMP)', type: 'date', default: () => { const d = new Date(); d.setDate(d.getDate() - 70); return d.toISOString().slice(0, 10); } },
+          { key: 'cycleLen', label: 'Average Cycle Length (Days)', type: 'number', default: 28, min: 21, max: 38, step: 1 }
+        ],
+        compute(v) {
+          const lmp = new Date((v.lmpDate || new Date().toISOString().slice(0, 10)) + 'T00:00:00');
+          const adj = (Number(v.cycleLen) || 28) - 28;
+          const due = new Date(lmp.getTime() + (280 + adj) * 86400000);
+          const conception = new Date(lmp.getTime() + (14 + adj) * 86400000);
+          const today = new Date();
+          const daysElapsed = Math.max(0, Math.floor((today - lmp) / 86400000));
+          const weeks = Math.floor(daysElapsed / 7);
+          const remDays = daysElapsed % 7;
+          const daysLeft = Math.max(0, Math.ceil((due - today) / 86400000));
+          const tri = weeks < 13 ? '1st Trimester' : (weeks < 27 ? '2nd Trimester' : '3rd Trimester');
+          const pct = Math.min(100, Math.max(0, (daysElapsed / 280) * 100));
+          const fmtD = d => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+          return {
+            summaryLabel: fmtD(due),
+            kpis: [
+              { label: 'Estimated Due Date', value: fmtD(due), sub: `${daysLeft} days remaining` },
+              { label: 'Current Progress', value: `${weeks}w ${remDays}d`, sub: `${tri} (${pct.toFixed(0)}% complete)` },
+              { label: 'Est. Conception Date', value: fmtD(conception), sub: `Cycle length: ${v.cycleLen} days` }
+            ],
+            visualHtml: `<div class="space-y-1.5"><div class="w-full h-3.5 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden"><div style="width:${pct.toFixed(1)}%" class="h-full bg-gradient-to-r from-indigo-500 to-emerald-500"></div></div><div class="flex justify-between text-[11px] text-slate-500"><span>Week 0</span><span>Trimester 2 (13w)</span><span>Trimester 3 (27w)</span><span>40w Due</span></div></div>`,
+            formulaSteps: [
+              `Naegele's Rule: Due Date = LMP + 280 days + (Cycle Length − 28)`,
+              `LMP: ${fmtD(lmp)} → Estimated Due Date: ${fmtD(due)} (${tri})`
+            ]
+          };
+        }
+      },
+      {
+        id: 'calories_burned',
+        name: 'Calories Burned by Activity Calculator',
+        category: 'Fitness & Health',
+        icon: '<svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>',
+        popular: false,
+        desc: 'Calculate exact kcal burned across walking, running, cycling, swimming, HIIT & gym workouts using MET values',
+        inputs: [
+          { key: 'activity', label: 'Activity / Exercise', type: 'select', default: '8.3', options: [
+            {v: '3.5', l: 'Brisk Walking (3.5 MET)'},
+            {v: '8.3', l: 'Running — Moderate 8 km/h (8.3 MET)'},
+            {v: '11.0', l: 'Running — Fast 11+ km/h (11.0 MET)'},
+            {v: '7.5', l: 'Cycling — Moderate (7.5 MET)'},
+            {v: '8.0', l: 'Swimming Laps (8.0 MET)'},
+            {v: '9.5', l: 'HIIT / Jump Rope (9.5 MET)'},
+            {v: '5.0', l: 'Weightlifting / Gym (5.0 MET)'},
+            {v: '3.0', l: 'Yoga / Stretching (3.0 MET)'}
+          ]},
+          { key: 'weightUnit', label: 'Weight Unit', type: 'select', default: 'kg', unitKind: 'weight', converts: ['weightVal'], options: [{v: 'kg', l: 'Kilograms (kg)'}, {v: 'lb', l: 'Pounds (lb)'}] },
+          { key: 'weightVal', label: 'Body Weight', type: 'number', default: 72, min: 20, step: 0.5 },
+          { key: 'minutes', label: 'Duration (Minutes)', type: 'number', default: 45, min: 1, step: 5 }
+        ],
+        compute(v) {
+          const met = Number(v.activity) || 5.0;
+          const weightKg = Math.max(15, toKg(v.weightVal, v.weightUnit || 'kg'));
+          const mins = Math.max(1, Number(v.minutes) || 1);
+          const kcalPerMin = (met * 3.5 * weightKg) / 200;
+          const totalKcal = kcalPerMin * mins;
+          return {
+            summaryLabel: `${Math.round(totalKcal)} kcal`,
+            kpis: [
+              { label: 'Total Calories Burned', value: `${Math.round(totalKcal)} kcal`, sub: `In ${mins} minutes (${met} MET)` },
+              { label: 'Burn Rate', value: `${kcalPerMin.toFixed(1)} kcal/min`, sub: `${Math.round(kcalPerMin * 60)} kcal per hour` },
+              { label: 'Equivalent Fat Energy', value: `${(totalKcal / 7.7).toFixed(1)} g`, sub: `≈ ${(totalKcal / 3500).toFixed(2)} lb fat equivalent` }
+            ],
+            visualHtml: `<div class="text-xs text-slate-600 dark:text-slate-300">MET Formula: <strong>(${met} × 3.5 × ${weightKg.toFixed(1)} kg) ÷ 200</strong> = <strong>${kcalPerMin.toFixed(2)} kcal/min</strong> × ${mins} min = <strong class="text-emerald-600 dark:text-emerald-400">${Math.round(totalKcal)} kcal</strong></div>`,
+            formulaSteps: [
+              `Calories/min = (MET × 3.5 × Weight in kg) ÷ 200 = ${kcalPerMin.toFixed(2)} kcal/min`,
+              `Total Burned = ${kcalPerMin.toFixed(2)} × ${mins} min = ${Math.round(totalKcal)} kcal`
+            ]
+          };
+        }
+      },
+      {
+        id: 'heart_rate',
+        name: 'Target Heart Rate & One Rep Max (1RM)',
+        category: 'Fitness & Health',
+        icon: '<svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
+        popular: false,
+        desc: 'Calculate Karvonen cardio heart rate training zones plus Epley & Brzycki 1-Rep Max strength estimates',
+        inputs: [
+          { key: 'age', label: 'Age (Years)', type: 'number', default: 28, min: 12, max: 100, step: 1 },
+          { key: 'restHr', label: 'Resting Heart Rate (bpm)', type: 'number', default: 65, min: 35, max: 120, step: 1 },
+          { key: 'weightUnit', label: 'Lift Weight Unit', type: 'select', default: 'kg', unitKind: 'weight', converts: ['liftWeight'], options: [{v: 'kg', l: 'Kilograms (kg)'}, {v: 'lb', l: 'Pounds (lb)'}] },
+          { key: 'liftWeight', label: 'Weight Lifted', type: 'number', default: 60, min: 1, step: 2.5 },
+          { key: 'reps', label: 'Reps Completed (1–15)', type: 'number', default: 8, min: 1, max: 15, step: 1 }
+        ],
+        compute(v) {
+          const maxHr = Math.max(100, 220 - (Number(v.age) || 28));
+          const rest = Math.min(maxHr - 20, Math.max(35, Number(v.restHr) || 65));
+          const hrr = maxHr - rest;
+          const zone = (p1, p2) => `${Math.round(rest + hrr * p1)}–${Math.round(rest + hrr * p2)} bpm`;
+          const w = Math.max(1, Number(v.liftWeight) || 1);
+          const r = Math.max(1, Math.min(15, Number(v.reps) || 1));
+          const u = v.weightUnit || 'kg';
+          const epley = r === 1 ? w : w * (1 + r / 30);
+          const brzycki = r === 1 ? w : w * (36 / (37 - r));
+          return {
+            summaryLabel: `Max ${maxHr} bpm • 1RM ${epley.toFixed(1)} ${u}`,
+            kpis: [
+              { label: 'Fat Burn / Cardio Zone', value: zone(0.60, 0.80), sub: `Max HR: ${maxHr} bpm (Karvonen)` },
+              { label: 'One Rep Max (Epley)', value: `${epley.toFixed(1)} ${u}`, sub: `Brzycki est: ${brzycki.toFixed(1)} ${u}` },
+              { label: 'Peak Anaerobic Zone', value: zone(0.85, 0.95), sub: `85–95% Heart Rate Reserve` }
+            ],
+            visualHtml: `<div class="grid grid-cols-3 gap-2 text-center text-xs"><div class="p-2 rounded-lg bg-cyan-500/10"><div class="text-slate-500">Warm-up (50-60%)</div><div class="font-bold">${zone(0.50, 0.60)}</div></div><div class="p-2 rounded-lg bg-emerald-500/10"><div class="text-slate-500">Aerobic (70-80%)</div><div class="font-bold">${zone(0.70, 0.80)}</div></div><div class="p-2 rounded-lg bg-rose-500/10"><div class="text-slate-500">Peak (85-95%)</div><div class="font-bold">${zone(0.85, 0.95)}</div></div></div>`,
+            formulaSteps: [
+              `Max HR = 220 − ${v.age} = ${maxHr} bpm | HR Reserve = ${maxHr} − ${rest} = ${hrr} bpm`,
+              `Epley 1RM = ${w} × (1 + ${r}/30) = ${epley.toFixed(1)} ${u}`
             ]
           };
         }
@@ -2257,25 +2913,240 @@
         popular: false,
         desc: 'Solve hypotenuse, area, perimeter, and interior angles from two legs a and b',
         inputs: [
+          { key: 'lengthUnit', label: 'Measurement Unit', type: 'select', default: 'm', options: [
+            {v: 'm', l: 'Metres (m)'}, {v: 'ft', l: 'Feet (ft)'}, {v: 'cm', l: 'Centimetres (cm)'}, {v: 'in', l: 'Inches (in)'}, {v: 'units', l: 'Generic Units'}
+          ]},
           { key: 'sideA', label: 'Side a (Base)', type: 'number', default: 6, min: 0.1, step: 0.5 },
           { key: 'sideB', label: 'Side b (Height)', type: 'number', default: 8, min: 0.1, step: 0.5 }
         ],
         compute(v) {
+          const u = v.lengthUnit || 'm';
+          const uSq = u === 'units' ? 'sq units' : `${u}²`;
           const c = Math.hypot(v.sideA, v.sideB);
           const area = 0.5 * v.sideA * v.sideB;
           const angleA = (Math.atan2(v.sideA, v.sideB) * 180) / Math.PI;
           const angleB = 90 - angleA;
           return {
-            summaryLabel: `c = ${c.toFixed(3)}`,
+            summaryLabel: `c = ${c.toFixed(3)} ${u}`,
             kpis: [
-              { label: 'Hypotenuse (c)', value: c.toFixed(4), sub: `Perimeter: ${(v.sideA + v.sideB + c).toFixed(2)}` },
-              { label: 'Triangle Area', value: area.toFixed(3), sub: `½ × ${v.sideA} × ${v.sideB}` },
+              { label: 'Hypotenuse (c)', value: `${c.toFixed(4)} ${u}`, sub: `Perimeter: ${(v.sideA + v.sideB + c).toFixed(2)} ${u}` },
+              { label: 'Triangle Area', value: `${area.toFixed(3)} ${uSq}`, sub: `½ × ${v.sideA} × ${v.sideB} ${u}` },
               { label: 'Acute Angles (α, β)', value: `${angleA.toFixed(1)}° & ${angleB.toFixed(1)}°`, sub: `Right Angle = 90°` }
             ],
-            visualHtml: `<div class="text-xs">Pythagorean Theorem: ${v.sideA}² + ${v.sideB}² = ${c.toFixed(2)}² (${(v.sideA*v.sideA + v.sideB*v.sideB).toFixed(2)})</div>`,
+            visualHtml: `<div class="text-xs">Pythagorean Theorem (${u}): ${v.sideA}² + ${v.sideB}² = ${c.toFixed(2)}² (${(v.sideA*v.sideA + v.sideB*v.sideB).toFixed(2)} ${uSq})</div>`,
             formulaSteps: [
-              `c = √(a² + b²) = √(${v.sideA}² + ${v.sideB}²) = ${c.toFixed(4)}`,
-              `Area = ½ × a × b = ${area.toFixed(3)} | α = arctan(a/b) = ${angleA.toFixed(2)}°`
+              `c = √(a² + b²) = √(${v.sideA}² + ${v.sideB}²) = ${c.toFixed(4)} ${u}`,
+              `Area = ½ × a × b = ${area.toFixed(3)} ${uSq} | α = arctan(a/b) = ${angleA.toFixed(2)}°`
+            ]
+          };
+        }
+      },
+
+      {
+        id: 'number_system',
+        name: 'Number System Converter (BIN / OCT / DEC / HEX)',
+        category: 'Math',
+        icon: '<svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>',
+        popular: true,
+        desc: 'Convert between Binary (Base 2), Octal (Base 8), Decimal (Base 10) & Hexadecimal (Base 16) with step-by-step radix workings',
+        inputs: [
+          { key: 'inputBase', label: 'Input Number System (Base)', type: 'select', default: '10', options: [
+            {v: '10', l: 'Decimal (Base 10 — 0-9)'},
+            {v: '2', l: 'Binary (Base 2 — 0, 1)'},
+            {v: '8', l: 'Octal (Base 8 — 0-7)'},
+            {v: '16', l: 'Hexadecimal (Base 16 — 0-9, A-F)'}
+          ]},
+          { key: 'numStr', label: 'Enter Number', type: 'text', default: '255' },
+          { key: 'op', label: 'Optional Operation (with 2nd Number)', type: 'select', default: 'convert', options: [
+            {v: 'convert', l: 'Convert Only'},
+            {v: 'add', l: 'Add (+)'},
+            {v: 'sub', l: 'Subtract (−)'},
+            {v: 'and', l: 'Bitwise AND (&)'},
+            {v: 'or', l: 'Bitwise OR (|)'},
+            {v: 'xor', l: 'Bitwise XOR (^)'}
+          ]},
+          { key: 'numStr2', label: 'Second Number (Same Base, Optional)', type: 'text', default: '15' }
+        ],
+        compute(v) {
+          const base = Number(v.inputBase) || 10;
+          const basePatterns = { 2: /^[01]+$/, 8: /^[0-7]+$/, 10: /^[0-9]+$/, 16: /^[0-9a-fA-F]+$/ };
+          const clean1 = String(v.numStr || '').trim().replace(/^0[bBoOxX]/, '').replace(/[\s_]+/g, '');
+          const clean2 = String(v.numStr2 || '0').trim().replace(/^0[bBoOxX]/, '').replace(/[\s_]+/g, '');
+          const valid1 = clean1.length > 0 && basePatterns[base].test(clean1);
+          const valid2 = clean2.length > 0 && basePatterns[base].test(clean2);
+
+          if (!valid1) {
+            return {
+              summaryLabel: 'Invalid Base-' + base + ' Input',
+              kpis: [
+                { label: 'Input Validation Error', value: 'Invalid Digits', sub: `Allowed for Base ${base}: ${base === 2 ? '0–1' : base === 8 ? '0–7' : base === 10 ? '0–9' : '0–9, A–F'}` },
+                { label: 'Binary (Base 2)', value: '--', sub: 'Enter valid digits' },
+                { label: 'Hexadecimal (Base 16)', value: '--', sub: 'Enter valid digits' }
+              ],
+              visualHtml: `<div class="text-xs text-rose-600 dark:text-rose-400 font-semibold">Please enter valid Base-${base} digits (e.g. ${base === 2 ? '101101' : base === 8 ? '377' : base === 10 ? '255' : 'FF'}).</div>`,
+              formulaSteps: [`Validation failed: "${clean1}" contains characters not allowed in Base-${base}.`]
+            };
+          }
+
+          const n1 = parseInt(clean1, base);
+          const n2 = valid2 ? parseInt(clean2, base) : 0;
+          let resultDec = n1;
+          let opLabel = '';
+          if (v.op === 'add') { resultDec = n1 + n2; opLabel = `${clean1} + ${clean2}`; }
+          else if (v.op === 'sub') { resultDec = Math.max(0, n1 - n2); opLabel = `${clean1} − ${clean2}`; }
+          else if (v.op === 'and') { resultDec = (n1 & n2) >>> 0; opLabel = `${clean1} AND ${clean2}`; }
+          else if (v.op === 'or') { resultDec = (n1 | n2) >>> 0; opLabel = `${clean1} OR ${clean2}`; }
+          else if (v.op === 'xor') { resultDec = (n1 ^ n2) >>> 0; opLabel = `${clean1} XOR ${clean2}`; }
+
+          const binStr = resultDec.toString(2);
+          const binGrouped = binStr.replace(/\B(?=(\d{4})+(?!\d))/g, ' ');
+          const octStr = resultDec.toString(8);
+          const decStr = resultDec.toString(10);
+          const hexStr = resultDec.toString(16).toUpperCase();
+          const bitLen = binStr.length;
+
+          // Build short step-by-step division steps (up to 6 steps)
+          const divSteps = [];
+          let q = resultDec;
+          while (q > 0 && divSteps.length < 6) {
+            divSteps.push(`${q} ÷ 2 = ${Math.floor(q / 2)} (rem ${q % 2})`);
+            q = Math.floor(q / 2);
+          }
+
+          return {
+            summaryLabel: `BIN ${binStr} | HEX 0x${hexStr}`,
+            kpis: [
+              { label: 'Binary (Base 2)', value: binGrouped, sub: `${bitLen} bits • 0b${binStr}` },
+              { label: 'Octal (Base 8) & Decimal', value: `${octStr} (OCT)`, sub: `Decimal (Base 10): ${Number(decStr).toLocaleString()}` },
+              { label: 'Hexadecimal (Base 16)', value: `0x${hexStr}`, sub: `Uppercase Hex • ${Math.ceil(bitLen / 8)} byte(s)` }
+            ],
+            visualHtml: `
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs font-mono-num">
+                <div class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                  <div class="text-[10px] font-bold uppercase text-indigo-600 dark:text-indigo-400">Binary (Base 2)</div>
+                  <div class="font-extrabold text-sm mt-0.5 break-all">${binGrouped}</div>
+                </div>
+                <div class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                  <div class="text-[10px] font-bold uppercase text-cyan-600 dark:text-cyan-400">Octal (Base 8)</div>
+                  <div class="font-extrabold text-sm mt-0.5">${octStr}</div>
+                </div>
+                <div class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                  <div class="text-[10px] font-bold uppercase text-emerald-600 dark:text-emerald-400">Decimal (Base 10)</div>
+                  <div class="font-extrabold text-sm mt-0.5">${Number(decStr).toLocaleString()}</div>
+                </div>
+                <div class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                  <div class="text-[10px] font-bold uppercase text-amber-600 dark:text-amber-400">Hexadecimal (Base 16)</div>
+                  <div class="font-extrabold text-sm mt-0.5">0x${hexStr}</div>
+                </div>
+              </div>
+            `,
+            formulaSteps: [
+              opLabel ? `Operation (Base ${base}): ${opLabel} = ${decStr} (Base 10)` : `Input: (${clean1.toUpperCase()})₍${base}₎ = ${decStr}₍₁₀₎`,
+              `Conversions: Binary = ${binStr}₍₂₎ | Octal = ${octStr}₍₈₎ | Decimal = ${decStr}₍₁₀₎ | Hex = ${hexStr}₍₁₆₎`,
+              divSteps.length > 0 ? `Binary Division Steps: ${divSteps.join(' → ')}${q > 0 ? ' → ...' : ''}` : `Zero in all bases = 0`
+            ]
+          };
+        }
+      },
+
+      {
+        id: 'area_volume',
+        name: 'Area, Volume & Surface Area Calculator',
+        category: 'Math',
+        icon: '<svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>',
+        popular: true,
+        desc: 'Compute 2D area, 3D volume, and surface area for Box, Cylinder, Sphere, and Cone in m, ft, cm, or in',
+        inputs: [
+          { key: 'shape', label: 'Geometric Shape', type: 'select', default: 'box', options: [
+            {v: 'box', l: 'Rectangle / Rectangular Box (L × W × H)'},
+            {v: 'cylinder', l: 'Circle / Cylinder (Radius r & Height h)'},
+            {v: 'sphere', l: 'Sphere (Radius r)'},
+            {v: 'cone', l: 'Cone (Radius r & Height h)'}
+          ]},
+          { key: 'unit', label: 'Measurement Unit', type: 'select', default: 'm', options: [
+            {v: 'm', l: 'Metres (m)'}, {v: 'ft', l: 'Feet (ft)'}, {v: 'cm', l: 'Centimetres (cm)'}, {v: 'in', l: 'Inches (in)'}
+          ]},
+          { key: 'dim1', label: 'Length / Radius (r)', type: 'number', default: 5, min: 0.01, step: 0.5 },
+          { key: 'dim2', label: 'Width (for Box)', type: 'number', default: 4, min: 0.01, step: 0.5 },
+          { key: 'dim3', label: 'Height (h)', type: 'number', default: 3, min: 0.01, step: 0.5 }
+        ],
+        compute(v) {
+          const u = v.unit || 'm';
+          const a = Math.max(0.01, Number(v.dim1) || 1);
+          const b = Math.max(0.01, Number(v.dim2) || 1);
+          const h = Math.max(0.01, Number(v.dim3) || 1);
+          let baseArea = 0, vol = 0, surf = 0, formula = '';
+          if (v.shape === 'cylinder') {
+            baseArea = Math.PI * a * a;
+            vol = baseArea * h;
+            surf = 2 * Math.PI * a * (a + h);
+            formula = `Cylinder: Base = πr² | Volume = πr²h | Surface = 2πr(r+h)`;
+          } else if (v.shape === 'sphere') {
+            baseArea = Math.PI * a * a;
+            vol = (4 / 3) * Math.PI * Math.pow(a, 3);
+            surf = 4 * Math.PI * a * a;
+            formula = `Sphere: Volume = (4/3)πr³ | Surface = 4πr²`;
+          } else if (v.shape === 'cone') {
+            const s = Math.hypot(a, h);
+            baseArea = Math.PI * a * a;
+            vol = (1 / 3) * baseArea * h;
+            surf = Math.PI * a * (a + s);
+            formula = `Cone: Volume = (1/3)πr²h | Surface = πr(r + √(r²+h²))`;
+          } else {
+            baseArea = a * b;
+            vol = a * b * h;
+            surf = 2 * (a * b + b * h + a * h);
+            formula = `Box: Base Area = L×W | Volume = L×W×H | Surface = 2(LW+WH+LH)`;
+          }
+          return {
+            summaryLabel: `Vol: ${vol.toFixed(2)} ${u}³`,
+            kpis: [
+              { label: '3D Volume', value: `${vol.toFixed(3)} ${u}³`, sub: `Unit: cubic ${u}` },
+              { label: 'Total Surface Area', value: `${surf.toFixed(3)} ${u}²`, sub: `Outer 3D surface` },
+              { label: '2D Base / Cross-Section', value: `${baseArea.toFixed(3)} ${u}²`, sub: `Flat 2D area` }
+            ],
+            visualHtml: `<div class="text-xs text-slate-600 dark:text-slate-300">${formula}</div>`,
+            formulaSteps: [formula, `Computed: Base = ${baseArea.toFixed(3)} ${u}², Surface = ${surf.toFixed(3)} ${u}², Volume = ${vol.toFixed(3)} ${u}³`]
+          };
+        }
+      },
+      {
+        id: 'gcf_lcm',
+        name: 'GCF, LCM & Prime Factorization Calculator',
+        category: 'Math',
+        icon: '<svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>',
+        popular: false,
+        desc: 'Find Greatest Common Factor (GCD/GCF), Least Common Multiple (LCM) & prime factors for any integers',
+        inputs: [
+          { key: 'nums', label: 'Integers (comma or space separated)', type: 'text', default: '24, 36, 60' }
+        ],
+        compute(v) {
+          const parsed = String(v.nums || '24, 36').split(/[\s,]+/).map(s => Math.abs(parseInt(s, 10))).filter(n => Number.isInteger(n) && n > 0).slice(0, 12);
+          const list = parsed.length >= 2 ? parsed : [24, 36];
+          const gcd2 = (a, b) => b === 0 ? a : gcd2(b, a % b);
+          const lcm2 = (a, b) => (a / gcd2(a, b)) * b;
+          const gcf = list.reduce((acc, n) => gcd2(acc, n));
+          const lcm = list.reduce((acc, n) => lcm2(acc, n));
+          const factorize = n => {
+            let x = n, out = [];
+            for (let d = 2; d * d <= x; d++) {
+              while (x % d === 0) { out.push(d); x /= d; }
+            }
+            if (x > 1) out.push(x);
+            return out.length ? out.join(' × ') : '1';
+          };
+          const factorRows = list.slice(0, 6).map(n => `<div class="text-xs font-mono-num"><strong>${n}</strong> = ${factorize(n)}</div>`).join('');
+          return {
+            summaryLabel: `GCF ${gcf} • LCM ${lcm}`,
+            kpis: [
+              { label: 'Greatest Common Factor (GCF)', value: String(gcf), sub: `Divides all ${list.length} numbers` },
+              { label: 'Least Common Multiple (LCM)', value: fmtNum(lcm, 0), sub: `Smallest shared multiple` },
+              { label: 'Numbers Analyzed', value: list.join(', '), sub: `${list.length} positive integers` }
+            ],
+            visualHtml: `<div class="space-y-1 p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">${factorRows}</div>`,
+            formulaSteps: [
+              `Euclidean Algorithm on [${list.join(', ')}] → GCF = ${gcf}`,
+              `LCM = Product ÷ Common Factors → LCM = ${fmtNum(lcm, 0)}`
             ]
           };
         }
@@ -2544,6 +3415,163 @@
             formulaSteps: [`Entropy E = Length × log₂(Pool Size) = ${len} × log₂(${pool}) = ${entropy.toFixed(2)} bits`, `Sample Key: ${sample}`]
           };
         }
+      },
+      {
+        id: 'time_calc',
+        name: 'Time Duration, Hours & Time Zone Converter',
+        category: 'Science & Utility',
+        icon: '<svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+        popular: true,
+        desc: 'Calculate work hours minus breaks plus instant worldwide time zone comparison (BST, UTC, EST, GMT, GST, JST)',
+        inputs: [
+          { key: 'startTime', label: 'Start Time (HH:MM, 24h)', type: 'text', default: '09:00' },
+          { key: 'endTime', label: 'End Time (HH:MM, 24h)', type: 'text', default: '17:30' },
+          { key: 'breakMin', label: 'Unpaid Break (Minutes)', type: 'number', default: 30, min: 0, max: 480, step: 5 },
+          { key: 'baseTz', label: 'Reference Time Zone', type: 'select', default: '6', options: [
+            {v: '6', l: 'Dhaka / BST (UTC+6)'},
+            {v: '0', l: 'London / UTC (UTC+0)'},
+            {v: '-5', l: 'New York / EST (UTC−5)'},
+            {v: '-8', l: 'Los Angeles / PST (UTC−8)'},
+            {v: '4', l: 'Dubai / GST (UTC+4)'},
+            {v: '5.5', l: 'India / IST (UTC+5:30)'},
+            {v: '9', l: 'Tokyo / JST (UTC+9)'}
+          ]}
+        ],
+        compute(v) {
+          const parseHM = s => {
+            const m = String(s || '09:00').trim().match(/^(\d{1,2}):(\d{2})$/);
+            if (!m) return 540;
+            return (Math.min(23, Number(m[1])) * 60) + Math.min(59, Number(m[2]));
+          };
+          const sMin = parseHM(v.startTime);
+          let eMin = parseHM(v.endTime);
+          if (eMin < sMin) eMin += 1440;
+          const netMin = Math.max(0, (eMin - sMin) - Math.max(0, Number(v.breakMin) || 0));
+          const hrs = Math.floor(netMin / 60);
+          const mins = netMin % 60;
+          const decHrs = netMin / 60;
+          const baseOff = Number(v.baseTz) || 0;
+          const utcMin = ((sMin - baseOff * 60) % 1440 + 1440) % 1440;
+          const zones = [
+            { l: 'Dhaka (BST)', off: 6 }, { l: 'London (UTC)', off: 0 }, { l: 'New York (EST)', off: -5 },
+            { l: 'Dubai (GST)', off: 4 }, { l: 'India (IST)', off: 5.5 }, { l: 'Tokyo (JST)', off: 9 }
+          ];
+          const fmtClock = totalM => {
+            const m = ((Math.round(totalM) % 1440) + 1440) % 1440;
+            const hh = Math.floor(m / 60), mm = m % 60;
+            const ampm = hh >= 12 ? 'PM' : 'AM';
+            const h12 = hh % 12 || 12;
+            return `${h12}:${mm < 10 ? '0' : ''}${mm} ${ampm}`;
+          };
+          const tzCards = zones.map(z => `<div class="p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800"><div class="text-[10px] text-slate-500">${z.l}</div><div class="font-bold font-mono-num text-xs mt-0.5">${fmtClock(utcMin + z.off * 60)}</div></div>`).join('');
+          return {
+            summaryLabel: `${hrs}h ${mins}m (${decHrs.toFixed(2)} hrs)`,
+            kpis: [
+              { label: 'Net Duration', value: `${hrs}h ${mins}m`, sub: `After ${v.breakMin} min break` },
+              { label: 'Decimal Work Hours', value: `${decHrs.toFixed(2)} hrs`, sub: `${netMin} total minutes` },
+              { label: 'Shift Window', value: `${v.startTime} → ${v.endTime}`, sub: `Base offset: UTC${baseOff >= 0 ? '+' : ''}${baseOff}` }
+            ],
+            visualHtml: `<div class="space-y-1.5"><div class="text-xs font-semibold text-slate-600 dark:text-slate-300">Start Time (${v.startTime}) Around the World</div><div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-center">${tzCards}</div></div>`,
+            formulaSteps: [
+              `Gross Duration = ${eMin - sMin} min − ${v.breakMin} min break = ${netMin} min`,
+              `Decimal Hours = ${netMin} ÷ 60 = ${decHrs.toFixed(2)} hours`
+            ]
+          };
+        }
+      },
+
+      // ---------------- EVERYDAY & HOME (2) ----------------
+      {
+        id: 'fuel_electricity',
+        name: 'Fuel Trip & Home Electricity Cost Calculator',
+        category: 'Everyday & Home',
+        usesCurrency: true,
+        icon: '<svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+        popular: true,
+        desc: 'Estimate vehicle fuel cost per trip (km or miles) and monthly home appliance electricity bills (kWh)',
+        inputs: [
+          { key: 'mode', label: 'Calculation Mode', type: 'select', default: 'electricity', options: [
+            {v: 'electricity', l: 'Home Electricity Bill (Watts → kWh)'},
+            {v: 'fuel', l: 'Vehicle Fuel Trip Cost (km / miles)'}
+          ]},
+          { key: 'wattsOrDist', label: 'Appliance Watts (or Trip Distance)', type: 'number', default: 1500, min: 1, step: 10 },
+          { key: 'hoursOrEff', label: 'Hours/Day (or km/L Efficiency)', type: 'number', default: 6, min: 0.1, step: 0.5 },
+          { key: 'daysOrUnit', label: 'Days/Month (or 1=km, 1.609=miles)', type: 'number', default: 30, min: 1, step: 1 },
+          { key: 'rate', label: 'Price per kWh or per Litre ($)', type: 'number', default: 0.12, min: 0.01, step: 0.01 }
+        ],
+        compute(v) {
+          if (v.mode === 'fuel') {
+            const dist = Math.max(0.1, Number(v.wattsOrDist) || 100);
+            const eff = Math.max(0.5, Number(v.hoursOrEff) || 12);
+            const litres = dist / eff;
+            const cost = litres * Math.max(0, Number(v.rate) || 0);
+            return {
+              summaryLabel: fmtCurrency(cost),
+              kpis: [
+                { label: 'Total Fuel Cost', value: fmtCurrency(cost), sub: `For ${dist} distance at ${fmtCurrency(v.rate)}/unit` },
+                { label: 'Fuel Required', value: `${litres.toFixed(2)} L / gal`, sub: `Efficiency: ${eff} per unit` },
+                { label: 'Cost per 100 Distance', value: fmtCurrency((100 / eff) * v.rate), sub: `Round-trip: ${fmtCurrency(cost * 2)}` }
+              ],
+              visualHtml: `<div class="text-xs text-slate-600 dark:text-slate-300">Fuel Used = <strong>${dist} ÷ ${eff} = ${litres.toFixed(2)}</strong> × ${fmtCurrency(v.rate)} = <strong class="text-indigo-600 dark:text-indigo-400">${fmtCurrency(cost)}</strong></div>`,
+              formulaSteps: [`Fuel Needed = ${dist} ÷ ${eff} = ${litres.toFixed(2)}`, `Trip Cost = ${litres.toFixed(2)} × ${fmtCurrency(v.rate)} = ${fmtCurrency(cost)}`]
+            };
+          }
+          const watts = Math.max(1, Number(v.wattsOrDist) || 1000);
+          const hrsDay = Math.max(0.1, Number(v.hoursOrEff) || 1);
+          const days = Math.max(1, Number(v.daysOrUnit) || 30);
+          const kwhDay = (watts * hrsDay) / 1000;
+          const kwhMonth = kwhDay * days;
+          const monthCost = kwhMonth * Math.max(0, Number(v.rate) || 0);
+          return {
+            summaryLabel: `${fmtCurrency(monthCost)}/mo`,
+            kpis: [
+              { label: 'Monthly Electricity Cost', value: fmtCurrency(monthCost), sub: `${kwhMonth.toFixed(1)} kWh over ${days} days` },
+              { label: 'Daily Energy Usage', value: `${kwhDay.toFixed(2)} kWh/day`, sub: `${fmtCurrency(kwhDay * v.rate)} per day` },
+              { label: 'Estimated Yearly Cost', value: fmtCurrency(monthCost * 12), sub: `${(kwhMonth * 12).toFixed(0)} kWh / year` }
+            ],
+            visualHtml: `<div class="text-xs text-slate-600 dark:text-slate-300"><strong>${watts}W</strong> × ${hrsDay}h/day × ${days}d = <strong>${kwhMonth.toFixed(1)} kWh</strong> → <strong class="text-emerald-600 dark:text-emerald-400">${fmtCurrency(monthCost)}/month</strong></div>`,
+            formulaSteps: [`Daily kWh = (${watts}W × ${hrsDay}h) ÷ 1000 = ${kwhDay.toFixed(2)} kWh`, `Monthly Cost = ${kwhMonth.toFixed(1)} kWh × ${fmtCurrency(v.rate)} = ${fmtCurrency(monthCost)}`]
+          };
+        }
+      },
+      {
+        id: 'square_footage',
+        name: 'Square Footage, Tile & Concrete Estimator',
+        category: 'Everyday & Home',
+        usesCurrency: true,
+        icon: '<svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/></svg>',
+        popular: false,
+        desc: 'Calculate room square footage, floor tiles with waste margin, and concrete slab volume in feet or metres',
+        inputs: [
+          { key: 'unit', label: 'Measurement Unit', type: 'select', default: 'ft', options: [{v: 'ft', l: 'Feet (ft / sq ft)'}, {v: 'm', l: 'Metres (m / m²)'}] },
+          { key: 'length', label: 'Room / Slab Length', type: 'number', default: 14, min: 0.5, step: 0.5 },
+          { key: 'width', label: 'Room / Slab Width', type: 'number', default: 12, min: 0.5, step: 0.5 },
+          { key: 'wastePct', label: 'Waste / Overage Margin (%)', type: 'number', default: 10, min: 0, max: 35, step: 1 },
+          { key: 'costPerSq', label: 'Material Cost per sq unit ($)', type: 'number', default: 4.5, min: 0, step: 0.5 }
+        ],
+        compute(v) {
+          const u = v.unit || 'ft';
+          const uSq = u === 'm' ? 'm²' : 'sq ft';
+          const area = Math.max(0.1, Number(v.length) || 1) * Math.max(0.1, Number(v.width) || 1);
+          const withWaste = area * (1 + Math.max(0, Number(v.wastePct) || 0) / 100);
+          const altArea = u === 'm' ? `${(area * 10.7639).toFixed(1)} sq ft` : `${(area / 10.7639).toFixed(1)} m²`;
+          const totalCost = withWaste * Math.max(0, Number(v.costPerSq) || 0);
+          const sqFtTotal = u === 'm' ? withWaste * 10.7639 : withWaste;
+          const tiles16 = Math.ceil(sqFtTotal / 1.778);
+          return {
+            summaryLabel: `${area.toFixed(1)} ${uSq}`,
+            kpis: [
+              { label: `Total Area (${uSq})`, value: `${area.toFixed(2)} ${uSq}`, sub: `Equivalent: ${altArea}` },
+              { label: `Order Qty (+${v.wastePct}% Waste)`, value: `${withWaste.toFixed(2)} ${uSq}`, sub: `≈ ${tiles16} standard 16"×16" tiles` },
+              { label: 'Estimated Material Cost', value: fmtCurrency(totalCost), sub: `At ${fmtCurrency(v.costPerSq)} per ${uSq}` }
+            ],
+            visualHtml: `<div class="text-xs text-slate-600 dark:text-slate-300">Dimensions: <strong>${v.length} ${u} × ${v.width} ${u}</strong> = <strong>${area.toFixed(2)} ${uSq}</strong> (${altArea}) • Perimeter: <strong>${(2 * (Number(v.length) + Number(v.width))).toFixed(1)} ${u}</strong></div>`,
+            formulaSteps: [
+              `Base Area = ${v.length} × ${v.width} = ${area.toFixed(2)} ${uSq} (${altArea})`,
+              `With ${v.wastePct}% waste = ${withWaste.toFixed(2)} ${uSq} → Cost = ${fmtCurrency(totalCost)}`
+            ]
+          };
+        }
       }
     ];
 
@@ -2553,6 +3581,7 @@
     const appState = {
       activeCalcId: 'mortgage',
       activeCategoryFilter: 'all',
+      currency: safeGetStorage('calcverse_currency', 'USD'),
       inputValues: {},
       favorites: safeGetStorage('calcverse_favorites', ['mortgage', 'bmi', 'compound', 'graphing']),
       pins: safeGetStorage('calcverse_pins', []),
@@ -2580,6 +3609,7 @@
       appState.activeCalcId = target.id;
       initCalcDefaults(target, false);
       renderActiveWorkspace();
+      scheduleUserCloudSync();
       if (scrollToWorkspace) {
         document.getElementById('activeCalculatorWorkspace').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
@@ -2600,14 +3630,27 @@
       document.getElementById('favCurrentStar').classList.toggle('text-amber-500', isFav);
       document.getElementById('favCurrentText').textContent = isFav ? 'Saved' : 'Save Tool';
 
-      // Build Inputs
+      // Build Inputs (with Currency Selector for Financial tools & Smart Unit Conversion)
       const inputsContainer = document.getElementById('calcInputsContainer');
-      inputsContainer.innerHTML = calc.inputs.map(inp => {
+      const activeCur = getActiveCurrency();
+      const currencySelectorHtml = ((calc.category === 'Financial' || calc.usesCurrency) && calc.id !== 'currency_converter') ? `
+        <div class="pb-2 mb-1 border-b border-slate-200/80 dark:border-slate-800">
+          <label for="activeCurrencySelect" class="block text-xs font-semibold text-indigo-600 dark:text-indigo-400 mb-1">Display Currency</label>
+          <select id="activeCurrencySelect" class="w-full px-3 py-2 rounded-lg text-sm font-semibold bg-indigo-50/60 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800/80 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            ${CURRENCIES.map(c => `<option value="${c.code}" ${c.code === activeCur.code ? 'selected' : ''}>${c.code} — ${c.name}</option>`).join('')}
+          </select>
+        </div>
+      ` : '';
+
+      inputsContainer.innerHTML = currencySelectorHtml + calc.inputs.map(inp => {
         const curVal = vals[inp.key];
+        const dynamicLabel = (calc.category === 'Financial' || calc.usesCurrency)
+          ? inp.label.replace(/\(\$\)/g, `(${activeCur.symbol})`)
+          : inp.label;
         if (inp.type === 'select') {
           return `
             <div>
-              <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">${inp.label}</label>
+              <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">${dynamicLabel}</label>
               <select data-calc-input="${inp.key}" class="w-full px-3 py-2 rounded-lg text-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 ${inp.options.map(opt => `<option value="${opt.v}" ${String(opt.v) === String(curVal) ? 'selected' : ''}>${opt.l}</option>`).join('')}
               </select>
@@ -2616,19 +3659,48 @@
         }
         return `
           <div>
-            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">${inp.label}</label>
+            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">${dynamicLabel}</label>
             <input type="${inp.type}" data-calc-input="${inp.key}" value="${curVal}" ${inp.min !== undefined ? `min="${inp.min}"` : ''} ${inp.max !== undefined ? `max="${inp.max}"` : ''} ${inp.step !== undefined ? `step="${inp.step}"` : ''} class="w-full px-3 py-2 rounded-lg text-sm font-mono-num bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
         `;
       }).join('');
 
+      const curSelectEl = document.getElementById('activeCurrencySelect');
+      if (curSelectEl) {
+        curSelectEl.addEventListener('change', () => {
+          appState.currency = curSelectEl.value;
+          safeSetStorage('calcverse_currency', appState.currency);
+          scheduleUserCloudSync();
+          renderActiveWorkspace();
+        });
+      }
+
       inputsContainer.querySelectorAll('[data-calc-input]').forEach(el => {
-        el.addEventListener('input', () => {
+        const evtName = el.tagName === 'SELECT' ? 'change' : 'input';
+        el.addEventListener(evtName, () => {
           const key = el.getAttribute('data-calc-input');
           const def = calc.inputs.find(i => i.key === key);
           if (def && def.type === 'number') {
             const parsed = parseFloat(el.value);
             vals[key] = isFinite(parsed) ? parsed : 0;
+          } else if (def && def.unitKind && Array.isArray(def.converts)) {
+            const prevUnit = vals[key];
+            const nextUnit = el.value;
+            vals[key] = nextUnit;
+            if (prevUnit && prevUnit !== nextUnit) {
+              def.converts.forEach(targetKey => {
+                const curNum = parseFloat(vals[targetKey]);
+                if (isFinite(curNum)) {
+                  let converted = curNum;
+                  if (def.unitKind === 'length') converted = fromCm(toCm(curNum, prevUnit), nextUnit);
+                  else if (def.unitKind === 'weight') converted = fromKg(toKg(curNum, prevUnit), nextUnit);
+                  else if (def.unitKind === 'distance') converted = fromKm(toKm(curNum, prevUnit), nextUnit);
+                  vals[targetKey] = converted;
+                  const targetEl = inputsContainer.querySelector(`[data-calc-input="${targetKey}"]`);
+                  if (targetEl) targetEl.value = converted;
+                }
+              });
+            }
           } else {
             vals[key] = el.value;
           }
@@ -2676,6 +3748,18 @@
 
     // Rich Search Synonyms, Keywords & Formula Tags per Calculator
     const SEARCH_KEYWORDS = {
+      discount_tax: ['discount', 'sale', 'percent off', 'vat', 'gst', 'sales tax', 'shopping', 'final price'],
+      tip: ['tip', 'gratuity', 'restaurant', 'bill split', 'split check', 'dining'],
+      budget_savings: ['budget', '50 30 20', 'savings goal', 'monthly budget', 'expense', 'finance'],
+      pregnancy: ['pregnancy', 'due date', 'trimester', 'conception', 'lmp', 'baby', 'gestation'],
+      calories_burned: ['calories burned', 'exercise', 'workout', 'met', 'walking', 'running', 'gym'],
+      heart_rate: ['heart rate', 'target hr', 'karvonen', 'one rep max', '1rm', 'bench press', 'cardio zone'],
+      area_volume: ['area', 'volume', 'surface area', 'cylinder', 'sphere', 'cone', 'box', 'geometry', 'cubic'],
+      gcf_lcm: ['gcf', 'gcd', 'lcm', 'prime factorization', 'greatest common factor', 'least common multiple'],
+      time_calc: ['time', 'hours', 'duration', 'work hours', 'time card', 'time zone', 'world clock', 'bst', 'utc'],
+      fuel_electricity: ['fuel', 'gas', 'mileage', 'electricity', 'kwh', 'watt', 'power bill', 'trip cost'],
+      square_footage: ['square footage', 'sqft', 'tile', 'flooring', 'concrete', 'room area', 'construction'],
+      currency_converter: ['currency', 'exchange rate', 'forex', 'fx', 'worldwide', 'dollar', 'taka', 'bdt', 'usd', 'eur', 'gbp', 'inr', 'aed', 'sar', 'convert money'],
       mortgage: ['home loan', 'house', 'emi', 'property tax', 'amortization', 'down payment', 'real estate', 'monthly payment'],
       loan: ['auto loan', 'car loan', 'emi', 'personal loan', 'debt payoff', 'apr', 'interest', 'installment'],
       compound: ['investment', 'wealth', 'savings', 'apy', 'interest', 'future value', 'mutual fund', 'sip'],
@@ -2694,6 +3778,7 @@
       statistics: ['standard deviation', 'mean', 'median', 'variance', 'sample', 'population', 'average', 'data'],
       quadratic: ['roots', 'discriminant', 'ax2+bx+c', 'parabola vertex', 'complex roots', 'algebra', 'equation'],
       triangle: ['pythagoras', 'hypotenuse', 'trigonometry', 'angle', 'area', 'perimeter', 'geometry'],
+      number_system: ['binary', 'octal', 'decimal', 'hexadecimal', 'hex', 'base 2', 'base 8', 'base 10', 'base 16', 'radix', 'bitwise', 'programmer', 'number system'],
       unit: ['converter', 'length', 'weight', 'temperature', 'celsius', 'fahrenheit', 'kelvin', 'km to miles', 'kg to lbs', 'speed'],
       ohms: ['electricity', 'voltage', 'current', 'resistance', 'watts', 'power', 'kwh', 'circuit', 'amps', 'physics'],
       age: ['birthday', 'date duration', 'days between', 'weeks', 'hours', 'chronological', 'time span'],
@@ -2794,7 +3879,7 @@
     function renderDirectory() {
       const filter = appState.activeCategoryFilter;
       const searchQ = (appState.searchQuery || '').trim();
-      const categories = ['Financial', 'Fitness & Health', 'Math', 'Science & Utility'];
+      const categories = ['Financial', 'Fitness & Health', 'Math', 'Science & Utility', 'Everyday & Home'];
       const activeCats = filter === 'all' ? categories : categories.filter(c => c === filter);
 
       const badge = document.getElementById('activeSearchFilterBadge');
@@ -2918,6 +4003,7 @@
       });
       if (appState.history.length > 18) appState.history.pop();
       safeSetStorage('calcverse_history', appState.history);
+      scheduleUserCloudSync();
       renderHistory();
       if (!silent) showToast('Saved snapshot to Calculation History ');
     }
@@ -2963,6 +4049,7 @@
         const id = remFav.getAttribute('data-remove-fav');
         appState.favorites = appState.favorites.filter(x => x !== id);
         safeSetStorage('calcverse_favorites', appState.favorites);
+        scheduleUserCloudSync();
         renderFavorites();
         renderActiveWorkspace();
         return;
@@ -2973,6 +4060,7 @@
         const idx = Number(remPin.getAttribute('data-remove-pin'));
         appState.pins.splice(idx, 1);
         safeSetStorage('calcverse_pins', appState.pins);
+        scheduleUserCloudSync();
         renderPins();
         return;
       }
@@ -2982,6 +4070,7 @@
         const idx = Number(remHist.getAttribute('data-remove-history'));
         appState.history.splice(idx, 1);
         safeSetStorage('calcverse_history', appState.history);
+      scheduleUserCloudSync();
         renderHistory();
         return;
       }
@@ -3096,6 +4185,7 @@
         showToast('Added to Saved Calculators ');
       }
       safeSetStorage('calcverse_favorites', appState.favorites);
+        scheduleUserCloudSync();
       renderFavorites();
       renderActiveWorkspace();
     });
@@ -3113,6 +4203,7 @@
       });
       if (appState.pins.length > 9) appState.pins.pop();
       safeSetStorage('calcverse_pins', appState.pins);
+        scheduleUserCloudSync();
       renderPins();
       document.getElementById('compareDrawerSection').classList.remove('hidden');
       showToast('Pinned scenario to comparison board ');
@@ -4199,14 +5290,8 @@
       // Verify Google ID Token server-side on Cloudflare Worker first
       const workerRes = await syncWithWorkerApi('/api/auth/google', { credential });
       if (workerRes && workerRes.ok && workerRes.user) {
-        appState.currentUser = workerRes.user;
-        if (Array.isArray(workerRes.user.favorites)) appState.favorites = workerRes.user.favorites;
-        if (Array.isArray(workerRes.user.pins)) appState.pins = workerRes.user.pins;
-        if (Array.isArray(workerRes.user.history)) appState.history = workerRes.user.history;
-        safeSetStorage('calcverse_current_user', workerRes.user);
-        updateAuthUI();
-        renderFavorites(); renderPins(); renderHistory();
-        showToast(`Verified Google Sign-In as ${workerRes.user.name}!`);
+        applyUserPersonalization(workerRes.user);
+        showToast(`Verified Google Sign-In as ${workerRes.user.name}! History & settings restored.`);
         return;
       }
       if (workerRes && workerRes.ok === false) {
@@ -4539,7 +5624,13 @@
         email: appState.currentUser.email,
         favorites: appState.favorites,
         pins: appState.pins,
-        history: appState.history
+        history: appState.history,
+        prefs: {
+          darkMode: document.documentElement.classList.contains('dark'),
+          soundEnabled: typeof celebrationSoundEnabled !== 'undefined' ? celebrationSoundEnabled : true,
+          activeCalcId: appState.activeCalcId || 'mortgage',
+          currency: appState.currency || 'USD'
+        }
       });
       showToast('Account data synced! ');
     });
@@ -4597,11 +5688,9 @@
 
       const workerRes = await syncWithWorkerApi('/api/auth/login', { email: emailOrUser, password, remember });
       if (workerRes && workerRes.ok && workerRes.user) {
-        appState.currentUser = workerRes.user;
-        safeSetStorage('calcverse_current_user', workerRes.user);
+        applyUserPersonalization(workerRes.user);
         loginForm.reset();
-        updateAuthUI();
-        showToast(`Signed in as ${workerRes.user.name}!`);
+        showToast(`Welcome back, ${workerRes.user.name}! Your history & settings are restored.`);
         return;
       }
 
@@ -4645,6 +5734,79 @@
       });
     }
 
+    // Apply Server-Saved History & Personalization (Favorites, Pinboard, History, Theme, Sound, Active Calc)
+    function applyUserPersonalization(user) {
+      if (!user) return;
+      appState.currentUser = user;
+      if (Array.isArray(user.favorites)) {
+        appState.favorites = user.favorites;
+        safeSetStorage('calcverse_favorites', appState.favorites);
+        scheduleUserCloudSync();
+      }
+      if (Array.isArray(user.pins)) {
+        appState.pins = user.pins;
+        safeSetStorage('calcverse_pins', appState.pins);
+        scheduleUserCloudSync();
+      }
+      if (Array.isArray(user.history)) {
+        appState.history = user.history;
+        safeSetStorage('calcverse_history', appState.history);
+      }
+      if (user.prefs && typeof user.prefs === 'object') {
+        if (typeof user.prefs.darkMode === 'boolean' && !userToggledThemeManually) {
+          if (typeof applyThemeAtomic === 'function') {
+            applyThemeAtomic(user.prefs.darkMode, { skipSync: true });
+          }
+        }
+        if (typeof user.prefs.currency === 'string' && CURRENCIES.some(c => c.code === user.prefs.currency)) {
+          appState.currency = user.prefs.currency;
+          safeSetStorage('calcverse_currency', appState.currency);
+        }
+        if (typeof user.prefs.soundEnabled === 'boolean') {
+          celebrationSoundEnabled = user.prefs.soundEnabled;
+          safeSetStorage('calcverse_sound_on', celebrationSoundEnabled);
+      scheduleUserCloudSync();
+          if (typeof updateSoundIcon === 'function') updateSoundIcon();
+        }
+        if (user.prefs.activeCalcId && CALCULATORS.some(c => c.id === user.prefs.activeCalcId)) {
+          appState.activeCalcId = user.prefs.activeCalcId;
+        }
+      }
+      safeSetStorage('calcverse_current_user', user);
+      updateAuthUI();
+      renderFavorites();
+      renderPins();
+      renderHistory();
+      renderActiveWorkspace();
+    }
+
+    let cloudSyncTimer = null;
+    function scheduleUserCloudSync() {
+      if (!appState.currentUser) return;
+      if (cloudSyncTimer) clearTimeout(cloudSyncTimer);
+      cloudSyncTimer = setTimeout(async () => {
+        if (!appState.currentUser) return;
+        const prefs = {
+          darkMode: document.documentElement.classList.contains('dark'),
+          soundEnabled: typeof celebrationSoundEnabled !== 'undefined' ? celebrationSoundEnabled : true,
+          activeCalcId: appState.activeCalcId || 'mortgage',
+          currency: appState.currency || 'USD'
+        };
+        appState.currentUser.favorites = [...appState.favorites];
+        appState.currentUser.pins = [...appState.pins];
+        appState.currentUser.history = [...appState.history];
+        appState.currentUser.prefs = prefs;
+        safeSetStorage('calcverse_current_user', appState.currentUser);
+        await syncWithWorkerApi('/api/auth/sync', {
+          email: appState.currentUser.email,
+          favorites: appState.favorites,
+          pins: appState.pins,
+          history: appState.history,
+          prefs
+        });
+      }, 450);
+    }
+
     // Restore Server Session Cookie (/api/auth/me) on Page Load
     async function restoreServerSession() {
       if (location.protocol !== 'https:' || !location.hostname.endsWith('.workers.dev')) return;
@@ -4653,13 +5815,7 @@
         if (res.ok) {
           const data = await res.json();
           if (data && data.ok && data.user) {
-            appState.currentUser = data.user;
-            if (Array.isArray(data.user.favorites) && data.user.favorites.length) appState.favorites = data.user.favorites;
-            if (Array.isArray(data.user.pins)) appState.pins = data.user.pins;
-            if (Array.isArray(data.user.history)) appState.history = data.user.history;
-            safeSetStorage('calcverse_current_user', data.user);
-            updateAuthUI();
-            renderFavorites(); renderPins(); renderHistory();
+            applyUserPersonalization(data.user);
           }
         }
       } catch (_) {}
@@ -4696,13 +5852,44 @@
       showToast('Downloaded account backup (.JSON)!');
     });
 
-    // Theme Toggle
+    // Theme Toggle (Atomic, Flicker-Free Swap)
     const themeToggleBtn = document.getElementById('themeToggleBtn');
     const themeIcon = document.getElementById('themeIcon');
+    let userToggledThemeManually = false;
+    const SUN_ICON_SVG = '<svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+    const MOON_ICON_SVG = '<svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+
+    function applyThemeAtomic(isDark, opts = {}) {
+      const darkBool = Boolean(isDark);
+      const root = document.documentElement;
+      const alreadyMatches = root.classList.contains('dark') === darkBool;
+      if (themeIcon) themeIcon.innerHTML = darkBool ? SUN_ICON_SVG : MOON_ICON_SVG;
+      if (themeToggleBtn) {
+        themeToggleBtn.setAttribute('aria-pressed', darkBool ? 'true' : 'false');
+        themeToggleBtn.setAttribute('title', darkBool ? 'Switch to Light Mode' : 'Switch to Dark Mode');
+      }
+      const metaTheme = document.getElementById('metaThemeColor');
+      if (metaTheme) metaTheme.setAttribute('content', darkBool ? '#020617' : '#f8fafc');
+      safeSetStorage('calcverse_dark', darkBool);
+      if (!alreadyMatches) {
+        root.classList.add('theme-switching');
+        root.classList.toggle('dark', darkBool);
+        void root.offsetHeight;
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            root.classList.remove('theme-switching');
+          });
+        });
+      }
+      if (!opts.skipSync) {
+        scheduleUserCloudSync();
+      }
+    }
+
     themeToggleBtn.addEventListener('click', () => {
-      const isDark = document.documentElement.classList.toggle('dark');
-      themeIcon.innerHTML = isDark ? '<svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>' : '<svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
-      safeSetStorage('calcverse_dark', isDark);
+      userToggledThemeManually = true;
+      const nextDark = !document.documentElement.classList.contains('dark');
+      applyThemeAtomic(nextDark);
     });
 
     // =========================================================================
@@ -5062,6 +6249,151 @@
         `).join('');
     });
 
+    // =========================================================================
+    // BUG REPORT & SOLVING ADVICE MODAL (AUTO DATE & TIME STAMP FOR ADMIN)
+    // =========================================================================
+    const feedbackModal = document.getElementById('feedbackModal');
+    const feedbackForm = document.getElementById('feedbackForm');
+    const feedbackStatusBanner = document.getElementById('feedbackStatusBanner');
+
+    function formatReadableDateTime(dt = new Date()) {
+      const datePart = dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+      const timePart = dt.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+      return `${datePart} • ${timePart}`;
+    }
+
+    document.getElementById('openFeedbackModalBtn').addEventListener('click', () => {
+      feedbackStatusBanner.classList.add('hidden');
+      document.getElementById('feedbackAutoTimestamp').textContent = formatReadableDateTime(new Date());
+      const activeCalc = getActiveCalc();
+      if (activeCalc) document.getElementById('feedbackCalcInput').value = activeCalc.name;
+      if (appState.currentUser && !document.getElementById('feedbackSenderInput').value) {
+        document.getElementById('feedbackSenderInput').value = appState.currentUser.email || appState.currentUser.name || '';
+      }
+      feedbackModal.classList.remove('hidden');
+    });
+
+    document.getElementById('closeFeedbackModalBtn').addEventListener('click', () => {
+      feedbackModal.classList.add('hidden');
+    });
+
+    feedbackForm.addEventListener('submit', async e => {
+      e.preventDefault();
+      const now = new Date();
+      const entry = {
+        type: document.getElementById('feedbackTypeSelect').value,
+        sender: document.getElementById('feedbackSenderInput').value.trim() || 'Anonymous',
+        calculator: document.getElementById('feedbackCalcInput').value.trim() || 'General',
+        message: document.getElementById('feedbackMessageInput').value.trim(),
+        local_time: formatReadableDateTime(now),
+        created_at: now.toISOString()
+      };
+      if (!entry.message) return;
+
+      const localReports = safeGetStorage('calcverse_feedback_reports', []);
+      localReports.unshift(entry);
+      safeSetStorage('calcverse_feedback_reports', localReports.slice(0, 100));
+
+      await syncWithWorkerApi('/api/feedback', entry);
+
+      feedbackForm.reset();
+      document.getElementById('feedbackAutoTimestamp').textContent = formatReadableDateTime(new Date());
+      feedbackStatusBanner.className = 'px-3 py-2 rounded-xl text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800';
+      feedbackStatusBanner.textContent = `Submitted at ${entry.local_time}! Thank you for helping improve CalcVerse.`;
+      feedbackStatusBanner.classList.remove('hidden');
+      showToast('Bug report / advice submitted!');
+    });
+
+    document.getElementById('refreshAdminFeedbackBtn').addEventListener('click', async () => {
+      const box = document.getElementById('adminFeedbackTableContainer');
+      box.textContent = 'Loading bug reports & solving advice...';
+      try {
+        const res = await fetch('/api/admin/feedback', { method: 'GET', headers: { 'x-admin-key': sessionAdminKey } });
+        const data = await res.json();
+        if (res.ok && data && data.ok) {
+          const list = data.reports || [];
+          if (list.length === 0) {
+            box.textContent = `No bug reports or advice submitted yet (Storage: ${data.storage || 'D1'}).`;
+            return;
+          }
+          box.innerHTML = `<div class="text-[10px] font-bold text-sky-700 dark:text-sky-300 mb-1">Total: ${list.length} report(s) • Storage: ${data.storage}</div>` +
+            list.map(r => `
+              <div class="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 space-y-1">
+                <div class="flex flex-wrap items-center justify-between gap-1">
+                  <span class="font-bold text-indigo-600 dark:text-indigo-400">${r.type} — ${r.calculator}</span>
+                  <span class="text-[10px] font-mono text-slate-500">${r.local_time || r.created_at}</span>
+                </div>
+                <div class="text-[11px] text-slate-700 dark:text-slate-200 whitespace-pre-wrap break-words">${r.message}</div>
+                <div class="text-[10px] text-slate-400">From: ${r.sender || 'Anonymous'}</div>
+              </div>
+            `).join('');
+          return;
+        }
+      } catch (_) {}
+
+      const localList = safeGetStorage('calcverse_feedback_reports', []);
+      if (localList.length === 0) {
+        box.textContent = 'No bug reports or advice recorded yet.';
+        return;
+      }
+      box.innerHTML = `<div class="text-[10px] font-bold text-sky-700 dark:text-sky-300 mb-1">Total: ${localList.length} report(s) • Storage: Browser Local</div>` +
+        localList.map(r => `
+          <div class="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 space-y-1">
+            <div class="flex flex-wrap items-center justify-between gap-1">
+              <span class="font-bold text-indigo-600 dark:text-indigo-400">${r.type} — ${r.calculator}</span>
+              <span class="text-[10px] font-mono text-slate-500">${r.local_time || r.created_at}</span>
+            </div>
+            <div class="text-[11px] text-slate-700 dark:text-slate-200 whitespace-pre-wrap break-words">${r.message}</div>
+            <div class="text-[10px] text-slate-400">From: ${r.sender || 'Anonymous'}</div>
+          </div>
+        `).join('');
+    });
+
+    document.getElementById('refreshAdminContactsBtn').addEventListener('click', async () => {
+      const box = document.getElementById('adminContactsTableContainer');
+      box.textContent = 'Loading Contact Us messages...';
+      try {
+        const res = await fetch('/api/admin/contacts', { method: 'GET', headers: { 'x-admin-key': sessionAdminKey } });
+        const data = await res.json();
+        if (res.ok && data && data.ok) {
+          const list = data.contacts || [];
+          if (list.length === 0) {
+            box.textContent = `No Contact Us messages yet (Storage: ${data.storage || 'D1'}).`;
+            return;
+          }
+          box.innerHTML = `<div class="text-[10px] font-bold text-violet-700 dark:text-violet-300 mb-1">Total: ${list.length} message(s) • Storage: ${data.storage}</div>` +
+            list.map(c => `
+              <div class="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 space-y-1">
+                <div class="flex flex-wrap items-center justify-between gap-1">
+                  <span class="font-bold text-violet-700 dark:text-violet-300">${c.subject || 'Contact Message'}</span>
+                  <span class="text-[10px] font-mono text-slate-500">${c.local_time || c.created_at}</span>
+                </div>
+                <div class="text-[11px] text-slate-700 dark:text-slate-200 whitespace-pre-wrap break-words">${c.message}</div>
+                <div class="text-[10px] text-slate-400">From: ${c.name} (${c.email})</div>
+              </div>
+            `).join('');
+          return;
+        }
+      } catch (_) {}
+
+      const localList = safeGetStorage('calcverse_contact_messages', []);
+      if (localList.length === 0) {
+        box.textContent = 'No Contact Us messages recorded yet.';
+        return;
+      }
+      box.innerHTML = `<div class="text-[10px] font-bold text-violet-700 dark:text-violet-300 mb-1">Total: ${localList.length} message(s) • Storage: Browser Local</div>` +
+        localList.map(c => `
+          <div class="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 space-y-1">
+            <div class="flex flex-wrap items-center justify-between gap-1">
+              <span class="font-bold text-violet-700 dark:text-violet-300">${c.subject || 'Contact Message'}</span>
+              <span class="text-[10px] font-mono text-slate-500">${c.local_time || c.created_at}</span>
+            </div>
+            <div class="text-[11px] text-slate-700 dark:text-slate-200 whitespace-pre-wrap break-words">${c.message}</div>
+            <div class="text-[10px] text-slate-400">From: ${c.name} (${c.email})</div>
+          </div>
+        `).join('');
+    });
+
     document.getElementById('openAdManagerBtn').addEventListener('click', () => {
       renderAdManagerModal();
       document.getElementById('adManagerModal').classList.remove('hidden');
@@ -5127,21 +6459,28 @@
       `,
       contact: `
         <h3 class="text-base font-extrabold text-slate-900 dark:text-white">Contact Us</h3>
-        <p>Have a question, formula suggestion, or bug report? Reach out to the CalcVerse editorial and engineering team using the form below or via email at <strong>support@calcverse.example.com</strong>.</p>
-        <form id="legalContactForm" class="space-y-3 pt-2">
-          <div>
-            <label class="block text-xs font-bold mb-1">Your Name</label>
-            <input type="text" required placeholder="Your Name" class="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" />
+        <p>Have a question, formula suggestion, or partnership inquiry? Send us a message below—every submission is timestamped and delivered directly to the CalcVerse admin inbox.</p>
+        <div id="contactFormStatus" class="hidden px-3 py-2 rounded-xl text-xs font-semibold"></div>
+        <form id="legalContactForm" class="space-y-3 pt-1">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div>
+              <label class="block text-xs font-bold mb-1">Your Name</label>
+              <input id="contactNameInput" type="text" required placeholder="Your Full Name" class="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold mb-1">Your Email</label>
+              <input id="contactEmailInput" type="email" required placeholder="you@example.com" class="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" />
+            </div>
           </div>
           <div>
-            <label class="block text-xs font-bold mb-1">Your Email</label>
-            <input type="email" required placeholder="you@example.com" class="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" />
+            <label class="block text-xs font-bold mb-1">Subject</label>
+            <input id="contactSubjectInput" type="text" required placeholder="e.g. Calculator question or business inquiry" class="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" />
           </div>
           <div>
-            <label class="block text-xs font-bold mb-1">Message or Calculator Feedback</label>
-            <textarea rows="3" required placeholder="Describe your question or suggestion..." class="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700"></textarea>
+            <label class="block text-xs font-bold mb-1">Message</label>
+            <textarea id="contactMessageInput" rows="4" required placeholder="Write your full message here..." class="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 resize-y"></textarea>
           </div>
-          <button type="submit" class="px-4 py-2 rounded-xl font-bold bg-indigo-600 hover:bg-indigo-500 text-white">Send Message</button>
+          <button id="contactSubmitBtn" type="submit" class="px-5 py-2.5 rounded-xl font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm transition">Send Message</button>
         </form>
       `,
       privacy: `
@@ -5185,11 +6524,45 @@
 
       const contactForm = document.getElementById('legalContactForm');
       if (contactForm) {
-        contactForm.addEventListener('submit', e => {
+        if (appState.currentUser) {
+          const nInp = document.getElementById('contactNameInput');
+          const eInp = document.getElementById('contactEmailInput');
+          if (nInp && !nInp.value) nInp.value = appState.currentUser.name || '';
+          if (eInp && !eInp.value) eInp.value = appState.currentUser.email || '';
+        }
+        contactForm.addEventListener('submit', async e => {
           e.preventDefault();
-          contactForm.reset();
-          document.getElementById('legalComplianceModal').classList.add('hidden');
-          showToast('Thank you! Your message has been recorded.');
+          const btn = document.getElementById('contactSubmitBtn');
+          const statusEl = document.getElementById('contactFormStatus');
+          const now = new Date();
+          const payload = {
+            name: document.getElementById('contactNameInput').value.trim(),
+            email: document.getElementById('contactEmailInput').value.trim(),
+            subject: document.getElementById('contactSubjectInput').value.trim(),
+            message: document.getElementById('contactMessageInput').value.trim(),
+            local_time: formatReadableDateTime(now),
+            created_at: now.toISOString()
+          };
+          if (!payload.name || !payload.email || !payload.message) return;
+
+          btn.disabled = true;
+          btn.textContent = 'Sending...';
+          try {
+            const localContacts = safeGetStorage('calcverse_contact_messages', []);
+            localContacts.unshift(payload);
+            safeSetStorage('calcverse_contact_messages', localContacts.slice(0, 100));
+
+            await syncWithWorkerApi('/api/contact', payload);
+
+            contactForm.reset();
+            statusEl.className = 'px-3 py-2 rounded-xl text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800';
+            statusEl.textContent = `Message sent at ${payload.local_time}! Our team will review it shortly.`;
+            statusEl.classList.remove('hidden');
+            showToast('Contact message sent successfully!');
+          } finally {
+            btn.disabled = false;
+            btn.textContent = 'Send Message';
+          }
         });
       }
     }
@@ -5306,9 +6679,13 @@
       updateDonateUI();
       donateModal.classList.remove('hidden');
     });
-    document.getElementById('closeDonateModalBtn').addEventListener('click', () => {
+    function dismissSupportPopup() {
       donateModal.classList.add('hidden');
-    });
+      try { sessionStorage.setItem('calcverse_support_seen', '1'); } catch (_) {}
+    }
+
+    document.getElementById('closeDonateModalBtn').addEventListener('click', dismissSupportPopup);
+    document.getElementById('skipDonateModalBtn').addEventListener('click', dismissSupportPopup);
 
     document.querySelectorAll('.donate-amt-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -5350,6 +6727,7 @@
       document.getElementById('donateNoteInput').value = '';
       donateThankYouBanner.textContent = `Thank you for your $${entry.amount} ${methodLabel} support!${note ? ' Ref/Note: "' + note + '"' : ''} Your submission has been recorded.`;
       donateThankYouBanner.classList.remove('hidden');
+      try { sessionStorage.setItem('calcverse_support_seen', '1'); } catch (_) {}
       showToast(`Recorded $${entry.amount} ${methodLabel} support!`);
       triggerCongratulation(`Thank you for your $${entry.amount} support!`);
     });
@@ -5391,6 +6769,7 @@
     document.getElementById('soundToggleBtn').addEventListener('click', () => {
       celebrationSoundEnabled = !celebrationSoundEnabled;
       safeSetStorage('calcverse_sound_on', celebrationSoundEnabled);
+      scheduleUserCloudSync();
       updateSoundIcon();
       showToast(celebrationSoundEnabled ? 'Celebration sound enabled' : 'Celebration sound muted');
     });
@@ -5517,12 +6896,18 @@
 
     // Init App
     (function initApp() {
-      const savedDark = safeGetStorage('calcverse_dark', false);
-      if (savedDark) {
-        document.documentElement.classList.add('dark');
-        themeIcon.innerHTML = '<svg class="w-4 h-4 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
-      }
+      const savedDark = Boolean(safeGetStorage('calcverse_dark', false));
+      applyThemeAtomic(savedDark, { skipSync: true });
+      fetchLiveFxRates(false);
       updateSciIndicators();
+      try {
+        const pathMatch = location.pathname.match(/^\/calc\/([a-z0-9_\-]+)$/i);
+        const qCalc = new URLSearchParams(location.search).get('calc');
+        const targetId = (pathMatch && pathMatch[1]) || qCalc;
+        if (targetId && CALCULATORS.some(c => c.id === targetId)) {
+          appState.activeCalcId = targetId;
+        }
+      } catch (e) {}
       renderPopularQuickGrid();
       renderFavorites();
       renderPins();
@@ -5542,6 +6927,20 @@
           const kInp = document.getElementById('adminKeyInput');
           if (kInp) kInp.focus();
         }, 150);
+      } else {
+        let alreadySeen = false;
+        try { alreadySeen = sessionStorage.getItem('calcverse_support_seen') === '1'; } catch (_) {}
+        if (!alreadySeen) {
+          setTimeout(() => {
+            const anyOpen = !document.getElementById('authModal').classList.contains('hidden') ||
+                            !document.getElementById('adManagerModal').classList.contains('hidden');
+            if (!anyOpen) {
+              donateThankYouBanner.classList.add('hidden');
+              updateDonateUI();
+              donateModal.classList.remove('hidden');
+            }
+          }, 1800);
+        }
       }
     })();
   </script>
