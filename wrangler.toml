@@ -2,3 +2,8 @@ name = "msc"
 main = "worker.js"
 compatibility_date = "2026-11-18"
 workers_dev = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "calcverse-auth-db"
+database_id = "ddf1deef-1f84-4a5d-a61a-33ed4a4266ca"
