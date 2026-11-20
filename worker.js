@@ -450,7 +450,7 @@ export default {
 
       try {
         if (path === "/api/config" && request.method === "GET") {
-          return json({ ok: true, version: "2.0", appVersion: "2026.11.21-r13", googleClientId: (env && env.GOOGLE_CLIENT_ID) || "", hasDatabase: Boolean(env && env.DB) });
+          return json({ ok: true, version: "2.0", appVersion: "2026.11.21-r14", googleClientId: (env && env.GOOGLE_CLIENT_ID) || "", hasDatabase: Boolean(env && env.DB) });
         }
 
         if (path === "/api/fx/pair" && request.method === "GET") {
@@ -1550,7 +1550,7 @@ export default {
 
         if (path === "/api/admin/notifications" && request.method === "POST") {
           await pruneExpiredNotifications(env);
-          const body = await readJson(request);
+          const body = await request.json().catch(() => ({}));
           const title = String(body.title || "").trim().slice(0, 120);
           const message = String(body.message || "").trim().slice(0, 400);
           const linkUrl = String(body.linkUrl || body.link_url || "").trim().slice(0, 200);
@@ -1580,7 +1580,7 @@ export default {
         }
 
         if (path === "/api/admin/notifications/toggle" && request.method === "POST") {
-          const body = await readJson(request);
+          const body = await request.json().catch(() => ({}));
           const id = String(body.id || "").trim();
           const active = body.active ? 1 : 0;
           if (!id) return json({ ok: false, error: "Notification ID required." }, 400);
@@ -1593,7 +1593,7 @@ export default {
         }
 
         if (path === "/api/admin/notifications/delete" && request.method === "POST") {
-          const body = await readJson(request);
+          const body = await request.json().catch(() => ({}));
           const id = String(body.id || "").trim();
           if (!id) return json({ ok: false, error: "Notification ID required." }, 400);
           const idx = EDGE_NOTIFICATIONS.findIndex(n => n.id === id);
