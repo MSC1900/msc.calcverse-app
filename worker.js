@@ -583,6 +583,25 @@ export default {
           return json({ ok: true }, 200, { "set-cookie": clearCookie() });
         }
 
+        if (path === "/api/donations" && request.method === "POST") {
+          const body = await bodyJson(request);
+          const id = crypto.randomUUID();
+          const amountNum = Number(body.amount);
+          const amount = Number.isFinite(amountNum) && amountNum > 0 ? amountNum : 5;
+          const method = String(body.method || "Support").trim().slice(0, 120);
+          const note = String(body.note || "").trim().slice(0, 1000);
+          const donorEmail = String(body.donorEmail || body.donor_email || "").trim().slice(0, 160);
+          const createdAt = new Date().toISOString();
+          const rec = { id, amount, method, note, donor_email: donorEmail, created_at: createdAt };
+          EDGE_DONATIONS.unshift(rec);
+          if (EDGE_DONATIONS.length > 200) EDGE_DONATIONS.pop();
+          if (env && env.DB) {
+            await env.DB.prepare("INSERT INTO donations (id, amount, method, note, donor_email, created_at) VALUES (?, ?, ?, ?, ?, ?)")
+              .bind(id, amount, method, note, donorEmail, createdAt).run();
+          }
+          return json({ ok: true, donation: rec }, 201);
+        }
+
         if (path === "/api/downloads" && request.method === "POST") {
           const body = await bodyJson(request);
           const id = crypto.randomUUID();
@@ -673,6 +692,14 @@ export default {
             return json({ ok: true, storage: "Cloudflare D1", contacts: rows.results || [] });
           }
           return json({ ok: true, storage: "Edge Memory (Bind D1 as DB)", contacts: EDGE_CONTACTS });
+        }
+
+        if (path === "/api/admin/donations" && request.method === "GET") {
+          if (env && env.DB) {
+            const rows = await env.DB.prepare("SELECT id, amount, method, note, donor_email, created_at FROM donations ORDER BY created_at DESC LIMIT 5000").all();
+            return json({ ok: true, storage: "Cloudflare D1", donations: rows.results || [] });
+          }
+          return json({ ok: true, storage: "Edge Memory (Bind D1 as DB)", donations: EDGE_DONATIONS });
         }
 
         if (path === "/api/admin/downloads" && request.method === "GET") {
