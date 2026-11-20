@@ -240,6 +240,8 @@ async function ensureD1Schema(env) {
       )`)
     ]);
     try { await env.DB.prepare("ALTER TABLE users ADD COLUMN prefs_json TEXT DEFAULT '{}'").run(); } catch (_) {}
+    try { await env.DB.prepare("ALTER TABLE donations ADD COLUMN donor_email TEXT DEFAULT ''").run(); } catch (_) {}
+    try { await env.DB.prepare("ALTER TABLE users ADD COLUMN prefs_json TEXT DEFAULT '{}'").run(); } catch (_) {}
     d1SchemaReady = true;
   } catch (_) {}
 }
@@ -558,7 +560,7 @@ export default {
         if (path === "/api/auth/sync" && request.method === "POST") {
           const body = await bodyJson(request);
           const row = (await sessionUser(request, env)) || EDGE_USERS.get(String(body.email || "").toLowerCase());
-          if (!row) return json({ ok: false, error: "Please sign in again" }, 401);
+          if (!row) return json({ ok: false, skipped: true, error: "No active session" }, 200);
           const favJson = JSON.stringify(Array.isArray(body.favorites) ? body.favorites.slice(0, 100) : []);
           const pinsJson = JSON.stringify(Array.isArray(body.pins) ? body.pins.slice(0, 100) : []);
           const histJson = JSON.stringify(Array.isArray(body.history) ? body.history.slice(0, 200) : []);
@@ -696,7 +698,7 @@ export default {
 
         if (path === "/api/admin/donations" && request.method === "GET") {
           if (env && env.DB) {
-            const rows = await env.DB.prepare("SELECT id, amount, method, note, donor_email, created_at FROM donations ORDER BY created_at DESC LIMIT 5000").all();
+            const rows = await env.DB.prepare("SELECT * FROM donations ORDER BY created_at DESC LIMIT 5000").all();
             return json({ ok: true, storage: "Cloudflare D1", donations: rows.results || [] });
           }
           return json({ ok: true, storage: "Edge Memory (Bind D1 as DB)", donations: EDGE_DONATIONS });
@@ -787,6 +789,9 @@ export default {
       return new Response(STYLES_CSS, { headers: { "content-type": "text/css; charset=utf-8", "cache-control": "public, max-age=300", ...SECURITY_HEADERS } });
     }
     if (path === "/ads.txt") return new Response(ADS_TXT, { headers: { "content-type": "text/plain; charset=utf-8", ...SECURITY_HEADERS } });
+    if (path === "/favicon.ico") {
+      return new Response(null, { status: 204, headers: { "cache-control": "public, max-age=86400", ...SECURITY_HEADERS } });
+    }
     if (path === "/robots.txt") return new Response(ROBOTS_TXT, { headers: { "content-type": "text/plain; charset=utf-8", ...SECURITY_HEADERS } });
     if (path === "/sitemap.xml") {
       const origin = url.origin || "https://msc.calcverse-app.workers.dev";
