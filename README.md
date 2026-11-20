@@ -1,4 +1,4 @@
-# CalcVerse Pro — Production Calculator Suite
+# CalcVerse Pro — Production Calculator
 
 ## Included Files
 - `index.html`: Semantic HTML5 entry point with SEO meta tags & JSON-LD schema
