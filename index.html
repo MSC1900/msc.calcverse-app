@@ -4,6 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#f8fafc" id="metaThemeColor" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/icon.svg" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="CalcVerse Pro" />
   <title>CalcVerse Pro — Secure Online Calculators for Finance, Math, Fitness &amp; Science</title>
   <meta name="description" content="CalcVerse is a free, high-precision online calculator platform with 24+ verified tools across Finance, Fitness & Health, Mathematics, Graphing, and Science with PDF, Excel, PNG, and Nostalgic Receipt exports." />
   <meta name="keywords" content="online calculator, scientific calculator, mortgage calculator, BMI calculator, compound interest, function grapher, unit converter, CalcVerse" />
@@ -66,7 +72,11 @@
   <style>
     html, body { font-family: 'Inter', 'Noto Sans Bengali', system-ui, sans-serif; overflow-x: hidden; max-width: 100%; -webkit-tap-highlight-color: transparent; }
     body.modal-open { overflow: hidden !important; }
-    body.modal-open header, body.modal-open #cookieConsentBanner { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+    .bg-clip-text { -webkit-background-clip: text !important; background-clip: text !important; }
+    .col-span-full { grid-column: 1 / -1; }
+    .border-double { border-style: double; }
+    .divide-y > :not([hidden]) ~ :not([hidden]) { border-top-width: 1px; }
+    body.modal-open header { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
     #authModal { isolation: isolate; transform: translateZ(0); -webkit-backface-visibility: hidden; backface-visibility: hidden; overscroll-behavior: contain; }
     #authModal > div { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; transform: translateZ(0); max-height: 90dvh; }
     #googleSignInButtonContainer, #googleSignInButtonContainer > div, #googleSignInButtonContainer iframe {
@@ -250,6 +260,10 @@
             <p class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">Math • Finance • Fitness • Science • Live Graphing</p>
           </div>
         </button>
+        <button id="openUserNotifsBtn" type="button" title="Notifications" aria-label="View notifications" class="relative p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 shadow-sm transition shrink-0">
+          <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          <span id="userNotifBadge" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-extrabold flex items-center justify-center shadow-sm">0</span>
+        </button>
       </div>
 
       <!-- Row 2: Right-Aligned Controls (Sound, Dark/Light, Bug & Solving, Account) -->
@@ -403,7 +417,7 @@
       <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
         <div>
           <h2 class="text-xl font-extrabold tracking-tight">Complete Calculator Directory</h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400">Browse all 25 interactive calculators across Finance, Fitness &amp; Health, Mathematics, Science &amp; Everyday Utilities</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Browse all 40 interactive calculators across Finance, Fitness &amp; Health, Mathematics, Science &amp; Everyday Utilities</p>
         </div>
         <div class="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
           <div id="activeSearchFilterBadge" class="hidden items-center gap-1.5 px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 font-semibold">
@@ -739,7 +753,64 @@
   </div>
 
   <!-- Optional Download Info Modal (Name & Phone/Email — Skippable, Recorded for Admin when Filled) -->
-  <div id="downloadInfoModal" class="fixed inset-0 z-50 hidden bg-slate-950/75 flex items-start sm:items-center justify-center p-2.5 sm:p-4 overflow-y-auto">
+    <!-- 2-Step Delete Account Warning & Verification Modal -->
+  <div id="deleteAccountModal" class="fixed inset-0 z-[60] hidden bg-slate-950/85 flex items-center justify-center p-3 overflow-hidden">
+    <div class="bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-2xl border border-rose-200 dark:border-rose-900/80 max-w-md w-full p-5 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto overscroll-contain">
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+        <div class="flex items-center gap-2 text-rose-600 dark:text-rose-400">
+          <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <h3 id="delAccTitleText" class="font-extrabold text-base">Delete Account Permanently</h3>
+        </div>
+        <button id="closeDeleteAccModalBtn" type="button" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-300">×</button>
+      </div>
+
+      <!-- Step 1: Warning & Agreement -->
+      <div id="delAccStep1" class="space-y-3">
+        <div class="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 text-xs text-rose-800 dark:text-rose-200 space-y-1.5">
+          <div id="delAccWarnHeading" class="font-extrabold">Warning — This action cannot be undone!</div>
+          <p id="delAccWarnIntro">Deleting your CalcVerse Pro account will permanently erase:</p>
+          <ul class="list-disc pl-4 space-y-0.5">
+            <li>Your account profile, Member ID, and cloud sync</li>
+            <li>All <b>Saved Tools</b>, <b>Pinned Items</b>, and <b>History Logs</b></li>
+            <li>All <b>My Saved</b> slips and calculation results</li>
+            <li>All encrypted <b>Saved Passwords</b> in your Vault</li>
+          </ul>
+        </div>
+        <label class="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300 cursor-pointer select-none">
+          <input id="delAccAgreeCheck" type="checkbox" class="mt-0.5 rounded text-rose-600 focus:ring-rose-500" />
+          <span id="delAccAgreeLabel">I understand and agree that my saved items, pinned items, slips, and encrypted passwords will be permanently deleted.</span>
+        </label>
+        <div class="flex gap-2 pt-1">
+          <button id="cancelDeleteAccStep1Btn" type="button" class="flex-1 py-2.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">Cancel</button>
+          <button id="continueDeleteAccStep2Btn" type="button" disabled class="flex-1 py-2.5 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-500 disabled:opacity-40 disabled:cursor-not-allowed text-white transition">I Agree — Continue</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Strict Confirmation (Vault PIN + Dedicated Vault Authenticator ONLY) -->
+      <form id="delAccStep2Form" class="hidden space-y-3">
+        <p id="delAccStep2Prompt" class="text-xs text-slate-600 dark:text-slate-300">To confirm permanent deletion, enter BOTH your <b>Vault PIN</b> and your <b>Dedicated Vault Authenticator 6-digit code</b> (Login Password &amp; Login Authenticator are not accepted):</p>
+        <div id="delAccStatusMsg" class="hidden p-2.5 rounded-xl text-xs font-semibold bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800"></div>
+        <div id="delAccPolicyHintBox" class="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-[11px] text-amber-900 dark:text-amber-200 space-y-0.5">
+          <div><b>Both filled (PIN + Vault Authenticator):</b> Account is deleted <b>immediately</b>.</div>
+          <div><b>Only 1 filled (PIN OR Vault Authenticator):</b> Deletion is delayed for <b>60 days</b> (can be canceled within 60 days).</div>
+        </div>
+        <div>
+          <label id="delAccFactor1Label" class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Password Vault PIN <span class="text-slate-400 font-normal">(or leave blank to use Authenticator)</span></label>
+          <input id="delAccVaultPinInput" type="password" maxlength="64" placeholder="Enter your Vault PIN" class="w-full px-3 py-2 rounded-xl text-sm font-mono-num bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500" />
+        </div>
+        <div>
+          <label id="delAccFactor2Label" class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Dedicated Vault Authenticator Code <span class="text-slate-400 font-normal">(or leave blank to use PIN)</span></label>
+          <input id="delAccVaultTotpInput" type="text" inputmode="numeric" maxlength="6" placeholder="6-digit Vault Authenticator code" class="w-full px-3 py-2 rounded-xl text-sm font-mono-num tracking-widest bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500" />
+        </div>
+        <div class="flex gap-2 pt-1">
+          <button id="backDeleteAccStep1Btn" type="button" class="flex-1 py-2.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">Back</button>
+          <button id="confirmDeleteAccFinalBtn" type="submit" class="flex-1 py-2.5 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-500 text-white shadow-sm transition">Confirm Delete</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<div id="downloadInfoModal" class="fixed inset-0 z-50 hidden bg-slate-950/75 flex items-start sm:items-center justify-center p-2.5 sm:p-4 overflow-y-auto">
     <div class="bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-2xl border border-slate-200 dark:border-slate-800 max-w-md w-full p-5 shadow-2xl space-y-4 my-auto">
       <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
         <div>
@@ -976,6 +1047,11 @@
           </div>
         </div>
 
+                <div id="pendingDeletionBanner" class="hidden p-3 rounded-xl bg-rose-50 dark:bg-rose-950/60 border border-rose-300 dark:border-rose-800 flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div class="text-rose-800 dark:text-rose-200"><b class="block">Scheduled for Deletion (60-Day Grace Period)</b><span id="pendingDeletionDateText"></span></div>
+          <button id="cancelScheduledDeletionBtn" type="button" class="px-3 py-1.5 rounded-lg text-[11px] font-bold bg-emerald-600 hover:bg-emerald-500 text-white transition">Cancel Deletion</button>
+        </div>
+
         <!-- Synced Workspace Dashboard KPIs (Clickable Inline Viewers) -->
         <div class="grid grid-cols-3 gap-2.5 text-center">
           <button id="profileOpenFavsBtn" type="button" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 hover:border-amber-400 hover:bg-amber-50/50 dark:hover:bg-slate-800 transition cursor-pointer">
@@ -1013,6 +1089,83 @@
           <div id="profileSavedSlipsList" class="space-y-1.5 max-h-56 overflow-y-auto"></div>
         </div>
 
+        <!-- Saved Passwords Vault (AES-256-GCM Zero-Knowledge PIN-Locked) -->
+        <div id="profileSavedPasswordsCard" class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-1.5">
+              <span class="text-xs font-bold text-slate-800 dark:text-slate-100">Saved Passwords (<span id="profileSavedPasswordsCount">0</span>)</span>
+              <span id="vaultLockBadge" class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300">PIN Locked</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <button id="profileLockVaultBtn" type="button" class="hidden text-[11px] font-bold text-rose-600 dark:text-rose-400 hover:underline">Lock Vault</button>
+              <button id="setupVaultTotpBtn" type="button" class="text-[11px] font-bold text-amber-600 dark:text-amber-400 hover:underline">Vault Authenticator</button>
+              <button id="profileNewPwdBtn" type="button" class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline">+ Generate</button>
+              <button id="profileRefreshPwdsBtn" type="button" class="text-[11px] font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">Refresh</button>
+            </div>
+          </div>
+          <div class="px-2.5 py-1.5 rounded-lg bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/70 text-[11px] font-medium text-emerald-800 dark:text-emerald-300 flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span>Your passwords are encrypted (AES-256-GCM). Only your Vault PIN or Authenticator App can unlock them.</span>
+          </div>
+          <div id="vaultPinUnlockRow" class="space-y-1.5">
+            <div class="flex gap-1.5">
+              <input id="vaultPinUnlockInput" type="password" inputmode="numeric" maxlength="12" placeholder="Enter Vault PIN (auto-locks every 30s)" class="flex-1 min-w-0 px-3 py-1.5 rounded-lg text-xs font-mono-num bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+              <button id="vaultUnlockBtn" type="button" class="shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white transition">Unlock</button>
+            </div>
+            <div class="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
+              <span>Auto-locks every 30 seconds for security</span>
+              <button id="openVaultTotpRecoverBtn" type="button" class="font-bold text-emerald-600 dark:text-emerald-400 hover:underline">Forgot PIN? Use Authenticator</button>
+            </div>
+          </div>
+          <div id="vaultTotpRecoverBox" class="hidden p-2.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-bold text-emerald-800 dark:text-emerald-300">Recover Vault via Dedicated Vault Authenticator</span>
+              <button id="closeVaultTotpRecoverBtn" type="button" class="text-[10px] font-semibold text-slate-500 hover:underline">Back to PIN</button>
+            </div>
+            <p class="text-[10px] text-slate-600 dark:text-slate-300">Uses your separate <b>CalcVerse Vault</b> Authenticator key (Account Login Authenticator is not accepted here).</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+              <input id="vaultRecoverTotpInput" type="text" inputmode="numeric" maxlength="6" placeholder="6-digit Vault Auth code" class="px-2.5 py-1.5 rounded-lg text-xs font-mono-num bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700" />
+              <input id="vaultRecoverNewPinInput" type="password" inputmode="numeric" maxlength="12" placeholder="Set New Vault PIN (4+ digits)" class="px-2.5 py-1.5 rounded-lg text-xs font-mono-num bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700" />
+            </div>
+            <button id="vaultRecoverSubmitBtn" type="button" class="w-full py-1.5 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white transition">Verify Vault Authenticator &amp; Reset PIN</button>
+          </div>
+          <div id="vaultTotpSetupPanel" class="hidden p-3 rounded-xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 space-y-2.5">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[11px] font-bold text-amber-900 dark:text-amber-300">Dedicated Vault Authenticator Setup (Separate from Login)</span>
+              <button id="closeVaultTotpSetupBtn" type="button" class="text-[10px] font-semibold text-slate-500 hover:underline">Close</button>
+            </div>
+            <div id="vaultTotpSetupStatus" class="text-[11px] text-slate-600 dark:text-slate-300"></div>
+            <div id="vaultTotpQrArea" class="hidden space-y-2">
+              <div class="flex flex-col sm:flex-row items-center gap-2.5">
+                <img id="vaultTotpQrImg" alt="Vault Authenticator QR" class="w-32 h-32 rounded-lg bg-white p-1 border border-slate-200 shrink-0" />
+                <div class="space-y-1.5 text-[11px] min-w-0 w-full">
+                  <p class="text-slate-600 dark:text-slate-300">Add this separate <b>CalcVerse Vault</b> key to Google/Microsoft Authenticator or Authy:</p>
+                  <div class="flex items-center gap-1">
+                    <code id="vaultTotpSecretDisplay" class="flex-1 px-2 py-1 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-[10px] break-all select-all"></code>
+                    <button id="copyVaultTotpSecretBtn" type="button" class="shrink-0 px-2 py-1 rounded text-[10px] font-bold bg-slate-200 dark:bg-slate-700">Copy</button>
+                  </div>
+                  <a id="vaultTotpOpenAppLink" href="#" class="inline-block text-[10px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline">Open in Authenticator App</a>
+                </div>
+              </div>
+              <div class="flex gap-1.5">
+                <input id="vaultTotpVerifyInput" type="text" inputmode="numeric" maxlength="6" placeholder="Enter 6-digit Vault code" class="flex-1 px-2.5 py-1.5 rounded-lg text-xs font-mono-num bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700" />
+                <button id="verifyVaultTotpSetupBtn" type="button" class="shrink-0 px-3 py-1.5 rounded-lg text-[11px] font-bold bg-amber-600 hover:bg-amber-500 text-white transition">Verify &amp; Enable</button>
+              </div>
+            </div>
+            <div id="vaultTotpActiveActions" class="hidden space-y-2">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200">Vault Authenticator Active</span>
+              </div>
+              <div class="flex gap-1.5">
+                <input id="disableVaultTotpPinInput" type="password" inputmode="numeric" maxlength="12" placeholder="Enter Vault PIN to disable" class="flex-1 min-w-0 px-2.5 py-1.5 rounded-lg text-xs font-mono-num bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700" />
+                <button id="disableVaultTotpBtn" type="button" class="shrink-0 px-3 py-1.5 rounded-lg text-[11px] font-bold bg-rose-600 hover:bg-rose-500 text-white transition">Disable</button>
+              </div>
+            </div>
+          </div>
+          <div id="vaultPinStatusMsg" class="hidden text-[11px] font-semibold"></div>
+          <div id="profileSavedPasswordsList" class="space-y-1.5 max-h-52 overflow-y-auto"></div>
+        </div>
+
         <!-- Editable Profile Settings Form (Persisted to Cloudflare D1) -->
         <form id="profileUpdateForm" class="p-3.5 rounded-xl bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 space-y-2.5">
           <div class="flex items-center justify-between">
@@ -1032,17 +1185,21 @@
         </form>
 
         <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
-          <button id="syncCloudAccountBtn" type="button" class="px-3 py-2 rounded-xl text-xs font-semibold bg-cyan-600 hover:bg-cyan-500 text-white transition">
-            <span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg><span>Sync Now</span></span>
-          </button>
+          
           <button id="setupTotpBtn" type="button" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition">
             <span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span id="setupTotpBtnLabel">Authenticator App</span></span>
+          </button>
+          <button id="profileDownloadOfflineBtn" type="button" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition">
+            <span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span>Install App (Offline+Sync)</span></span>
           </button>
           <button id="downloadLoginKeyBtn" type="button" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition">
             <span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg><span>Download Login Key (.JSON)</span></span>
           </button>
           <button id="logoutAccountBtn" type="button" class="px-4 py-2 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-500 text-white shadow-sm transition">
             <span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg><span>Sign Out</span></span>
+          </button>
+          <button id="openDeleteAccountBtn" type="button" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-rose-50 dark:bg-rose-950/60 hover:bg-rose-600 hover:text-white text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 transition">
+            <span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg><span>Delete Account</span></span>
           </button>
         </div>
         <div id="totpSetupPanel" class="hidden mt-3 p-3.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 space-y-3">
@@ -1068,9 +1225,14 @@
               <button id="verifyTotpSetupBtn" type="button" class="shrink-0 px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white transition">Verify &amp; Enable</button>
             </div>
           </div>
-          <div id="totpActiveActions" class="hidden flex flex-wrap items-center gap-2">
-            <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200">Authenticator Active</span>
-            <button id="disableTotpBtn" type="button" class="px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 hover:bg-rose-200 transition">Disable Authenticator</button>
+          <div id="totpActiveActions" class="hidden space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200">Authenticator Active</span>
+            </div>
+            <div class="flex gap-1.5">
+              <input id="disableLoginTotpPwdInput" type="password" placeholder="Enter Login Password to disable" class="flex-1 min-w-0 px-2.5 py-1.5 rounded-lg text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700" />
+              <button id="disableTotpBtn" type="button" class="shrink-0 px-3 py-1.5 rounded-lg text-[11px] font-bold bg-rose-600 hover:bg-rose-500 text-white transition">Disable</button>
+            </div>
           </div>
         </div>
       </div>
@@ -1211,12 +1373,77 @@
   </div>
 
   <!-- Toast Notification -->
+  <!-- User Notifications Inbox Modal (All Active 7-Day Notifications) -->
+  <div id="userNotifsModal" class="fixed inset-0 z-50 hidden bg-slate-950/75 flex items-start sm:items-center justify-center p-3 sm:p-4 overflow-y-auto">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-3.5 my-auto max-h-[85vh] flex flex-col">
+      <div class="flex items-start justify-between gap-2 pb-2.5 border-b border-slate-200 dark:border-slate-800 shrink-0">
+        <div>
+          <h2 class="text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+            <svg class="w-4 h-4 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            <span>Notifications</span>
+          </h2>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Active announcements are kept for 7 days, then auto-deleted.</p>
+        </div>
+        <button id="closeUserNotifsModalBtn" type="button" aria-label="Close notifications" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-sm font-bold">&times;</button>
+      </div>
+      <div id="userNotifsModalList" class="overflow-y-auto flex-1 space-y-2.5 pr-0.5 text-xs">
+        <div class="text-center text-slate-400 py-6">Loading notifications...</div>
+      </div>
+      <div class="flex items-center justify-between gap-2 pt-2.5 border-t border-slate-200 dark:border-slate-800 shrink-0">
+        <button id="refreshUserNotifsBtn" type="button" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">Refresh</button>
+        <button id="markAllUserNotifsReadBtn" type="button" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white transition">Mark All Read</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live Push Notification Receiver (Only shown when Admin broadcasts an active notification) -->
+  <div id="livePushNotifCard" class="fixed bottom-5 right-5 z-50 hidden max-w-sm w-[calc(100vw-2.5rem)] rounded-2xl border shadow-2xl p-4 bg-white dark:bg-slate-900 border-indigo-200 dark:border-indigo-800 transition-all">
+    <div class="flex items-start justify-between gap-2.5">
+      <div class="min-w-0 flex-1 space-y-1">
+        <div class="flex items-center gap-1.5">
+          <span id="livePushNotifBadge" class="inline-block w-2 h-2 rounded-full bg-indigo-600 shrink-0"></span>
+          <div id="livePushNotifTitle" class="text-xs font-extrabold text-slate-900 dark:text-white truncate"></div>
+        </div>
+        <p id="livePushNotifBody" class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-wrap break-words"></p>
+        <div class="flex items-center gap-2 pt-1">
+          <a id="livePushNotifAction" href="#" class="hidden px-2.5 py-1 rounded-lg text-[11px] font-bold bg-indigo-600 hover:bg-indigo-500 text-white transition">Open</a>
+          <button id="livePushNotifDismissBtn" type="button" class="text-[11px] font-semibold text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200">Dismiss</button>
+        </div>
+      </div>
+      <button id="livePushNotifCloseBtn" type="button" aria-label="Close notification" class="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 text-base leading-none px-1">&times;</button>
+    </div>
+  </div>
+
   <div id="toastBanner" class="fixed bottom-5 right-5 z-50 hidden px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-xs font-semibold shadow-lg border border-slate-700/50 transition-all">
     <span id="toastMessage">Copied to clipboard!</span>
   </div>
 
   <!-- Footer with Mandatory Google AdSense Compliance & SEO Legal Pages -->
-  <footer class="mt-12 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 pt-8 pb-24 sm:pb-12">
+      <!-- Offline Mobile Edition Banner (Visible to all visitors; download exclusive to registered users) -->
+    <section id="offlineMobilePromoCard" class="max-w-7xl mx-auto px-3 sm:px-6 mb-5">
+      <div class="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-indigo-600/10 via-emerald-500/10 to-cyan-500/10 border border-indigo-200/80 dark:border-indigo-800/70 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div class="space-y-0.5">
+          <div class="inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+            <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            <span>Offline Mobile Edition • Registered Member Perk</span>
+          </div>
+          <h3 class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white">Download CalcVerse Pro for 100% Offline Mobile Use</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-300">All 40 calculators, Multi-Item Slip, 15 languages, Digital Signature &amp; PIN-locked Vault — works on Android &amp; iOS without internet. Free for registered users.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 shrink-0">
+          <button id="installPwaAppBtn" type="button" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm transition inline-flex items-center gap-1.5">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            <span>Install App (Offline+Sync)</span>
+          </button>
+          <button id="downloadOfflineAppBtn" type="button" class="shrink-0 px-4 py-2.5 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm transition inline-flex items-center gap-1.5">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span id="downloadOfflineAppBtnLabel">Download Offline App</span>
+        </button>
+        </div>
+      </div>
+    </section>
+
+<footer class="mt-12 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 pt-8 pb-24 sm:pb-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 space-y-5 text-xs text-slate-500 dark:text-slate-400">
       <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
@@ -1242,8 +1469,6 @@
           <button type="button" data-legal-page="privacy" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Privacy Policy</button>
           <button type="button" data-legal-page="terms" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Terms &amp; Conditions</button>
           <button type="button" data-legal-page="disclaimer" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Disclaimer</button>
-          <button id="openCookieSettingsBtn" type="button" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Cookie Consent</button>
-          <a href="/sitemap.html" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Sitemap</a>
         </nav>
 
         <div class="flex flex-wrap items-center gap-2.5">
@@ -1307,6 +1532,50 @@
         </div>
 
         <div id="adminProtectedContent" class="hidden space-y-4">
+        <!-- Admin-Only Push Notification Center (Hidden from Regular Users) -->
+        <div class="p-3.5 rounded-xl bg-fuchsia-50/60 dark:bg-fuchsia-950/20 border border-fuchsia-200/80 dark:border-fuchsia-900/60 space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <div class="font-bold text-fuchsia-900 dark:text-fuchsia-200">Push Notification Center (Admin Only)</div>
+              <p class="text-[10px] text-slate-500 dark:text-slate-400">Broadcast instant push alerts to website &amp; Offline+Sync app users (stored for 7 days, then auto-deleted). Regular users never see this panel.</p>
+            </div>
+            <button id="refreshAdminNotifsBtn" type="button" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-fuchsia-600 hover:bg-fuchsia-500 text-white transition">Load Sent</button>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <div class="sm:col-span-2">
+              <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Notification Title</label>
+              <input id="adminNotifTitleInput" type="text" maxlength="120" placeholder="e.g. New Calculator Update Available!" class="w-full px-3 py-1.5 rounded-lg text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Style / Priority</label>
+              <select id="adminNotifStyleSelect" class="w-full px-2.5 py-1.5 rounded-lg text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+                <option value="info">Info (Indigo)</option>
+                <option value="update">Update (Emerald)</option>
+                <option value="alert">Important Alert (Rose)</option>
+                <option value="promo">Announcement (Amber)</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Notification Message</label>
+            <textarea id="adminNotifMsgInput" rows="2" maxlength="400" placeholder="Write the push notification message users will receive..." class="w-full px-3 py-1.5 rounded-lg text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 resize-y"></textarea>
+          </div>
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-end gap-2">
+            <div class="flex-1">
+              <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Optional Target Link / Calculator Path</label>
+              <input id="adminNotifLinkInput" type="text" maxlength="200" placeholder="e.g. /calc/item_slip or https://..." class="w-full px-3 py-1.5 rounded-lg font-mono text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700" />
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button id="previewAdminNotifBtn" type="button" class="px-3 py-1.5 rounded-lg text-[11px] font-bold bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 transition">Preview</button>
+              <button id="sendAdminNotifBtn" type="button" class="px-3.5 py-1.5 rounded-lg text-[11px] font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm transition">Send Push Notification</button>
+            </div>
+          </div>
+          <div id="adminNotifStatusMsg" class="hidden px-2.5 py-1.5 rounded-lg text-[11px] font-semibold"></div>
+          <div id="adminNotifsListContainer" class="max-h-44 overflow-y-auto text-[11px] space-y-1.5 text-slate-600 dark:text-slate-300">
+            Click "Load Sent" to view or manage active push notifications.
+          </div>
+        </div>
+
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800">
           <div>
             <label class="block font-bold text-slate-700 dark:text-slate-200 mb-1">Google AdSense Publisher ID</label>
@@ -1445,26 +1714,7 @@
     </div>
   </div>
 
-  <!-- Non-Intrusive GDPR / CCPA & Google AdSense Cookie Consent Banner -->
-  <div id="cookieConsentBanner" class="fixed bottom-0 left-0 right-0 z-40 hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur border-t border-slate-200 dark:border-slate-800 shadow-2xl p-4">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
-      <div class="text-slate-600 dark:text-slate-300 max-w-3xl">
-        <strong class="text-slate-900 dark:text-white">Privacy &amp; Cookie Consent:</strong>
-        We use cookies and local storage to save your calculator preferences and support compliant advertising via Google AdSense. You can choose personalized or non-personalized ads anytime. See our
-        <button type="button" data-legal-page="privacy" class="text-indigo-600 dark:text-indigo-400 underline font-semibold">Privacy Policy</button>.
-      </div>
-      <div class="flex flex-wrap items-center gap-2 shrink-0">
-        <button id="cookieEssentialOnlyBtn" type="button" class="px-3 py-1.5 rounded-xl font-semibold border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
-          Non-Personalized Only
-        </button>
-        <button id="cookieAcceptAllBtn" type="button" class="px-4 py-1.5 rounded-xl font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm transition">
-          Accept All
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <script>
+<script>
     // =========================================================================
     // 1. SAFE STORAGE & TOAST HELPERS
     // =========================================================================
@@ -1595,7 +1845,7 @@
       const pairKey = `${fromCode}-${toCode}`;
       const cached = fxState.pairRates[pairKey];
       if (!force && cached && (Date.now() - cached.ts) < 300000) return;
-      if (location.protocol !== 'https:' && location.protocol !== 'http:') return;
+      /* supports both https:// and file:// offline app */
       try {
         const res = await fetch(`/api/fx/pair?from=${encodeURIComponent(fromCode)}&to=${encodeURIComponent(toCode)}`, { method: 'GET' });
         if (res.ok) {
@@ -3620,21 +3870,47 @@
           const pool = Number(v.poolSize);
           const entropy = len * Math.log2(pool);
           const chars = pool === 94
-            ? 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%^&*()-_=+'
+            ? 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%^&*()-_=+,'
             : (pool === 62 ? 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789' : 'abcdefghijkmnopqrstuvwxyz0123456789');
-          let sample = '';
+          const rb = new Uint32Array(len + 1);
+          crypto.getRandomValues(rb);
+          const arr = [];
           for (let i = 0; i < len; i++) {
-            sample += chars.charAt((i * 17 + len * 13 + pool) % chars.length);
+            arr.push(chars.charAt(rb[i] % chars.length));
           }
+          if (!arr.includes(',') && arr.length > 0) {
+            arr[rb[len] % arr.length] = ',';
+          }
+          const sample = arr.join('');
+          appState.lastGeneratedPassword = sample;
           const strength = entropy >= 80 ? 'Very Strong (Military Grade)' : (entropy >= 60 ? 'Strong' : 'Moderate');
           return {
             summaryLabel: `${entropy.toFixed(1)} bits`,
             kpis: [
               { label: 'Information Entropy', value: `${entropy.toFixed(1)} bits`, sub: strength },
               { label: 'Keyspace Combinations', value: `2^${Math.round(entropy)}`, sub: `Pool: ${pool} chars, Length: ${len}` },
-              { label: 'Sample Generated Key', value: sample.slice(0, 18), sub: `Click Copy Steps to copy` }
+              { label: 'Sample Generated Key', value: sample.slice(0, 18), sub: `Tap Copy Password below` }
             ],
-            visualHtml: `<div class="text-xs font-mono-num break-all p-2 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">Sample: <strong>${sample}</strong></div>`,
+            visualHtml: `<div class="space-y-2.5 p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+              <div class="flex items-center justify-between gap-2">
+                <div class="text-[11px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Generated Cryptographic Password</div>
+                <button id="regenPwdBtn" type="button" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 transition">Generate New</button>
+              </div>
+              <div class="flex items-stretch gap-2">
+                <div id="generatedPwdText" class="flex-1 text-sm sm:text-base font-bold font-mono-num break-all p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white select-all">${sample.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</div>
+                <button id="copyGenPwdBtn" type="button" class="shrink-0 px-3.5 py-2 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm transition inline-flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  <span id="copyGenPwdLabel">Copy</span>
+                </button>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-12 gap-1.5 pt-1">
+                <input id="savePwdNameInput" type="text" placeholder="Name (e.g. Gmail, Wi-Fi)" class="sm:col-span-5 px-3 py-2 rounded-xl text-xs bg-slate-50 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                <input id="savePwdPinInput" type="password" inputmode="numeric" maxlength="12" placeholder="Vault PIN (4+ digits)" class="sm:col-span-4 px-3 py-2 rounded-xl text-xs font-mono-num bg-slate-50 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                <button id="savePwdToProfileBtn" type="button" class="sm:col-span-3 px-3 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm transition">Encrypt &amp; Save</button>
+              </div>
+              <div id="savePwdEncryptedNotice" class="hidden p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300"></div>
+              <div class="text-[10px] text-emerald-700 dark:text-emerald-400 font-medium">Your password is encrypted with AES-256-GCM using your Vault PIN before saving — even the server cannot read it.</div>
+            </div>`,
             formulaSteps: [`Entropy E = Length × log₂(Pool Size) = ${len} × log₂(${pool}) = ${entropy.toFixed(2)} bits`, `Sample Key: ${sample}`]
           };
         }
@@ -4142,6 +4418,8 @@
         { name: 'Item 2', qty: 2, amount: 50 }
       ]),
       savedSlips: safeGetStorage('calcverse_saved_slips', []),
+      savedPasswords: safeGetStorage('calcverse_saved_passwords', []),
+      lastGeneratedPassword: '',
       inputValues: {},
       favorites: safeGetStorage('calcverse_favorites', ['mortgage', 'bmi', 'compound', 'graphing']),
       pins: safeGetStorage('calcverse_pins', []),
@@ -4344,7 +4622,7 @@
         if (!savedBox) return;
         if (fetchCloud && appState.currentUser && (location.protocol === 'https:' || location.protocol === 'http:')) {
           try {
-            const r = await fetch('/api/slips', { method: 'GET', credentials: 'same-origin' });
+            const r = await fetch('/api/slips', { method: 'GET', credentials: API_CRED_MODE });
             const d = await r.json();
             if (r.ok && d && d.ok && Array.isArray(d.slips)) {
               appState.savedSlips = d.slips;
@@ -4408,7 +4686,7 @@
             appState.savedSlips.splice(idx, 1);
             safeSetStorage('calcverse_saved_slips', appState.savedSlips);
             if (s && s.id && appState.currentUser && (location.protocol === 'https:' || location.protocol === 'http:')) {
-              try { await fetch(`/api/slips?id=${encodeURIComponent(s.id)}`, { method: 'DELETE', credentials: 'same-origin' }); } catch (_) {}
+              try { await fetch(`/api/slips?id=${encodeURIComponent(s.id)}`, { method: 'DELETE', credentials: API_CRED_MODE }); } catch (_) {}
             }
             renderSavedSlipsList(false);
             showToast('Deleted saved slip');
@@ -4561,6 +4839,55 @@
       `).join('');
 
       document.getElementById('calcVisualContainer').innerHTML = res.visualHtml || '';
+      if (calc.id === 'password') {
+        const regenBtn = document.getElementById('regenPwdBtn');
+        const copyBtn = document.getElementById('copyGenPwdBtn');
+        const savePwdBtn = document.getElementById('savePwdToProfileBtn');
+        if (regenBtn) regenBtn.addEventListener('click', () => updateActiveCalculationOutput());
+        if (copyBtn) copyBtn.addEventListener('click', () => {
+          copyTextToClipboard(appState.lastGeneratedPassword, 'Password copied!');
+          const lbl = document.getElementById('copyGenPwdLabel');
+          if (lbl) { lbl.textContent = 'Copied!'; setTimeout(() => { lbl.textContent = 'Copy'; }, 1500); }
+        });
+        if (savePwdBtn) {
+          const pinInpPre = document.getElementById('savePwdPinInput');
+          if (pinInpPre && unlockedVaultPin) pinInpPre.value = unlockedVaultPin;
+          savePwdBtn.addEventListener('click', async () => {
+            const nameInp = document.getElementById('savePwdNameInput');
+            const pinInp = document.getElementById('savePwdPinInput');
+            const label = (nameInp ? nameInp.value.trim() : '') || `Password (${new Date().toLocaleDateString()})`;
+            const pin = (pinInp ? pinInp.value.trim() : '') || unlockedVaultPin;
+            const pwdVal = appState.lastGeneratedPassword;
+            if (!pwdVal) return;
+            if (!pin || pin.length < 4) {
+              showToast('Enter a Vault PIN (at least 4 digits/chars) to encrypt & save.');
+              if (pinInp) pinInp.focus();
+              return;
+            }
+            const encryptedVal = await encryptVaultSecret(pwdVal, pin);
+            const entropyBits = parseFloat(res.summaryLabel) || 0;
+            const payload = { label, password: encryptedVal, entropyBits, created_at: new Date().toISOString() };
+            if (appState.currentUser) {
+              const apiRes = await syncWithWorkerApi('/api/passwords', payload);
+              if (apiRes && apiRes.ok && apiRes.item) {
+                appState.savedPasswords.unshift(apiRes.item);
+                safeSetStorage('calcverse_saved_passwords', appState.savedPasswords.slice(0, 100));
+                if (nameInp) nameInp.value = '';
+                renderProfileSavedPasswords(false);
+                const encNotice = document.getElementById('savePwdEncryptedNotice');
+                if (encNotice) { encNotice.textContent = `Your password "${label}" is encrypted (AES-256-GCM) and saved safely to your Profile.`; encNotice.classList.remove('hidden'); }
+                showToast(`Your password "${label}" is encrypted & saved!`);
+                return;
+              }
+            }
+            appState.savedPasswords.unshift({ id: 'local_' + Date.now(), label, password_val: encryptedVal, entropy_bits: entropyBits, created_at: payload.created_at });
+            safeSetStorage('calcverse_saved_passwords', appState.savedPasswords.slice(0, 100));
+            if (nameInp) nameInp.value = '';
+            renderProfileSavedPasswords(false);
+            showToast(appState.currentUser ? `Encrypted & saved "${label}" locally.` : `Encrypted & saved "${label}" on this device! Sign in to sync.`);
+          });
+        }
+      }
       const formulaBox = document.getElementById('calcFormulaContainer');
       if (formulaBox) {
         if (formulaBox.parentElement) formulaBox.parentElement.classList.toggle('hidden', calc.id === 'item_slip');
@@ -6885,7 +7212,7 @@
       if (!listBox) return;
       if (fetchCloud && appState.currentUser && (location.protocol === 'https:' || location.protocol === 'http:')) {
         try {
-          const r = await fetch('/api/slips', { method: 'GET', credentials: 'same-origin' });
+          const r = await fetch('/api/slips', { method: 'GET', credentials: API_CRED_MODE });
           const d = await r.json();
           if (r.ok && d && d.ok && Array.isArray(d.slips)) {
             appState.savedSlips = d.slips;
@@ -6989,7 +7316,7 @@
           appState.savedSlips.splice(idx, 1);
           safeSetStorage('calcverse_saved_slips', appState.savedSlips);
           if (s && s.id && appState.currentUser && (location.protocol === 'https:' || location.protocol === 'http:')) {
-            try { await fetch(`/api/slips?id=${encodeURIComponent(s.id)}`, { method: 'DELETE', credentials: 'same-origin' }); } catch (_) {}
+            try { await fetch(`/api/slips?id=${encodeURIComponent(s.id)}`, { method: 'DELETE', credentials: API_CRED_MODE }); } catch (_) {}
           }
           renderProfileSavedSlips(false);
           showToast('Deleted saved slip');
@@ -7183,6 +7510,435 @@
       });
     }
 
+    let unlockedVaultPin = '';
+    let unlockedVaultDekB64 = '';
+    let vaultCountdownTimer = null;
+    let vaultSecondsLeft = 0;
+
+    function bytesToB64(bytes) {
+      let s = '';
+      for (let i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]);
+      return btoa(s);
+    }
+    function b64ToBytes(b64) {
+      const bin = atob(b64);
+      const out = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+      return out;
+    }
+    async function deriveVaultAesKey(secretStr, saltBytes) {
+      const enc = new TextEncoder();
+      const baseKey = await crypto.subtle.importKey('raw', enc.encode(String(secretStr)), 'PBKDF2', false, ['deriveKey']);
+      return crypto.subtle.deriveKey(
+        { name: 'PBKDF2', salt: saltBytes, iterations: 150000, hash: 'SHA-256' },
+        baseKey,
+        { name: 'AES-GCM', length: 256 },
+        false,
+        ['encrypt', 'decrypt']
+      );
+    }
+    async function encryptWithPassphrase(plainText, passphrase) {
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const key = await deriveVaultAesKey(passphrase, salt);
+      const ct = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, new TextEncoder().encode(plainText)));
+      return `enc_v1:${bytesToB64(salt)}:${bytesToB64(iv)}:${bytesToB64(ct)}`;
+    }
+    async function decryptWithPassphrase(storedVal, passphrase) {
+      const str = String(storedVal || '');
+      if (!str.startsWith('enc_v1:')) return str;
+      const parts = str.split(':');
+      if (parts.length !== 4) throw new Error('Corrupt vault entry');
+      const key = await deriveVaultAesKey(passphrase, b64ToBytes(parts[1]));
+      const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64ToBytes(parts[2]) }, key, b64ToBytes(parts[3]));
+      return new TextDecoder().decode(pt);
+    }
+    async function encryptWithRawDek(plainText, dekB64) {
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const key = await crypto.subtle.importKey('raw', b64ToBytes(dekB64), { name: 'AES-GCM' }, false, ['encrypt']);
+      const ct = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, new TextEncoder().encode(plainText)));
+      return `enc_v2:${bytesToB64(iv)}:${bytesToB64(ct)}`;
+    }
+    async function decryptWithRawDek(storedVal, dekB64) {
+      const parts = String(storedVal || '').split(':');
+      if (parts.length !== 3 || parts[0] !== 'enc_v2') throw new Error('Invalid v2');
+      const key = await crypto.subtle.importKey('raw', b64ToBytes(dekB64), { name: 'AES-GCM' }, false, ['decrypt']);
+      const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64ToBytes(parts[1]) }, key, b64ToBytes(parts[2]));
+      return new TextDecoder().decode(pt);
+    }
+
+    async function ensureUserVaultDek(pin) {
+      if (unlockedVaultDekB64) return unlockedVaultDekB64;
+      // Check if server already has a PIN-wrapped DEK
+      let pinWrapped = appState.currentUser && appState.currentUser.vaultPinDek;
+      if (!pinWrapped && appState.currentUser && (location.protocol === 'https:' || location.protocol === 'http:')) {
+        try {
+          const r = await fetch('/api/passwords/vault-meta', { method: 'GET', credentials: API_CRED_MODE });
+          const d = await r.json();
+          if (r.ok && d && d.ok && d.vaultPinDek) pinWrapped = d.vaultPinDek;
+        } catch (_) {}
+      }
+      if (pinWrapped) {
+        const dek = await decryptWithPassphrase(pinWrapped, pin);
+        unlockedVaultDekB64 = dek;
+        return dek;
+      }
+      // First-time setup: generate fresh 256-bit DEK and wrap it with PIN (and server will also wrap with TOTP recovery if enabled)
+      const freshDek = bytesToB64(crypto.getRandomValues(new Uint8Array(32)));
+      const wrappedByPin = await encryptWithPassphrase(freshDek, pin);
+      unlockedVaultDekB64 = freshDek;
+      if (appState.currentUser) {
+        appState.currentUser.vaultPinDek = wrappedByPin;
+        await syncWithWorkerApi('/api/passwords/vault-init', { vaultPinDek: wrappedByPin, recoveryDekPlain: freshDek });
+      }
+      return freshDek;
+    }
+
+    async function encryptVaultSecret(plainText, pin) {
+      if (appState.currentUser) {
+        const dek = await ensureUserVaultDek(pin);
+        return encryptWithRawDek(plainText, dek);
+      }
+      return encryptWithPassphrase(plainText, pin);
+    }
+
+    async function decryptVaultSecret(storedVal, pin) {
+      const str = String(storedVal || '');
+      if (str.startsWith('enc_v2:')) {
+        const dek = unlockedVaultDekB64 || (await ensureUserVaultDek(pin));
+        return decryptWithRawDek(str, dek);
+      }
+      return decryptWithPassphrase(str, pin);
+    }
+
+    function startVault30SecTimer() {
+      if (vaultCountdownTimer) clearInterval(vaultCountdownTimer);
+      vaultSecondsLeft = 30;
+      const updateBadge = () => {
+        const badgeEl = document.getElementById('vaultLockBadge');
+        if (badgeEl && (unlockedVaultPin || unlockedVaultDekB64)) {
+          badgeEl.textContent = `Unlocked • ${vaultSecondsLeft}s`;
+        }
+      };
+      updateBadge();
+      vaultCountdownTimer = setInterval(() => {
+        vaultSecondsLeft--;
+        if (vaultSecondsLeft <= 0) {
+          lockPasswordVault();
+          showToast('Password Vault auto-locked after 30s. Enter PIN to unlock again.');
+        } else {
+          updateBadge();
+        }
+      }, 1000);
+    }
+
+    function lockPasswordVault() {
+      if (vaultCountdownTimer) { clearInterval(vaultCountdownTimer); vaultCountdownTimer = null; }
+      vaultSecondsLeft = 0;
+      unlockedVaultPin = '';
+      unlockedVaultDekB64 = '';
+      const inp = document.getElementById('vaultPinUnlockInput');
+      if (inp) inp.value = '';
+      const st = document.getElementById('vaultPinStatusMsg');
+      if (st) st.classList.add('hidden');
+      const recBox = document.getElementById('vaultTotpRecoverBox');
+      if (recBox) recBox.classList.add('hidden');
+      renderProfileSavedPasswords(false);
+    }
+
+    async function renderProfileSavedPasswords(fetchCloud = true) {
+      const box = document.getElementById('profileSavedPasswordsList');
+      const countEl = document.getElementById('profileSavedPasswordsCount');
+      const badgeEl = document.getElementById('vaultLockBadge');
+      const lockBtn = document.getElementById('profileLockVaultBtn');
+      const unlockRow = document.getElementById('vaultPinUnlockRow');
+      if (!box) return;
+      if (fetchCloud && appState.currentUser && (location.protocol === 'https:' || location.protocol === 'http:')) {
+        try {
+          const r = await fetch('/api/passwords', { method: 'GET', credentials: API_CRED_MODE });
+          const d = await r.json();
+          if (r.ok && d && d.ok && Array.isArray(d.passwords)) {
+            appState.savedPasswords = d.passwords;
+            if (d.vaultPinDek && appState.currentUser) appState.currentUser.vaultPinDek = d.vaultPinDek;
+            if (appState.currentUser) appState.currentUser.vaultTotpEnabled = Boolean(d.vaultTotpEnabled);
+            safeSetStorage('calcverse_saved_passwords', d.passwords.slice(0, 100));
+          }
+        } catch (_) {}
+      }
+      const list = Array.isArray(appState.savedPasswords) ? appState.savedPasswords : [];
+      if (countEl) countEl.textContent = String(list.length);
+      const isUnlocked = Boolean(unlockedVaultPin || unlockedVaultDekB64);
+      if (badgeEl) {
+        badgeEl.textContent = isUnlocked ? `Unlocked • ${vaultSecondsLeft || 30}s` : 'PIN Locked';
+        badgeEl.className = isUnlocked
+          ? 'px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300'
+          : 'px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300';
+      }
+      if (lockBtn) lockBtn.classList.toggle('hidden', !isUnlocked);
+      if (unlockRow) unlockRow.classList.toggle('hidden', isUnlocked);
+
+      if (!list.length) {
+        box.innerHTML = '<div class="text-[11px] text-slate-500 dark:text-slate-400">No saved passwords yet. Generate one in Cryptographic Password Calculator and encrypt it with your Vault PIN.</div>';
+        return;
+      }
+      const escPw = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;');
+      box.innerHTML = list.map((p, idx) => `
+        <div class="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-2">
+          <div class="min-w-0">
+            <div class="text-xs font-bold truncate text-slate-800 dark:text-slate-100">${escPw(p.label || 'Saved Password')}</div>
+            <div class="text-[11px] font-mono-num text-slate-500 dark:text-slate-400 break-all" data-pwd-val="${idx}" data-shown="0">${isUnlocked ? '••••••••••••' : 'Locked — Enter PIN (auto-locks every 30s)'}</div>
+          </div>
+          <div class="flex items-center gap-1 shrink-0">
+            ${isUnlocked ? `<button type="button" data-pwd-toggle="${idx}" class="px-2 py-1 rounded-lg text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">Show</button>
+            <button type="button" data-pwd-copy="${idx}" class="px-2 py-1 rounded-lg text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300">Copy</button>
+            <button type="button" data-pwd-del="${idx}" class="px-2 py-1 rounded-lg text-[10px] font-bold bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400">Del</button>` : '<span class="px-2 py-1 rounded-lg text-[10px] font-semibold bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300">PIN Required</span>'}
+          </div>
+        </div>`).join('');
+
+      box.querySelectorAll('[data-pwd-toggle]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const idx = Number(btn.getAttribute('data-pwd-toggle'));
+          const p = appState.savedPasswords[idx];
+          const valEl = box.querySelector(`[data-pwd-val="${idx}"]`);
+          if (!p || !valEl) return;
+          const shown = valEl.getAttribute('data-shown') === '1';
+          if (shown) {
+            valEl.textContent = '••••••••••••';
+            valEl.setAttribute('data-shown', '0');
+            btn.textContent = 'Show';
+            return;
+          }
+          try {
+            const plain = await decryptVaultSecret(p.password_val || p.password || '', unlockedVaultPin);
+            valEl.textContent = plain;
+            valEl.setAttribute('data-shown', '1');
+            btn.textContent = 'Hide';
+          } catch (_) {
+            showToast('Could not decrypt with current PIN.');
+          }
+        });
+      });
+      box.querySelectorAll('[data-pwd-copy]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const p = appState.savedPasswords[Number(btn.getAttribute('data-pwd-copy'))];
+          if (!p) return;
+          try {
+            const plain = await decryptVaultSecret(p.password_val || p.password || '', unlockedVaultPin);
+            copyTextToClipboard(plain, `Copied "${p.label}" password!`);
+          } catch (_) {
+            showToast('Could not decrypt with current PIN.');
+          }
+        });
+      });
+      box.querySelectorAll('[data-pwd-del]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          if (!unlockedVaultPin && !unlockedVaultDekB64) { showToast('Enter your Vault PIN first to delete a saved password.'); return; }
+          const idx = Number(btn.getAttribute('data-pwd-del'));
+          const p = appState.savedPasswords[idx];
+          appState.savedPasswords.splice(idx, 1);
+          safeSetStorage('calcverse_saved_passwords', appState.savedPasswords);
+          if (p && p.id && appState.currentUser && (location.protocol === 'https:' || location.protocol === 'http:')) {
+            try { await fetch(`/api/passwords?id=${encodeURIComponent(p.id)}`, { method: 'DELETE', credentials: API_CRED_MODE }); } catch (_) {}
+          }
+          renderProfileSavedPasswords(false);
+          showToast('Deleted saved password');
+        });
+      });
+    }
+
+    const vaultUnlockBtn = document.getElementById('vaultUnlockBtn');
+    const vaultPinUnlockInput = document.getElementById('vaultPinUnlockInput');
+    const profileLockVaultBtn = document.getElementById('profileLockVaultBtn');
+    const openVaultTotpRecoverBtn = document.getElementById('openVaultTotpRecoverBtn');
+    const closeVaultTotpRecoverBtn = document.getElementById('closeVaultTotpRecoverBtn');
+    const vaultTotpRecoverBox = document.getElementById('vaultTotpRecoverBox');
+    const vaultRecoverSubmitBtn = document.getElementById('vaultRecoverSubmitBtn');
+
+    if (openVaultTotpRecoverBtn && vaultTotpRecoverBox) {
+      openVaultTotpRecoverBtn.addEventListener('click', () => {
+        vaultTotpRecoverBox.classList.remove('hidden');
+        const stEl = document.getElementById('vaultPinStatusMsg');
+        if (stEl) stEl.classList.add('hidden');
+      });
+    }
+    if (closeVaultTotpRecoverBtn && vaultTotpRecoverBox) {
+      closeVaultTotpRecoverBtn.addEventListener('click', () => vaultTotpRecoverBox.classList.add('hidden'));
+    }
+
+    if (vaultUnlockBtn && vaultPinUnlockInput) {
+      vaultUnlockBtn.addEventListener('click', async () => {
+        const pin = vaultPinUnlockInput.value.trim();
+        const stEl = document.getElementById('vaultPinStatusMsg');
+        if (!pin || pin.length < 4) {
+          if (stEl) { stEl.textContent = 'Enter your Vault PIN (4+ digits/chars).'; stEl.className = 'text-[11px] font-semibold text-rose-600 dark:text-rose-400'; stEl.classList.remove('hidden'); }
+          return;
+        }
+        try {
+          if (appState.currentUser && appState.currentUser.vaultPinDek) {
+            unlockedVaultDekB64 = await decryptWithPassphrase(appState.currentUser.vaultPinDek, pin);
+          } else {
+            const firstEnc = (appState.savedPasswords || []).find(p => String(p.password_val || p.password || '').startsWith('enc_v1:'));
+            if (firstEnc) await decryptWithPassphrase(firstEnc.password_val || firstEnc.password, pin);
+          }
+        } catch (_) {
+          unlockedVaultDekB64 = '';
+          if (stEl) { stEl.textContent = 'Incorrect Vault PIN. Forgot PIN? Tap "Use Authenticator" below.'; stEl.className = 'text-[11px] font-semibold text-rose-600 dark:text-rose-400'; stEl.classList.remove('hidden'); }
+          return;
+        }
+        unlockedVaultPin = pin;
+        vaultPinUnlockInput.value = '';
+        if (stEl) stEl.classList.add('hidden');
+        if (vaultTotpRecoverBox) vaultTotpRecoverBox.classList.add('hidden');
+        renderProfileSavedPasswords(false);
+        startVault30SecTimer();
+        showToast('Password Vault unlocked for 30 seconds!');
+      });
+    }
+
+    // Forgot PIN -> ONLY way to open/reset vault is via 6-digit Authenticator App TOTP code
+    if (vaultRecoverSubmitBtn) {
+      vaultRecoverSubmitBtn.addEventListener('click', async () => {
+        const totpCode = document.getElementById('vaultRecoverTotpInput').value.replace(/\D/g, '').trim();
+        const newPin = document.getElementById('vaultRecoverNewPinInput').value.trim();
+        const stEl = document.getElementById('vaultPinStatusMsg');
+        const showSt = (msg, err = true) => {
+          if (!stEl) return;
+          stEl.textContent = msg;
+          stEl.className = err ? 'text-[11px] font-semibold text-rose-600 dark:text-rose-400' : 'text-[11px] font-semibold text-emerald-600 dark:text-emerald-400';
+          stEl.classList.remove('hidden');
+        };
+        if (totpCode.length !== 6) { showSt('Enter the 6-digit code from your Authenticator App.'); return; }
+        if (!newPin || newPin.length < 4) { showSt('Enter a New Vault PIN (4+ digits/chars).'); return; }
+        const res = await syncWithWorkerApi('/api/passwords/recover-totp', { code: totpCode });
+        if (!res || !res.ok) {
+          showSt((res && res.error) || 'Authenticator verification failed. Enable Authenticator App in your Profile first.');
+          return;
+        }
+        // Re-wrap the recovered Vault DEK with the user's new PIN!
+        const recoveredDek = res.recoveredDek || bytesToB64(crypto.getRandomValues(new Uint8Array(32)));
+        const newPinWrapped = await encryptWithPassphrase(recoveredDek, newPin);
+        await syncWithWorkerApi('/api/passwords/vault-init', { vaultPinDek: newPinWrapped, recoveryDekPlain: recoveredDek });
+        if (appState.currentUser) appState.currentUser.vaultPinDek = newPinWrapped;
+        unlockedVaultDekB64 = recoveredDek;
+        unlockedVaultPin = newPin;
+        document.getElementById('vaultRecoverTotpInput').value = '';
+        document.getElementById('vaultRecoverNewPinInput').value = '';
+        if (vaultTotpRecoverBox) vaultTotpRecoverBox.classList.add('hidden');
+        showSt('Verified via Authenticator! New Vault PIN saved and unlocked for 30s.', false);
+        renderProfileSavedPasswords(false);
+        startVault30SecTimer();
+        showToast('Vault unlocked via Authenticator for 30 seconds!');
+      });
+    }
+
+    if (profileLockVaultBtn) profileLockVaultBtn.addEventListener('click', () => {
+      lockPasswordVault();
+      showToast('Password Vault locked.');
+    });
+    if (closeAuthModalBtn) closeAuthModalBtn.addEventListener('click', lockPasswordVault);
+
+    // Dedicated Vault Authenticator Setup / Verify / Disable (Completely separate from Login Authenticator)
+    const setupVaultTotpBtn = document.getElementById('setupVaultTotpBtn');
+    const vaultTotpSetupPanel = document.getElementById('vaultTotpSetupPanel');
+    const closeVaultTotpSetupBtn = document.getElementById('closeVaultTotpSetupBtn');
+    if (setupVaultTotpBtn && vaultTotpSetupPanel) {
+      closeVaultTotpSetupBtn.addEventListener('click', () => vaultTotpSetupPanel.classList.add('hidden'));
+      setupVaultTotpBtn.addEventListener('click', async () => {
+        if (!appState.currentUser) return;
+        vaultTotpSetupPanel.classList.remove('hidden');
+        const stEl = document.getElementById('vaultTotpSetupStatus');
+        const qrArea = document.getElementById('vaultTotpQrArea');
+        const actEl = document.getElementById('vaultTotpActiveActions');
+        if (appState.currentUser.vaultTotpEnabled) {
+          stEl.textContent = 'Dedicated Vault Authenticator is active. It can unlock your Password Vault if you forget your PIN (Login Authenticator is not accepted here).';
+          qrArea.classList.add('hidden');
+          actEl.classList.remove('hidden');
+          return;
+        }
+        stEl.textContent = 'Generating dedicated Vault Authenticator key...';
+        qrArea.classList.add('hidden');
+        actEl.classList.add('hidden');
+        const res = await syncWithWorkerApi('/api/passwords/totp/setup', {});
+        if (!res || !res.ok || !res.secret) {
+          stEl.textContent = (res && res.error) || 'Sign in on the live website to set up Dedicated Vault Authenticator.';
+          return;
+        }
+        document.getElementById('vaultTotpSecretDisplay').textContent = res.secret;
+        document.getElementById('vaultTotpOpenAppLink').href = res.otpauthUrl;
+        document.getElementById('vaultTotpQrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(res.otpauthUrl)}`;
+        stEl.textContent = 'Add this separate CalcVerse Vault key to your Authenticator app, then enter the 6-digit code below:';
+        qrArea.classList.remove('hidden');
+      });
+      document.getElementById('copyVaultTotpSecretBtn').addEventListener('click', () => {
+        const s = document.getElementById('vaultTotpSecretDisplay').textContent.trim();
+        if (s) copyTextToClipboard(s, 'Copied Vault Authenticator secret key!');
+      });
+      document.getElementById('verifyVaultTotpSetupBtn').addEventListener('click', async () => {
+        const code = document.getElementById('vaultTotpVerifyInput').value.replace(/\D/g, '').trim();
+        const stEl = document.getElementById('vaultTotpSetupStatus');
+        if (code.length !== 6) { stEl.textContent = 'Enter the 6-digit Vault Authenticator code.'; return; }
+        const res = await syncWithWorkerApi('/api/passwords/totp/verify', { code, recoveryDekPlain: unlockedVaultDekB64 || '' });
+        if (!res || !res.ok) {
+          stEl.textContent = (res && res.error) || 'Invalid 6-digit code. Try the latest code.';
+          return;
+        }
+        if (appState.currentUser) appState.currentUser.vaultTotpEnabled = true;
+        document.getElementById('vaultTotpVerifyInput').value = '';
+        document.getElementById('vaultTotpQrArea').classList.add('hidden');
+        document.getElementById('vaultTotpActiveActions').classList.remove('hidden');
+        stEl.textContent = 'Dedicated Vault Authenticator enabled! Only this separate authenticator can recover a forgotten Vault PIN.';
+        showToast('Dedicated Vault Authenticator enabled!');
+      });
+      document.getElementById('disableVaultTotpBtn').addEventListener('click', async () => {
+        const pinInp = document.getElementById('disableVaultTotpPinInput');
+        const stEl = document.getElementById('vaultTotpSetupStatus');
+        const pin = (pinInp ? pinInp.value.trim() : '') || unlockedVaultPin;
+        if (!pin || pin.length < 4) {
+          stEl.textContent = 'Enter your Vault PIN to disable Dedicated Vault Authenticator.';
+          if (pinInp) pinInp.focus();
+          return;
+        }
+        let pinWrapped = appState.currentUser && appState.currentUser.vaultPinDek;
+        if (!pinWrapped && (location.protocol === 'https:' || location.protocol === 'http:')) {
+          try {
+            const mr = await fetch('/api/passwords/vault-meta', { method: 'GET', credentials: API_CRED_MODE });
+            const md = await mr.json();
+            if (mr.ok && md && md.ok && md.vaultPinDek) pinWrapped = md.vaultPinDek;
+          } catch (_) {}
+        }
+        let pinVerifiedProof = '';
+        if (pinWrapped) {
+          try {
+            const dek = await decryptWithPassphrase(pinWrapped, pin);
+            pinVerifiedProof = await sha256HexLocal('disable-vault-totp:' + dek);
+          } catch (_) {
+            stEl.textContent = 'Incorrect Vault PIN — Dedicated Vault Authenticator cannot be disabled without your Vault PIN.';
+            return;
+          }
+        } else {
+          pinVerifiedProof = await sha256HexLocal('disable-vault-totp-pin:' + pin);
+        }
+        const res = await syncWithWorkerApi('/api/passwords/totp/disable', { pinVerifiedProof });
+        if (res && !res.ok) {
+          stEl.textContent = res.error || 'Vault PIN verification required to disable Dedicated Vault Authenticator.';
+          return;
+        }
+        if (pinInp) pinInp.value = '';
+        if (appState.currentUser) appState.currentUser.vaultTotpEnabled = false;
+        document.getElementById('vaultTotpActiveActions').classList.add('hidden');
+        stEl.textContent = 'Dedicated Vault Authenticator disabled.';
+        showToast('Vault Authenticator disabled');
+      });
+    }
+
+    const profRefPwds = document.getElementById('profileRefreshPwdsBtn');
+    if (profRefPwds) profRefPwds.addEventListener('click', () => renderProfileSavedPasswords(true));
+    const profNewPwd = document.getElementById('profileNewPwdBtn');
+    if (profNewPwd) profNewPwd.addEventListener('click', () => {
+      authModal.classList.add('hidden');
+      selectCalculator('password', true);
+    });
+
     function updateAuthUI() {
       const headerLabel = document.getElementById('authHeaderLabel');
       const headerIcon = document.getElementById('authHeaderIcon');
@@ -7193,6 +7949,14 @@
         authGuestContainer.classList.add('hidden');
         authProfileContainer.classList.remove('hidden');
         renderProfileSavedSlips(true);
+        renderProfileSavedPasswords(true);
+        const pdBan = document.getElementById('pendingDeletionBanner');
+        const pdTxt = document.getElementById('pendingDeletionDateText');
+        if (pdBan) {
+          const dt = appState.currentUser && appState.currentUser.deletionScheduledAt;
+          pdBan.classList.toggle('hidden', !dt);
+          if (dt && pdTxt) pdTxt.textContent = `Permanent deletion on ${String(dt).slice(0, 10)}.`;
+        }
 
         document.getElementById('profileAvatarCircle').textContent = firstName.charAt(0).toUpperCase();
         document.getElementById('profileDisplayName').textContent = appState.currentUser.name;
@@ -7222,23 +7986,150 @@
     }
 
 
+    const LIVE_API_ORIGIN = 'https://msc.calcverse-app.workers.dev';
+    const IS_CAPACITOR_APK = (function () {
+      try {
+        if (typeof window !== 'undefined' && window.Capacitor) return true;
+        if (location.protocol === 'capacitor:' || location.protocol === 'ionic:') return true;
+        if ((location.hostname === 'localhost' || location.hostname === '127.0.0.1') && !location.port) return true;
+      } catch (_) {}
+      return false;
+    })();
+    function getClientSourceLabel() {
+      try {
+        if (IS_CAPACITOR_APK) return 'Android APK';
+        if (location.protocol !== 'https:' && location.protocol !== 'http:') return 'Offline App';
+        if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) return 'Installed App';
+        if (window.navigator && window.navigator.standalone === true) return 'Installed App';
+      } catch (_) {}
+      return 'Website';
+    }
+    function renderSourceBadge(src) {
+      const s = String(src || 'Website');
+      const isApp = s.toLowerCase().includes('app') || s.toLowerCase().includes('apk');
+      const cls = isApp
+        ? 'bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300'
+        : 'bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300';
+      return `<span class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wide ${cls}">${s.replace(/</g, '&lt;')}</span>`;
+    }
+    const API_BASE = (!IS_CAPACITOR_APK && (location.protocol === 'https:' || location.protocol === 'http:')) ? '' : LIVE_API_ORIGIN;
+    const API_CRED_MODE = IS_CAPACITOR_APK ? 'include' : 'same-origin';
+    async function sha256HexLocal(str) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(String(str)));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    const OFFLINE_QUEUE_KEY = 'calcverse_offline_sync_queue';
+    const QUEUEABLE_ENDPOINTS = new Set([
+      '/api/auth/signup', '/api/donations', '/api/feedback', '/api/contact',
+      '/api/downloads', '/api/slips', '/api/passwords', '/api/passwords/vault-init',
+      '/api/auth/profile', '/api/auth/sync'
+    ]);
+
+    function enqueueOfflineSync(endpoint, payload) {
+      if (!QUEUEABLE_ENDPOINTS.has(endpoint)) return;
+      const q = safeGetStorage(OFFLINE_QUEUE_KEY, []);
+      const taggedPayload = (payload && typeof payload === 'object') ? { ...payload, clientSource: payload.clientSource || getClientSourceLabel() } : payload;
+      q.push({ endpoint, payload: taggedPayload, queuedAt: new Date().toISOString() });
+      safeSetStorage(OFFLINE_QUEUE_KEY, q.slice(-200));
+      updateOfflineSyncBanner();
+    }
+
+    let isFlushingOfflineQueue = false;
+    async function flushOfflineSyncQueue(silent = false) {
+      if (isFlushingOfflineQueue || !navigator.onLine) return;
+      if (location.protocol !== 'https:' && location.protocol !== 'http:') return;
+      const q = safeGetStorage(OFFLINE_QUEUE_KEY, []);
+      if (!Array.isArray(q) || q.length === 0) { updateOfflineSyncBanner(); return; }
+      isFlushingOfflineQueue = true;
+      let syncedCount = 0;
+      const remaining = [];
+      try {
+        // Process signups first so session cookie is established before syncing slips/passwords/profile
+        const ordered = [
+          ...q.filter(item => item.endpoint === '/api/auth/signup'),
+          ...q.filter(item => item.endpoint !== '/api/auth/signup')
+        ];
+        for (const item of ordered) {
+          try {
+            const res = await fetch(API_BASE + item.endpoint, {
+              method: 'POST',
+              credentials: API_BASE ? 'omit' : 'same-origin',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(item.payload)
+            });
+            if (res.ok || (res.status >= 400 && res.status < 500 && res.status !== 408 && res.status !== 429)) {
+              syncedCount++;
+            } else {
+              remaining.push(item);
+            }
+          } catch (_) {
+            remaining.push(item);
+          }
+        }
+        safeSetStorage(OFFLINE_QUEUE_KEY, remaining);
+        updateOfflineSyncBanner();
+        if (syncedCount > 0 && !silent) {
+          showToast(`Back online! Auto-synced ${syncedCount} offline record(s) to server.`);
+        }
+      } finally {
+        isFlushingOfflineQueue = false;
+      }
+    }
+
+    function updateOfflineSyncBanner() {
+      let pill = document.getElementById('offlineSyncStatusPill');
+      const q = safeGetStorage(OFFLINE_QUEUE_KEY, []);
+      const pending = Array.isArray(q) ? q.length : 0;
+      const isOff = !navigator.onLine;
+      if (!isOff && pending === 0) {
+        if (pill) pill.classList.add('hidden');
+        return;
+      }
+      if (!pill) {
+        pill = document.createElement('button');
+        pill.id = 'offlineSyncStatusPill';
+        pill.type = 'button';
+        pill.className = 'fixed bottom-4 left-4 z-40 px-3 py-1.5 rounded-full text-[11px] font-bold shadow-lg border transition flex items-center gap-1.5';
+        pill.addEventListener('click', () => {
+          if (navigator.onLine) flushOfflineSyncQueue(false);
+          else showToast('You are offline. Saved data will auto-sync as soon as internet reconnects.');
+        });
+        document.body.appendChild(pill);
+      }
+      pill.classList.remove('hidden');
+      if (isOff) {
+        pill.className = 'fixed bottom-4 left-4 z-40 px-3 py-1.5 rounded-full text-[11px] font-bold shadow-lg border bg-amber-50 dark:bg-amber-950 text-amber-800 dark:text-amber-200 border-amber-300 dark:border-amber-700';
+        pill.textContent = pending > 0 ? `Offline Mode • ${pending} saved locally (auto-syncs when online)` : 'Offline Mode • Works locally';
+      } else {
+        pill.className = 'fixed bottom-4 left-4 z-40 px-3 py-1.5 rounded-full text-[11px] font-bold shadow-lg border bg-indigo-600 text-white border-indigo-500';
+        pill.textContent = `Syncing ${pending} offline record(s)...`;
+      }
+    }
+
     async function syncWithWorkerApi(endpoint, payload) {
-      if (location.protocol === 'https:' || location.protocol === 'http:') {
-        try {
-          const res = await fetch(endpoint, {
-            method: 'POST',
-            credentials: 'same-origin',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
+      if (!navigator.onLine) {
+        enqueueOfflineSync(endpoint, payload);
+        return null;
+      }
+      try {
+        const res = await fetch(API_BASE + endpoint, {
+          method: 'POST',
+          credentials: API_BASE ? 'omit' : 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify((payload && typeof payload === 'object') ? { ...payload, clientSource: payload.clientSource || getClientSourceLabel() } : payload)
+        });
           const data = await res.json().catch(() => null);
           if (data) return { ...data, _status: res.status };
-        } catch (err) {
-          // Fallback to local storage cleanly
-        }
+      } catch (err) {
+        // Network dropped — queue automatically for background sync on reconnect!
+        enqueueOfflineSync(endpoint, payload);
       }
       return null;
     }
+
+    window.addEventListener('online', () => { updateOfflineSyncBanner(); flushOfflineSyncQueue(false); });
+    window.addEventListener('offline', () => { updateOfflineSyncBanner(); showToast('Offline mode active — your data will save locally and auto-sync when online.'); });
+    setInterval(() => { if (navigator.onLine) flushOfflineSyncQueue(true); }, 30000);
 
     const authTabSignupBtn = document.getElementById('authTabSignupBtn');
     const authTabLoginBtn = document.getElementById('authTabLoginBtn');
@@ -7441,7 +8332,7 @@
       showToast('Password updated! Please sign in.');
     });
 
-    document.getElementById('syncCloudAccountBtn').addEventListener('click', async () => {
+    const _syncCloudAccountBtnEl = document.getElementById('syncCloudAccountBtn'); if (_syncCloudAccountBtnEl) _syncCloudAccountBtnEl.addEventListener('click', async () => {
       if (!appState.currentUser) return;
       await syncWithWorkerApi('/api/auth/sync', {
         email: appState.currentUser.email,
@@ -7521,6 +8412,15 @@
 
       const workerRes = await syncWithWorkerApi('/api/auth/login', { email: emailOrUser, password, remember });
       if (workerRes && workerRes.ok && workerRes.user) {
+        // Cache offline SHA-256 login verifier on this device so user can also re-login offline later
+        try {
+          const pHash = await sha256HexLocal(String(workerRes.user.email || '').toLowerCase() + ':' + password);
+          const idxU = appState.users.findIndex(u => String(u.email || '').toLowerCase() === String(workerRes.user.email || '').toLowerCase());
+          const localCopy = { ...workerRes.user, offlinePwdHash: pHash };
+          if (idxU >= 0) appState.users[idxU] = { ...appState.users[idxU], ...localCopy };
+          else appState.users.push(localCopy);
+          safeSetStorage('calcverse_users', appState.users);
+        } catch (_) {}
         applyUserPersonalization(workerRes.user);
         loginForm.reset();
         showToast(`Welcome back, ${workerRes.user.name}! Your history & settings are restored.`);
@@ -7528,10 +8428,18 @@
         return;
       }
 
-      const matched = appState.users.find(u =>
-        (u.email.toLowerCase() === emailOrUser || u.name.toLowerCase() === emailOrUser || String(u.memberId || u.member_id || '').toLowerCase() === emailOrUser) &&
-        u.password === password
-      );
+      let matched = null;
+      for (const u of appState.users) {
+        const idOk = String(u.email || '').toLowerCase() === emailOrUser ||
+          String(u.name || '').toLowerCase() === emailOrUser ||
+          String(u.memberId || u.member_id || '').toLowerCase() === emailOrUser;
+        if (!idOk) continue;
+        if (u.password && u.password === password) { matched = u; break; }
+        if (u.offlinePwdHash) {
+          const chk = await sha256HexLocal(String(u.email || '').toLowerCase() + ':' + password);
+          if (chk === u.offlinePwdHash) { matched = u; break; }
+        }
+      }
 
       if (!matched) {
         showAuthBanner((workerRes && workerRes.error) || 'Invalid email, username, Member ID, or password. Please check your credentials or open a new account.');
@@ -7829,7 +8737,30 @@
       });
 
       document.getElementById('disableTotpBtn').addEventListener('click', async () => {
-        await syncWithWorkerApi('/api/auth/totp/disable', {});
+        const pwdInp = document.getElementById('disableLoginTotpPwdInput');
+        const stEl = document.getElementById('totpStatusMsg');
+        const password = pwdInp ? pwdInp.value : '';
+        if (!password) {
+          stEl.textContent = 'Enter your Login Password to disable Account Login Authenticator.';
+          if (pwdInp) pwdInp.focus();
+          return;
+        }
+        const res = await syncWithWorkerApi('/api/auth/totp/disable', { password });
+        if (res && !res.ok) {
+          stEl.textContent = res.error || 'Incorrect Login Password — cannot disable Authenticator App.';
+          return;
+        }
+        if (!res && appState.currentUser) {
+          let ok = appState.currentUser.password && appState.currentUser.password === password;
+          if (!ok && appState.currentUser.offlinePwdHash) {
+            ok = (await sha256HexLocal(String(appState.currentUser.email || '').toLowerCase() + ':' + password)) === appState.currentUser.offlinePwdHash;
+          }
+          if (!ok) {
+            stEl.textContent = 'Incorrect Login Password — cannot disable Authenticator App.';
+            return;
+          }
+        }
+        if (pwdInp) pwdInp.value = '';
         appState.currentUser.totpEnabled = false;
         appState.currentUser.totpSecret = '';
         const idxU = appState.users.findIndex(u => u.email === appState.currentUser.email);
@@ -7837,7 +8768,7 @@
         safeSetStorage('calcverse_users', appState.users);
         safeSetStorage('calcverse_current_user', appState.currentUser);
         document.getElementById('totpActiveActions').classList.add('hidden');
-        document.getElementById('totpStatusMsg').textContent = 'Authenticator App has been disabled.';
+        stEl.textContent = 'Authenticator App has been disabled.';
         showToast('Authenticator App disabled');
       });
     }
@@ -7942,7 +8873,7 @@
     async function restoreServerSession() {
       if (location.protocol !== 'https:' && location.protocol !== 'http:') return;
       try {
-        const res = await fetch('/api/auth/me', { method: 'GET', credentials: 'same-origin' });
+        const res = await fetch('/api/auth/me', { method: 'GET', credentials: API_CRED_MODE });
         if (res.ok) {
           const data = await res.json();
           if (data && data.ok && data.user) {
@@ -8286,6 +9217,7 @@
       foot.classList.remove('hidden');
       foot.classList.add('flex');
       showToast('Admin panel unlocked!');
+      if (typeof loadAdminNotifications === 'function') loadAdminNotifications();
     });
 
     document.getElementById('refreshAdminUsersBtn').addEventListener('click', async () => {
@@ -8346,7 +9278,7 @@
                   </div>
                   <div class="flex flex-col items-end gap-1 shrink-0">
                     <span class="text-[10px] font-mono text-slate-400">${String(d.created_at || '').slice(0, 10)}</span>
-                    <span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${stCls}">${st}</span>
+                    <div class="flex items-center gap-1">${renderSourceBadge(d.source)}<span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${stCls}">${st}</span></div>
                   </div>
                 </div>
                 <div class="flex items-center gap-1.5 pt-0.5">
@@ -8466,7 +9398,7 @@
             list.map(r => `
               <div class="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 space-y-1">
                 <div class="flex flex-wrap items-center justify-between gap-1">
-                  <span class="font-bold text-indigo-600 dark:text-indigo-400">${r.type} — ${r.calculator}</span>
+                  <span class="font-bold text-indigo-600 dark:text-indigo-400 inline-flex items-center gap-1.5">${renderSourceBadge(r.source)}<span>${r.type} — ${r.calculator}</span></span>
                   <span class="text-[10px] font-mono text-slate-500">${r.local_time || r.created_at}</span>
                 </div>
                 <div class="text-[11px] text-slate-700 dark:text-slate-200 whitespace-pre-wrap break-words">${r.message}</div>
@@ -8511,7 +9443,7 @@
             list.map(c => `
               <div class="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 space-y-1">
                 <div class="flex flex-wrap items-center justify-between gap-1">
-                  <span class="font-bold text-violet-700 dark:text-violet-300">${c.subject || 'Contact Message'}</span>
+                  <span class="font-bold text-violet-700 dark:text-violet-300 inline-flex items-center gap-1.5">${renderSourceBadge(c.source)}<span>${c.subject || 'Contact Message'}</span></span>
                   <span class="text-[10px] font-mono text-slate-500">${c.local_time || c.created_at}</span>
                 </div>
                 <div class="text-[11px] text-slate-700 dark:text-slate-200 whitespace-pre-wrap break-words">${c.message}</div>
@@ -8557,7 +9489,7 @@
             list.map(d => `
               <div class="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 space-y-0.5">
                 <div class="flex flex-wrap items-center justify-between gap-1">
-                  <span class="font-bold text-teal-700 dark:text-teal-300">${d.name || 'Anonymous'} — ${d.contact || 'No contact'}</span>
+                  <span class="font-bold text-teal-700 dark:text-teal-300 inline-flex items-center gap-1.5">${renderSourceBadge(d.source)}<span>${d.name || 'Anonymous'} — ${d.contact || 'No contact'}</span></span>
                   <span class="text-[10px] font-mono text-slate-500">${d.local_time || d.created_at}</span>
                 </div>
                 <div class="text-[10px] text-slate-500 dark:text-slate-400">Downloaded: <strong>${d.format}</strong> • ${d.calculator}</div>
@@ -8671,24 +9603,24 @@
             ]),
             [],
             ['=== 3. DONATION SUBMISSIONS ==='],
-            ['Amount', 'Method', 'Transaction ID', 'Status', 'Donor Email', 'Note', 'Created At'],
-            ...(data.donations || []).map(d => [d.amount, d.method, d.tx_id || '', d.status || 'Pending Verification', d.donor_email || '', d.note || '', d.created_at]),
+            ['Source', 'Amount', 'Method', 'Transaction ID', 'Status', 'Donor Email', 'Note', 'Created At'],
+            ...(data.donations || []).map(d => [d.source || 'Website', d.amount, d.method, d.tx_id || '', d.status || 'Pending Verification', d.donor_email || '', d.note || '', d.created_at]),
             [],
             ['=== 4. DOWNLOAD LEADS ==='],
-            ['Name', 'Contact', 'Calculator', 'Format', 'Local Time', 'Created At'],
-            ...(data.downloadLeads || []).map(dl => [dl.name, dl.contact, dl.calculator, dl.format, dl.local_time, dl.created_at]),
+            ['Source', 'Name', 'Contact', 'Calculator', 'Format', 'Local Time', 'Created At'],
+            ...(data.downloadLeads || []).map(dl => [dl.source || 'Website', dl.name, dl.contact, dl.calculator, dl.format, dl.local_time, dl.created_at]),
             [],
             ['=== 5. ACCOUNT OPEN & LOGIN ACTIVITY ==='],
-            ['Event', 'Name', 'Email', 'Phone', 'Role', 'Provider', 'Created At'],
-            ...(data.authActivity || []).map(a => [a.event_type, a.name, a.email, a.phone, a.role, a.provider, a.created_at]),
+            ['Source', 'Event', 'Name', 'Email', 'Phone', 'Role', 'Provider', 'Created At'],
+            ...(data.authActivity || []).map(a => [a.source || 'Website', a.event_type, a.name, a.email, a.phone, a.role, a.provider, a.created_at]),
             [],
             ['=== 6. BUG REPORTS & SOLVING ADVICE ==='],
-            ['Type', 'Sender', 'Calculator', 'Message', 'Local Time', 'Created At'],
-            ...(data.feedbackReports || []).map(f => [f.type, f.sender, f.calculator, f.message, f.local_time, f.created_at]),
+            ['Source', 'Type', 'Sender', 'Calculator', 'Message', 'Local Time', 'Created At'],
+            ...(data.feedbackReports || []).map(f => [f.source || 'Website', f.type, f.sender, f.calculator, f.message, f.local_time, f.created_at]),
             [],
             ['=== 7. CONTACT MESSAGES ==='],
-            ['Name', 'Email', 'Subject', 'Message', 'Local Time', 'Created At'],
-            ...(data.contactMessages || []).map(c => [c.name, c.email, c.subject, c.message, c.local_time, c.created_at])
+            ['Source', 'Name', 'Email', 'Subject', 'Message', 'Local Time', 'Created At'],
+            ...(data.contactMessages || []).map(c => [c.source || 'Website', c.name, c.email, c.subject, c.message, c.local_time, c.created_at])
           ];
           const csv = '\uFEFF' + rows.map(r => r.map(q).join(',')).join('\r\n');
           const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
@@ -8733,9 +9665,9 @@
             const itStr = (s.items || []).slice(0, 5).map(it => `${it.name}(${it.qty}x${it.amount})`).join(', ');
             return `${s.title || 'Saved'} | ${s.user_email || '-'} | ${s.customer_name || ''} | Total: ${s.grand_total || 0} ${s.currency || ''} | ${itStr}`;
           }));
-          addSection('3. Donation Submissions', (data.donations || []).map(d => `$${d.amount} | ${d.method} | TxID: ${d.tx_id || '-'} | ${d.status || 'Pending'} | ${d.donor_email || '-'} | ${String(d.created_at || '').slice(0, 10)}`));
-          addSection('4. Download Leads', (data.downloadLeads || []).map(dl => `${dl.name} | ${dl.contact} | ${dl.calculator} (${dl.format}) | ${dl.local_time || String(dl.created_at || '').slice(0, 10)}`));
-          addSection('5. Account Open & Login Activity', (data.authActivity || []).slice(0, 100).map(a => `${a.event_type} | ${a.name} (${a.email}) | ${a.provider} | ${String(a.created_at || '').slice(0, 16).replace('T', ' ')}`));
+          addSection('3. Donation Submissions', (data.donations || []).map(d => `[${d.source || 'Website'}] $${d.amount} | ${d.method} | TxID: ${d.tx_id || '-'} | ${d.status || 'Pending'} | ${d.donor_email || '-'} | ${String(d.created_at || '').slice(0, 10)}`));
+          addSection('4. Download Leads', (data.downloadLeads || []).map(dl => `[${dl.source || 'Website'}] ${dl.name} | ${dl.contact} | ${dl.calculator} (${dl.format}) | ${dl.local_time || String(dl.created_at || '').slice(0, 10)}`));
+          addSection('5. Account Open & Login Activity', (data.authActivity || []).slice(0, 100).map(a => `[${a.source || 'Website'}] ${a.event_type} | ${a.name} (${a.email}) | ${a.provider} | ${String(a.created_at || '').slice(0, 16).replace('T', ' ')}`));
           addSection('6. Bug Reports & Solving Advice', (data.feedbackReports || []).map(f => `[${f.type}] ${f.sender} (${f.calculator}): ${String(f.message || '').slice(0, 90)}`));
           addSection('7. Contact Messages', (data.contactMessages || []).map(c => `${c.name} (${c.email}) — ${c.subject}: ${String(c.message || '').slice(0, 90)}`));
 
@@ -8983,31 +9915,6 @@
 
     document.getElementById('closeLegalModalBtn').addEventListener('click', () => {
       document.getElementById('legalComplianceModal').classList.add('hidden');
-    });
-
-    // Cookie Consent Banner Logic
-    const cookieBanner = document.getElementById('cookieConsentBanner');
-    function initCookieConsent() {
-      const savedConsent = safeGetStorage('calcverse_cookie_consent', null);
-      if (!savedConsent) {
-        cookieBanner.classList.remove('hidden');
-      }
-    }
-
-    document.getElementById('cookieAcceptAllBtn').addEventListener('click', () => {
-      safeSetStorage('calcverse_cookie_consent', { mode: 'personalized', timestamp: '2026-11-18' });
-      cookieBanner.classList.add('hidden');
-      showToast('Cookie preferences saved (Personalized Ads enabled)');
-    });
-
-    document.getElementById('cookieEssentialOnlyBtn').addEventListener('click', () => {
-      safeSetStorage('calcverse_cookie_consent', { mode: 'non_personalized', timestamp: '2026-11-18' });
-      cookieBanner.classList.add('hidden');
-      showToast('Cookie preferences saved (Non-Personalized Ads only)');
-    });
-
-    document.getElementById('openCookieSettingsBtn').addEventListener('click', () => {
-      cookieBanner.classList.remove('hidden');
     });
 
     // =========================================================================
@@ -9391,7 +10298,6 @@
       updateAuthUI();
       restoreServerSession();
       renderAllAdPlacements();
-      initCookieConsent();
       const _adminPath = window.location.pathname.replace(/\/+$/, '').toLowerCase();
       const _adminParams = new URLSearchParams(window.location.search);
       const _adminHash = String(window.location.hash || '').replace(/^#\/?/, '').toLowerCase();
@@ -9426,7 +10332,7 @@
     // =========================================================================
     const I18N_UI = {
       en: {
-        dir: 'ltr', searchPh: 'Search 38+ calculators or type math (e.g., 25% of 400)...',
+        dir: 'ltr', searchPh: 'Search 40+ calculators or type math (e.g., 25% of 400)...',
         allCalcs: 'All Calculators', financial: 'Financial', fitness: 'Fitness & Health',
         math: 'Math & Graphing', science: 'Science & Utility', everyday: 'Everyday & Home',
         saved: 'Saved', pin: 'Pin', history: 'History', account: 'Account',
@@ -9435,7 +10341,7 @@
         support: 'Support', copyFormula: 'Copy Formula'
       },
       bn: {
-        dir: 'ltr', searchPh: '৩৮+ ক্যালকুলেটর খুঁজুন বা অঙ্ক লিখুন (যেমন 25% of 400)...',
+        dir: 'ltr', searchPh: '৪০+ ক্যালকুলেটর খুঁজুন বা অঙ্ক লিখুন (যেমন 25% of 400)...',
         allCalcs: 'সব ক্যালকুলেটর', financial: 'আর্থিক', fitness: 'স্বাস্থ্য ও ফিটনেস',
         math: 'গণিত ও গ্রাফ', science: 'বিজ্ঞান ও ইউটিলিটি', everyday: 'দৈনন্দিন ও ঘরোয়া',
         saved: 'সেভড', pin: 'পিন', history: 'হিস্ট্রি', account: 'অ্যাকাউন্ট',
@@ -9664,6 +10570,704 @@
     const savedLang = safeGetStorage('calcverse_lang', 'en');
     applyUiLanguage(savedLang, false);
 
-</script>
+
+    // Offline Mobile Edition Download (Visible to all; restricted to signed-in registered users)
+    async function triggerOfflineMobileDownload() {
+      if (!appState.currentUser) {
+        if (typeof switchAuthSection === 'function') switchAuthSection('signup');
+        updateAuthUI();
+        authModal.classList.remove('hidden');
+        showAuthBanner('Create a free account or sign in to download the CalcVerse Pro Offline Mobile Edition.', false);
+        showToast('Sign in or open a free account to download Offline Mobile Edition.');
+        return;
+      }
+      if (location.protocol === 'https:' || location.protocol === 'http:') {
+        try {
+          const res = await fetch('/api/offline-app', { method: 'GET', credentials: API_CRED_MODE });
+          if (res.status === 401) {
+            if (typeof switchAuthSection === 'function') switchAuthSection('login');
+            authModal.classList.remove('hidden');
+            showAuthBanner('Please sign in to your registered account to download the Offline Mobile Edition.');
+            return;
+          }
+          if (res.ok) {
+            const blob = await res.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'CalcVerse_Pro_Offline.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('Downloaded CalcVerse Pro Offline Mobile Edition!');
+            return;
+          }
+        } catch (_) {}
+      }
+      showToast('Offline Mobile Edition download is available on the live CalcVerse website.');
+    }
+    const dlOfflineBtn = document.getElementById('downloadOfflineAppBtn');
+    const profDlOfflineBtn = document.getElementById('profileDownloadOfflineBtn');
+    if (dlOfflineBtn) dlOfflineBtn.addEventListener('click', triggerOfflineMobileDownload);
+    if (profDlOfflineBtn) profDlOfflineBtn.addEventListener('click', triggerOfflineMobileDownload);
+
+
+    // Register Offline-First Service Worker (/sw.js) & Handle Native Mobile Install Prompt
+    let deferredPwaPrompt = null;
+    window.addEventListener('beforeinstallprompt', e => {
+      e.preventDefault();
+      deferredPwaPrompt = e;
+    });
+    const installPwaBtn = document.getElementById('installPwaAppBtn');
+    const profInstallPwaBtn = document.getElementById('profileInstallPwaBtn');
+    const handlePwaInstallClick = async () => {
+      if (deferredPwaPrompt) {
+        deferredPwaPrompt.prompt();
+        const choice = await deferredPwaPrompt.userChoice;
+        deferredPwaPrompt = null;
+        if (choice && choice.outcome === 'accepted') showToast('Installing CalcVerse Pro Offline+Sync App!');
+      } else {
+        showToast('Tap your browser menu (⋮) → "Add to Home screen" or "Install app".');
+      }
+    };
+    if (profInstallPwaBtn) profInstallPwaBtn.addEventListener('click', handlePwaInstallClick);
+    if (installPwaBtn) {
+      installPwaBtn.addEventListener('click', async () => {
+        if (deferredPwaPrompt) {
+          deferredPwaPrompt.prompt();
+          const choice = await deferredPwaPrompt.userChoice;
+          deferredPwaPrompt = null;
+          if (choice && choice.outcome === 'accepted') showToast('Installing CalcVerse Pro App!');
+        } else {
+          showToast('To install: tap your browser menu (⋮) → "Install app" or "Add to Home screen".');
+        }
+      });
+    }
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    }
+    updateOfflineSyncBanner();
+    if (navigator.onLine) setTimeout(() => flushOfflineSyncQueue(true), 1200);
+
+
+    // 2-Step Delete Account Workflow (Warning + Agreement -> Password / Authenticator Confirmation)
+    const deleteAccModal = document.getElementById('deleteAccountModal');
+    const delAccStep1 = document.getElementById('delAccStep1');
+    const delAccStep2Form = document.getElementById('delAccStep2Form');
+    const delAccAgreeCheck = document.getElementById('delAccAgreeCheck');
+    const continueDelStep2Btn = document.getElementById('continueDeleteAccStep2Btn');
+    const delAccStatusMsg = document.getElementById('delAccStatusMsg');
+
+    const DELETE_I18N = {
+      en: { title: 'Delete Account Permanently', warnHead: 'Warning — This action cannot be undone!', intro: 'Deleting your CalcVerse Pro account will permanently erase all your saved tools, pinned items, history, saved slips, and encrypted passwords.', agree: 'I understand and agree that all my saved items, pinned items, slips, and encrypted passwords will be permanently deleted.', cancel: 'Cancel', cont: 'I Agree — Continue', step2: 'Choose 1 factor (Vault PIN OR Vault Authenticator) for 60-day delayed deletion, or BOTH for immediate permanent deletion:', back: 'Back', confirm: 'Confirm Delete' },
+      bn: { title: 'অ্যাকাউন্ট স্থায়ীভাবে মুছুন', warnHead: 'সতর্কতা — এটি আর ফিরিয়ে আনা যাবে না!', intro: 'আপনার CalcVerse Pro অ্যাকাউন্ট মুছে ফেললে আপনার সব সেভ করা টুল, পিন করা আইটেম, হিস্ট্রি, স্লিপ এবং এনক্রিপ্টেড পাসওয়ার্ড চিরতরে মুছে যাবে।', agree: 'আমি বুঝতে পেরেছি এবং সম্মত যে আমার সব সেভড, পিনড, স্লিপ এবং পাসওয়ার্ড স্থায়ীভাবে মুছে যাবে।', cancel: 'বাতিল', cont: 'আমি সম্মত — এগিয়ে যান', step2: 'যেকোনো ১টি (Vault PIN অথবা Vault Authenticator) দিলে ৬০ দিন পর ডিলিট হবে, আর ২টিই দিলে সাথে সাথে স্থায়ীভাবে ডিলিট হবে:', back: 'পেছনে', confirm: 'মুছে ফেলা নিশ্চিত করুন' },
+      hi: { title: 'खाता स्थायी रूप से हटाएं', warnHead: 'चेतावनी — यह क्रिया पूर्ववत नहीं की जा सकती!', intro: 'अपना खाता हटाने से आपके सभी सहेजे गए टूल, पिन किए गए आइटम, इतिहास, स्लिप और एन्क्रिप्टेड पासवर्ड स्थायी रूप से मिट जाएंगे।', agree: 'मैं समझता/समझती हूं और सहमत हूं कि मेरे सभी सहेजे गए, पिन किए गए डेटा और पासवर्ड स्थायी रूप से हटा दिए जाएंगे।', cancel: 'रद्द करें', cont: 'मैं सहमत हूं — आगे बढ़ें', step2: 'स्थायी विलोपन की पुष्टि के लिए अपना लॉगिन पासवर्ड और/या 6-अंकीय Authenticator कोड दर्ज करें:', back: 'वापस', confirm: 'हटाने की पुष्टि करें' },
+      ar: { title: 'حذف الحساب نهائياً', warnHead: 'تحذير — لا يمكن التراجع عن هذا الإجراء!', intro: 'سيؤدي حذف حسابك إلى مسح جميع الأدوات المحفوظة والعناصر المثبتة والسجل والفواتير وكلمات المرور المشفرة نهائياً.', agree: 'أفهم وأوافق على أن جميع العناصر المحفوظة والمثبتة وكلمات المرور سيتم حذفها نهائياً.', cancel: 'إلغاء', cont: 'أوافق — متابعة', step2: 'لتأكيد الحذف النهائي، يرجى التحقق باستخدام كلمة مرور الدخول و/أو رمز تطبيق المصادقة المكون من 6 أرقام:', back: 'رجوع', confirm: 'تأكيد الحذف' },
+      ur: { title: 'اکاؤنٹ مستقل طور پر حذف کریں', warnHead: 'انتباہ — یہ عمل واپس نہیں ہو سکتا!', intro: 'اکاؤنٹ حذف کرنے سے آپ کے تمام محفوظ ٹولز، پن آئٹمز، ہسٹری، سلپس اور خفیہ پاس ورڈز ہمیشہ کے لیے مٹ جائیں گے۔', agree: 'میں سمجھتا ہوں اور متفق ہوں کہ میرا تمام محفوظ، پن کیا گیا ڈیٹا اور پاس ورڈز مستقل طور پر حذف ہو جائیں گے۔', cancel: 'منسوخ کریں', cont: 'میں متفق ہوں — آگے بڑھیں', step2: 'مستقل حذف کی تصدیق کے لیے اپنا لاگ ان پاس ورڈ اور/یا 6 ہندسوں کا Authenticator کوڈ درج کریں:', back: 'واپس', confirm: 'حذف کی تصدیق کریں' },
+      es: { title: 'Eliminar Cuenta Permanentemente', warnHead: 'Advertencia — ¡Esta acción no se puede deshacer!', intro: 'Eliminar tu cuenta borrará permanentemente todas tus herramientas guardadas, elementos fijados, historial, recibos y contraseñas cifradas.', agree: 'Entiendo y acepto que todos mis elementos guardados, fijados y contraseñas cifradas se eliminarán permanentemente.', cancel: 'Cancelar', cont: 'Acepto — Continuar', step2: 'Para confirmar la eliminación, verifica con tu Contraseña de inicio de sesión y/o código de 6 dígitos del Authenticator:', back: 'Atrás', confirm: 'Confirmar Eliminación' },
+      fr: { title: 'Supprimer Définitivement le Compte', warnHead: 'Avertissement — Cette action est irréversible !', intro: 'La suppression de votre compte effacera définitivement tous vos outils enregistrés, éléments épinglés, historique, reçus et mots de passe chiffrés.', agree: 'Je comprends et j’accepte que tous mes éléments enregistrés, épinglés et mots de passe soient supprimés définitivement.', cancel: 'Annuler', cont: 'J’accepte — Continuer', step2: 'Pour confirmer la suppression, vérifiez avec votre mot de passe et/ou votre code Authenticator à 6 chiffres :', back: 'Retour', confirm: 'Confirmer la Suppression' },
+      de: { title: 'Konto Dauerhaft Löschen', warnHead: 'Warnung — Diese Aktion kann nicht rückgängig gemacht werden!', intro: 'Das Löschen Ihres Kontos entfernt dauerhaft alle gespeicherten Tools, angehefteten Einträge, Belege und verschlüsselten Passwörter.', agree: 'Ich verstehe und stimme zu, dass alle gespeicherten, angehefteten Daten und Passwörter dauerhaft gelöscht werden.', cancel: 'Abbrechen', cont: 'Zustimmen — Weiter', step2: 'Bestätigen Sie die Löschung mit Ihrem Login-Passwort und/oder Ihrem 6-stelligen Authenticator-Code:', back: 'Zurück', confirm: 'Löschen Bestätigen' },
+      pt: { title: 'Excluir Conta Permanentemente', warnHead: 'Aviso — Esta ação não pode ser desfeita!', intro: 'Excluir sua conta apagará permanentemente todas as ferramentas salvas, itens fixados, recibos e senhas criptografadas.', agree: 'Entendo e concordo que todos os meus itens salvos, fixados e senhas criptografadas serão excluídos permanentemente.', cancel: 'Cancelar', cont: 'Concordo — Continuar', step2: 'Para confirmar a exclusão, verifique com sua Senha de login e/ou código de 6 dígitos do Authenticator:', back: 'Voltar', confirm: 'Confirmar Exclusão' },
+      zh: { title: '永久删除账户', warnHead: '警告 — 此操作无法撤销！', intro: '删除账户将永久清除您所有已保存的工具、置顶项目、历史记录、账单以及加密密码。', agree: '我理解并同意永久删除我所有已保存、置顶的内容以及加密密码。', cancel: '取消', cont: '我同意 — 继续', step2: '请输入您的登录密码和/或 6 位身份验证器验证码以确认永久删除：', back: '返回', confirm: '确认删除' },
+      id: { title: 'Hapus Akun Secara Permanen', warnHead: 'Peringatan — Tindakan ini tidak dapat dibatalkan!', intro: 'Menghapus akun akan menghapus secara permanen semua alat tersimpan, item disematkan, riwayat, slip, dan kata sandi terenkripsi Anda.', agree: 'Saya mengerti dan setuju bahwa semua item tersimpan, disematkan, dan kata sandi terenkripsi akan dihapus permanen.', cancel: 'Batal', cont: 'Saya Setuju — Lanjut', step2: 'Untuk konfirmasi penghapusan, verifikasi dengan Kata Sandi Login dan/atau kode Authenticator 6 digit Anda:', back: 'Kembali', confirm: 'Konfirmasi Hapus' },
+      tr: { title: 'Hesabı Kalıcı Olarak Sil', warnHead: 'Uyarı — Bu işlem geri alınamaz!', intro: 'Hesabınızı silmek tüm kayıtlı araçlarınızı, sabitlenen öğeleri, fişleri ve şifrelenmiş parolalarınızı kalıcı olarak silecektir.', agree: 'Tüm kayıtlı, sabitlenmiş verilerimin ve şifrelenmiş parolalarımın kalıcı olarak silineceğini anlıyor ve kabul ediyorum.', cancel: 'İptal', cont: 'Kabul Ediyorum — Devam', step2: 'Kalıcı silmeyi onaylamak için Giriş Parolanızı ve/veya 6 haneli Authenticator kodunuzu girin:', back: 'Geri', confirm: 'Silmeyi Onayla' },
+      ru: { title: 'Удалить Аккаунт Навсегда', warnHead: 'Внимание — Это действие необратимо!', intro: 'Удаление аккаунта навсегда сотрёт все сохранённые инструменты, закреплённые элементы, чеки и зашифрованные пароли.', agree: 'Я понимаю и согласен, что все мои сохранённые, закреплённые данные и пароли будут удалены навсегда.', cancel: 'Отмена', cont: 'Согласен — Продолжить', step2: 'Для подтверждения введите пароль входа и/или 6-значный код из приложения Authenticator:', back: 'Назад', confirm: 'Подтвердить Удаление' },
+      ja: { title: 'アカウントを完全に削除', warnHead: '警告 — この操作は取り消せません！', intro: 'アカウントを削除すると、保存済みのツール、ピン留め項目、伝票、暗号化されたパスワードがすべて完全に削除されます。', agree: '保存済み・ピン留め項目および暗号化パスワードが完全に削除されることに同意します。', cancel: 'キャンセル', cont: '同意して続行', step2: '完全削除を確認するため、ログインパスワードまたは6桁の認証アプリコードを入力してください：', back: '戻る', confirm: '削除を確定' },
+      ko: { title: '계정 영구 삭제', warnHead: '경고 — 이 작업은 되돌릴 수 없습니다!', intro: '계정을 삭제하면 저장된 도구, 고정된 항목, 내역 및 암호화된 비밀번호가 모두 영구적으로 삭제됩니다.', agree: '저장됨, 고정됨 항목 및 암호화된 비밀번호가 영구 삭제됨을 이해하고 동의합니다.', cancel: '취소', cont: '동의 — 계속', step2: '영구 삭제를 확인하려면 로그인 비밀번호 및/또는 6자리 인증 앱 코드를 입력하세요:', back: '뒤로', confirm: '삭제 확인' }
+    };
+
+    function applyDeleteModalLanguage() {
+      const code = appState.lang || safeGetStorage('calcverse_lang', 'en');
+      const d = DELETE_I18N[code] || DELETE_I18N.en;
+      const setT = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+      setT('delAccTitleText', d.title);
+      setT('delAccWarnHeading', d.warnHead);
+      setT('delAccWarnIntro', d.intro);
+      setT('delAccAgreeLabel', d.agree);
+      setT('cancelDeleteAccStep1Btn', d.cancel);
+      setT('continueDeleteAccStep2Btn', d.cont);
+      setT('delAccStep2Prompt', d.step2);
+      setT('backDeleteAccStep1Btn', d.back);
+      setT('confirmDeleteAccFinalBtn', d.confirm);
+    }
+
+    
+    const cancelSchedDelBtn = document.getElementById('cancelScheduledDeletionBtn');
+    if (cancelSchedDelBtn) {
+      cancelSchedDelBtn.addEventListener('click', async () => {
+        const r = await syncWithWorkerApi('/api/auth/cancel-deletion', {});
+        if (r && r.ok) {
+          if (appState.currentUser) appState.currentUser.deletionScheduledAt = '';
+          safeSetStorage('calcverse_current_user', appState.currentUser);
+          const pdBan = document.getElementById('pendingDeletionBanner');
+          if (pdBan) pdBan.classList.add('hidden');
+          showToast('Scheduled account deletion has been canceled!');
+        }
+      });
+    }
+    function userHasSavedPasswords() {
+      return Array.isArray(appState.savedPasswords) && appState.savedPasswords.length > 0;
+    }
+
+    function resetDeleteAccModal() {
+      applyDeleteModalLanguage();
+      const hasPwds = userHasSavedPasswords();
+      const l1 = document.getElementById('delAccFactor1Label');
+      const l2 = document.getElementById('delAccFactor2Label');
+      const i1 = document.getElementById('delAccVaultPinInput');
+      const i2 = document.getElementById('delAccVaultTotpInput');
+      if (hasPwds) {
+        if (l1) l1.innerHTML = 'Password Vault PIN <span class="text-slate-400 font-normal">(Vault protection active)</span>';
+        if (l2) l2.innerHTML = 'Dedicated Vault Authenticator Code <span class="text-slate-400 font-normal">(Login Auth not accepted)</span>';
+        if (i1) { i1.placeholder = 'Enter your Password Vault PIN'; i1.setAttribute('inputmode', 'numeric'); }
+        if (i2) i2.placeholder = '6-digit Dedicated Vault Authenticator code';
+        const pb = document.getElementById('delAccPolicyHintBox');
+        if (pb) pb.innerHTML = '<div><b>Both filled (Vault PIN + Vault Authenticator):</b> Account is deleted <b>immediately</b>.</div><div><b>Only 1 filled (Vault PIN OR Vault Authenticator):</b> Deletion is delayed for <b>60 days</b> (can be canceled within 60 days).</div>';
+      } else {
+        if (l1) l1.innerHTML = 'Login Password <span class="text-slate-400 font-normal">(No saved passwords in Vault)</span>';
+        if (l2) l2.innerHTML = 'Account Login Authenticator Code <span class="text-slate-400 font-normal">(6-digit code)</span>';
+        if (i1) { i1.placeholder = 'Enter your Login Password'; i1.removeAttribute('inputmode'); }
+        if (i2) i2.placeholder = '6-digit Account Authenticator code';
+        const pb = document.getElementById('delAccPolicyHintBox');
+        if (pb) pb.innerHTML = '<div><b>Account Login Authenticator (6-digit code):</b> Account is deleted <b>immediately</b>.</div><div><b>Login Password only:</b> Deletion is delayed for <b>60 days</b> (can be canceled within 60 days).</div>';
+      }
+      if (delAccAgreeCheck) delAccAgreeCheck.checked = false;
+      if (continueDelStep2Btn) continueDelStep2Btn.disabled = true;
+      if (delAccStep1) delAccStep1.classList.remove('hidden');
+      if (delAccStep2Form) { delAccStep2Form.classList.add('hidden'); delAccStep2Form.reset(); }
+      if (delAccStatusMsg) delAccStatusMsg.classList.add('hidden');
+    }
+
+    const openDelBtn = document.getElementById('openDeleteAccountBtn');
+    if (openDelBtn && deleteAccModal) {
+      openDelBtn.addEventListener('click', () => {
+        if (!appState.currentUser) return;
+        resetDeleteAccModal();
+        deleteAccModal.classList.remove('hidden');
+      });
+      document.getElementById('closeDeleteAccModalBtn').addEventListener('click', () => deleteAccModal.classList.add('hidden'));
+      document.getElementById('cancelDeleteAccStep1Btn').addEventListener('click', () => deleteAccModal.classList.add('hidden'));
+      delAccAgreeCheck.addEventListener('change', () => {
+        continueDelStep2Btn.disabled = !delAccAgreeCheck.checked;
+      });
+      continueDelStep2Btn.addEventListener('click', () => {
+        if (!delAccAgreeCheck.checked) return;
+        delAccStep1.classList.add('hidden');
+        delAccStep2Form.classList.remove('hidden');
+        document.getElementById('delAccVaultPinInput').focus();
+      });
+      document.getElementById('backDeleteAccStep1Btn').addEventListener('click', () => {
+        delAccStep2Form.classList.add('hidden');
+        delAccStep1.classList.remove('hidden');
+        delAccStatusMsg.classList.add('hidden');
+      });
+      delAccStep2Form.addEventListener('submit', async e => {
+        e.preventDefault();
+        const factor1 = document.getElementById('delAccVaultPinInput').value.trim();
+        const factor2Code = document.getElementById('delAccVaultTotpInput').value.replace(/\D/g, '').trim();
+        const hasPwds = userHasSavedPasswords();
+        if (!factor1 && factor2Code.length !== 6) {
+          delAccStatusMsg.textContent = hasPwds
+            ? 'Enter at least one: your Password Vault PIN OR Dedicated Vault Authenticator code (BOTH for immediate deletion, 1 for 60-day delay).'
+            : 'Enter at least one: your Login Password OR 6-digit Account Authenticator code (BOTH for immediate deletion, 1 for 60-day delay).';
+          delAccStatusMsg.classList.remove('hidden');
+          return;
+        }
+        let payload = {};
+        if (hasPwds) {
+          let pinVerifiedProof = '';
+          if (factor1) {
+            let pinWrapped = appState.currentUser && appState.currentUser.vaultPinDek;
+            if (!pinWrapped && (location.protocol === 'https:' || location.protocol === 'http:')) {
+              try {
+                const mr = await fetch('/api/passwords/vault-meta', { method: 'GET', credentials: API_CRED_MODE });
+                const md = await mr.json();
+                if (mr.ok && md && md.ok && md.vaultPinDek) pinWrapped = md.vaultPinDek;
+              } catch (_) {}
+            }
+            if (!pinWrapped) {
+              delAccStatusMsg.textContent = 'No Password Vault PIN is set up on this account.';
+              delAccStatusMsg.classList.remove('hidden');
+              return;
+            }
+            try {
+              const decryptedDek = await decryptWithPassphrase(pinWrapped, factor1);
+              pinVerifiedProof = await sha256HexLocal('del-vault-proof:' + decryptedDek);
+            } catch (_) {
+              delAccStatusMsg.textContent = 'Incorrect Password Vault PIN.';
+              delAccStatusMsg.classList.remove('hidden');
+              return;
+            }
+          }
+          payload = { vaultTotpCode: factor2Code.length === 6 ? factor2Code : '', pinVerifiedProof };
+        } else {
+          payload = { password: factor1, totpCode: factor2Code.length === 6 ? factor2Code : '' };
+        }
+        delAccStatusMsg.classList.add('hidden');
+        const workerRes = await syncWithWorkerApi('/api/auth/delete-account', payload);
+        if (!workerRes || !workerRes.ok) {
+          delAccStatusMsg.textContent = (workerRes && workerRes.error) || 'Verification failed. Check your Vault PIN or Dedicated Vault Authenticator code.';
+          delAccStatusMsg.classList.remove('hidden');
+          return;
+        }
+        if (workerRes.scheduled) {
+          // 60-day delayed deletion scheduled — sign user out cleanly and show scheduled date
+          appState.currentUser = null;
+          if (typeof lockPasswordVault === 'function') lockPasswordVault();
+          safeSetStorage('calcverse_current_user', null);
+          deleteAccModal.classList.add('hidden');
+          authModal.classList.add('hidden');
+          updateAuthUI();
+          showToast(`Account deletion scheduled for ${String(workerRes.deleteAfter || '').slice(0, 10)} (60-day delay). Sign in anytime before then to cancel.`);
+          return;
+        }
+        const delEmail = String((appState.currentUser && appState.currentUser.email) || '').toLowerCase();
+        appState.users = appState.users.filter(u => String(u.email || '').toLowerCase() !== delEmail);
+        appState.currentUser = null;
+        appState.favorites = [];
+        appState.pins = [];
+        appState.history = [];
+        appState.savedSlips = [];
+        appState.savedPasswords = [];
+        if (typeof lockPasswordVault === 'function') lockPasswordVault();
+        safeSetStorage('calcverse_users', appState.users);
+        safeSetStorage('calcverse_current_user', null);
+        safeSetStorage('calcverse_favorites', []);
+        safeSetStorage('calcverse_pins', []);
+        safeSetStorage('calcverse_history', []);
+        safeSetStorage('calcverse_saved_slips', []);
+        safeSetStorage('calcverse_saved_passwords', []);
+        deleteAccModal.classList.add('hidden');
+        authModal.classList.add('hidden');
+        updateAuthUI();
+        renderPopularQuickGrid();
+        showToast('Your account and all saved data have been permanently deleted.');
+      });
+    }
+
+
+    // Automatic Update Sync:
+    // 1) Installed PWA auto-updates silently via /sw.js network-first + reload on controllerchange
+    // 2) Downloaded CalcVerse_Pro_Offline.html checks /api/config when online and shows a 1-tap Update banner
+    const LOCAL_APP_VERSION = '2026.11.21-r16';
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+      navigator.serviceWorker.getRegistration().then(reg => { if (reg) reg.update().catch(() => {}); }).catch(() => {});
+    }
+    async function checkDownloadedOfflineAppUpdate() {
+      if (!navigator.onLine) return;
+      if (location.protocol === 'https:' || location.protocol === 'http:') return;
+      try {
+        const r = await fetch(LIVE_API_ORIGIN + '/api/config', { method: 'GET', cache: 'no-store' });
+        const d = await r.json();
+        if (r.ok && d && d.appVersion && d.appVersion !== LOCAL_APP_VERSION) {
+          let bar = document.getElementById('offlineAppUpdateBanner');
+          if (!bar) {
+            bar = document.createElement('div');
+            bar.id = 'offlineAppUpdateBanner';
+            bar.className = 'fixed top-3 left-1/2 -translate-x-1/2 z-50 px-3.5 py-2 rounded-xl bg-indigo-600 text-white shadow-xl flex items-center gap-2.5 text-xs font-bold max-w-[94vw]';
+            bar.innerHTML = '<span>New CalcVerse Pro update available!</span><a href="https://msc.calcverse-app.workers.dev/" target="_blank" class="px-2.5 py-1 rounded-lg bg-white text-indigo-700 font-extrabold shrink-0">Get Update</a><button type="button" onclick="this.parentElement.remove()" class="opacity-80 hover:opacity-100">×</button>';
+            document.body.appendChild(bar);
+          }
+        }
+      } catch (_) {}
+    }
+    window.addEventListener('online', checkDownloadedOfflineAppUpdate);
+    setTimeout(checkDownloadedOfflineAppUpdate, 2000);
+
+
+    // =========================================================================
+    // ADMIN-ONLY PUSH NOTIFICATION CENTER & SILENT USER DELIVERY
+    // =========================================================================
+    function escapeNotifHtml(str) {
+      return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    let currentLivePushNotifId = null;
+    function showLivePushNotificationCard(notif, isPreview = false) {
+      if (!notif || !notif.title) return;
+      const card = document.getElementById('livePushNotifCard');
+      const badge = document.getElementById('livePushNotifBadge');
+      const titleEl = document.getElementById('livePushNotifTitle');
+      const bodyEl = document.getElementById('livePushNotifBody');
+      const actEl = document.getElementById('livePushNotifAction');
+      if (!card || !titleEl || !bodyEl) return;
+
+      currentLivePushNotifId = isPreview ? null : notif.id;
+      titleEl.textContent = notif.title;
+      bodyEl.textContent = notif.message || '';
+
+      const styleMap = {
+        info: { dot: 'bg-indigo-600', border: 'border-indigo-200 dark:border-indigo-800' },
+        update: { dot: 'bg-emerald-500', border: 'border-emerald-200 dark:border-emerald-800' },
+        alert: { dot: 'bg-rose-500', border: 'border-rose-200 dark:border-rose-800' },
+        promo: { dot: 'bg-amber-500', border: 'border-amber-200 dark:border-amber-800' }
+      };
+      const st = styleMap[notif.style] || styleMap.info;
+      badge.className = `inline-block w-2 h-2 rounded-full ${st.dot} shrink-0`;
+      card.className = `fixed bottom-5 right-5 z-50 max-w-sm w-[calc(100vw-2.5rem)] rounded-2xl border shadow-2xl p-4 bg-white dark:bg-slate-900 ${st.border} transition-all`;
+
+      const rawLink = String(notif.link_url || notif.linkUrl || '').trim();
+      if (rawLink && (/^(\/|https?:\/\/)/i.test(rawLink))) {
+        actEl.href = rawLink;
+        actEl.target = /^https?:\/\//i.test(rawLink) ? '_blank' : '_self';
+        actEl.rel = 'noopener noreferrer';
+        actEl.classList.remove('hidden');
+      } else {
+        actEl.classList.add('hidden');
+      }
+      card.classList.remove('hidden');
+
+      // Also dispatch native OS/PWA notification if permission is already granted
+      if (!isPreview && 'Notification' in window && Notification.permission === 'granted') {
+        try {
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistration().then(reg => {
+              if (reg && reg.showNotification) {
+                reg.showNotification(notif.title, {
+                  body: notif.message || '',
+                  icon: '/icon-192.png',
+                  badge: '/icon-192.png',
+                  tag: String(notif.id || 'calcverse-push'),
+                  data: { url: rawLink || '/' }
+                });
+              }
+            }).catch(() => {});
+          }
+        } catch (_) {}
+      }
+    }
+
+    function dismissLivePushNotification() {
+      const card = document.getElementById('livePushNotifCard');
+      if (card) card.classList.add('hidden');
+      if (currentLivePushNotifId) {
+        const nowMs = Date.now();
+        const expMs = nowMs + (7 * 24 * 60 * 60 * 1000);
+        const seen = safeGetStorage('calcverse_dismissed_notifs', []).filter(e => typeof e === 'string' || (e && e.exp > nowMs));
+        if (!seen.some(e => (typeof e === 'string' ? e : e.id) === currentLivePushNotifId)) {
+          seen.unshift({ id: currentLivePushNotifId, exp: expMs });
+          safeSetStorage('calcverse_dismissed_notifs', seen.slice(0, 50));
+        }
+        currentLivePushNotifId = null;
+      }
+    }
+
+    const livePushCloseBtn = document.getElementById('livePushNotifCloseBtn');
+    const livePushDismissBtn = document.getElementById('livePushNotifDismissBtn');
+    const livePushActionBtn = document.getElementById('livePushNotifAction');
+    if (livePushCloseBtn) livePushCloseBtn.addEventListener('click', dismissLivePushNotification);
+    if (livePushDismissBtn) livePushDismissBtn.addEventListener('click', dismissLivePushNotification);
+    if (livePushActionBtn) livePushActionBtn.addEventListener('click', dismissLivePushNotification);
+
+
+    let cachedUserNotifs = [];
+    function getReadNotifIds() {
+      const nowMs = Date.now();
+      const raw = safeGetStorage('calcverse_read_notifs', []);
+      const cleaned = raw.filter(e => e && e.id && (!e.exp || e.exp > nowMs));
+      if (cleaned.length !== raw.length) safeSetStorage('calcverse_read_notifs', cleaned);
+      return new Set(cleaned.map(e => e.id));
+    }
+
+    function markUserNotifsAsRead(ids) {
+      if (!Array.isArray(ids) || ids.length === 0) return;
+      const nowMs = Date.now();
+      const expMs = nowMs + (7 * 24 * 60 * 60 * 1000);
+      const existing = safeGetStorage('calcverse_read_notifs', []).filter(e => e && e.id && (!e.exp || e.exp > nowMs));
+      const seenSet = new Set(existing.map(e => e.id));
+      ids.forEach(id => {
+        if (id && !seenSet.has(id)) {
+          existing.unshift({ id, exp: expMs });
+          seenSet.add(id);
+        }
+      });
+      safeSetStorage('calcverse_read_notifs', existing.slice(0, 100));
+      updateUserNotifBadge();
+    }
+
+    function updateUserNotifBadge() {
+      const badge = document.getElementById('userNotifBadge');
+      if (!badge) return;
+      const readSet = getReadNotifIds();
+      const unreadCount = cachedUserNotifs.filter(n => n && n.id && !readSet.has(n.id)).length;
+      if (unreadCount > 0) {
+        badge.textContent = unreadCount > 9 ? '9+' : String(unreadCount);
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
+    function renderUserNotifsModalList() {
+      const listEl = document.getElementById('userNotifsModalList');
+      if (!listEl) return;
+      if (!cachedUserNotifs || cachedUserNotifs.length === 0) {
+        listEl.innerHTML = '<div class="text-center text-slate-400 dark:text-slate-500 py-8 space-y-1"><div class="font-bold text-slate-600 dark:text-slate-300">No notifications yet</div><div>New updates &amp; announcements will appear here for 7 days.</div></div>';
+        return;
+      }
+      const readSet = getReadNotifIds();
+      const styleBadge = {
+        info: 'bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300',
+        update: 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300',
+        alert: 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300',
+        promo: 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300'
+      };
+      listEl.innerHTML = cachedUserNotifs.map(n => {
+        const isUnread = !readSet.has(n.id);
+        const rawLink = String(n.link_url || '').trim();
+        const hasValidLink = rawLink && /^(\/|https?:\/\/)/i.test(rawLink);
+        const tagCls = styleBadge[n.style] || styleBadge.info;
+        return `
+          <div class="p-3 rounded-xl border ${isUnread ? 'bg-indigo-50/50 dark:bg-indigo-950/30 border-indigo-200 dark:border-indigo-800/80' : 'bg-slate-50/70 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800'} space-y-1.5">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-1.5 min-w-0">
+                ${isUnread ? '<span class="w-2 h-2 rounded-full bg-rose-500 shrink-0"></span>' : ''}
+                <span class="font-extrabold text-slate-900 dark:text-white break-words">${escapeNotifHtml(n.title)}</span>
+              </div>
+              <span class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase shrink-0 ${tagCls}">${escapeNotifHtml(n.style || 'info')}</span>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-300 whitespace-pre-wrap break-words leading-relaxed">${escapeNotifHtml(n.message)}</p>
+            <div class="flex items-center justify-between gap-2 pt-1 text-[10px] text-slate-400">
+              <span>${escapeNotifHtml(String(n.created_at || '').slice(0, 10))}</span>
+              ${hasValidLink ? `<a href="${escapeNotifHtml(rawLink)}" ${/^https?:\/\//i.test(rawLink) ? 'target="_blank" rel="noopener noreferrer"' : ''} class="px-2 py-0.5 rounded-lg font-bold bg-indigo-600 hover:bg-indigo-500 text-white transition">Open</a>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    const openUserNotifsBtn = document.getElementById('openUserNotifsBtn');
+    const userNotifsModal = document.getElementById('userNotifsModal');
+    const closeUserNotifsModalBtn = document.getElementById('closeUserNotifsModalBtn');
+    const refreshUserNotifsBtn = document.getElementById('refreshUserNotifsBtn');
+    const markAllUserNotifsReadBtn = document.getElementById('markAllUserNotifsReadBtn');
+
+    if (openUserNotifsBtn && userNotifsModal) {
+      openUserNotifsBtn.addEventListener('click', async () => {
+        userNotifsModal.classList.remove('hidden');
+        renderUserNotifsModalList();
+        await pollLatestAdminNotification(true);
+        renderUserNotifsModalList();
+        markUserNotifsAsRead(cachedUserNotifs.map(n => n.id));
+      });
+    }
+    if (closeUserNotifsModalBtn && userNotifsModal) {
+      closeUserNotifsModalBtn.addEventListener('click', () => userNotifsModal.classList.add('hidden'));
+    }
+    if (userNotifsModal) {
+      userNotifsModal.addEventListener('click', e => {
+        if (e.target === userNotifsModal) userNotifsModal.classList.add('hidden');
+      });
+    }
+    if (refreshUserNotifsBtn) {
+      refreshUserNotifsBtn.addEventListener('click', async () => {
+        await pollLatestAdminNotification(true);
+        renderUserNotifsModalList();
+        showToast('Notifications refreshed');
+      });
+    }
+    if (markAllUserNotifsReadBtn) {
+      markAllUserNotifsReadBtn.addEventListener('click', () => {
+        markUserNotifsAsRead(cachedUserNotifs.map(n => n.id));
+        renderUserNotifsModalList();
+        showToast('All notifications marked as read');
+      });
+    }
+
+    async function pollLatestAdminNotification(silentModalRefresh = false) {
+      if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
+      try {
+        const base = (typeof API_BASE !== 'undefined' && API_BASE) ? API_BASE : '';
+        const res = await fetch(`${base}/api/notifications/latest`, { method: 'GET' });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!data || !data.ok || !Array.isArray(data.notifications)) return;
+        if (data.notifications.length === 0) { cachedUserNotifs = []; updateUserNotifBadge(); return; }
+        const nowMs = Date.now();
+        const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+        const rawDismissed = safeGetStorage('calcverse_dismissed_notifs', []);
+        // Auto-purge dismissed entries older than 7 days
+        const cleanedDismissed = rawDismissed.filter(entry => {
+          if (typeof entry === 'string') return true;
+          return entry && entry.id && (!entry.exp || entry.exp > nowMs);
+        });
+        if (cleanedDismissed.length !== rawDismissed.length) {
+          safeSetStorage('calcverse_dismissed_notifs', cleanedDismissed);
+        }
+        const dismissedIds = new Set(cleanedDismissed.map(e => (typeof e === 'string' ? e : e.id)));
+        const validNotifs = data.notifications.filter(n => {
+          if (!n || !n.id) return false;
+          const expMs = n.expires_at ? Date.parse(n.expires_at) : (Date.parse(n.created_at || '') + SEVEN_DAYS_MS);
+          return !isFinite(expMs) || expMs > nowMs;
+        });
+        cachedUserNotifs = validNotifs;
+        updateUserNotifBadge();
+        if (!silentModalRefresh) {
+          const nextNotif = validNotifs.find(n => !dismissedIds.has(n.id));
+          if (nextNotif) {
+            showLivePushNotificationCard(nextNotif, false);
+          }
+        }
+      } catch (_) {}
+    }
+
+    async function loadAdminNotifications() {
+      const box = document.getElementById('adminNotifsListContainer');
+      if (!box) return;
+      box.textContent = 'Loading push notifications...';
+      try {
+        const base = (typeof API_BASE !== 'undefined' && API_BASE) ? API_BASE : '';
+        const res = await fetch(`${base}/api/admin/notifications`, {
+          method: 'GET',
+          headers: { 'x-admin-key': sessionAdminKey }
+        });
+        const data = await res.json();
+        if (!res.ok || !data || !data.ok) {
+          box.textContent = (data && data.error) || 'Could not load notifications.';
+          return;
+        }
+        const list = data.notifications || [];
+        if (list.length === 0) {
+          box.textContent = `No push notifications sent yet (Storage: ${data.storage || 'D1'}).`;
+          return;
+        }
+        box.innerHTML = `<div class="text-[10px] font-bold text-fuchsia-700 dark:text-fuchsia-300 mb-1">Total: ${list.length} notification(s) • Storage: ${escapeNotifHtml(data.storage || 'D1')}</div>` +
+          list.map(n => {
+            const isActive = Number(n.active) === 1;
+            return `
+              <div class="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 space-y-1">
+                <div class="flex flex-wrap items-center justify-between gap-1.5">
+                  <div class="flex items-center gap-1.5 min-w-0">
+                    <span class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase ${isActive ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300' : 'bg-slate-200 dark:bg-slate-800 text-slate-500'}">${isActive ? 'Active' : 'Paused'}</span>
+                    <span class="font-bold text-slate-800 dark:text-white truncate">${escapeNotifHtml(n.title)}</span>
+                  </div>
+                  <div class="flex items-center gap-1 shrink-0">
+                    <button type="button" data-toggle-notif="${escapeNotifHtml(n.id)}" data-next-active="${isActive ? '0' : '1'}" class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200">${isActive ? 'Pause' : 'Activate'}</button>
+                    <button type="button" data-delete-notif="${escapeNotifHtml(n.id)}" class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 dark:bg-rose-950 hover:bg-rose-200 text-rose-700 dark:text-rose-300">Delete</button>
+                  </div>
+                </div>
+                <div class="text-[11px] text-slate-600 dark:text-slate-300 whitespace-pre-wrap break-words">${escapeNotifHtml(n.message)}</div>
+                <div class="text-[10px] text-slate-400 flex flex-wrap justify-between gap-1">
+                  <span>Style: ${escapeNotifHtml(n.style || 'info')}${n.link_url ? ' • Link: ' + escapeNotifHtml(n.link_url) : ''}</span>
+                  <span>Sent: ${escapeNotifHtml(String(n.created_at || '').slice(0, 10))} • Auto-deletes: ${escapeNotifHtml(String(n.expires_at || '').slice(0, 10) || '7d')}</span>
+                </div>
+              </div>
+            `;
+          }).join('');
+      } catch (err) {
+        box.textContent = 'Local preview mode (deploy worker.js to Cloudflare to broadcast live notifications).';
+      }
+    }
+
+    const refreshAdminNotifsBtn = document.getElementById('refreshAdminNotifsBtn');
+    if (refreshAdminNotifsBtn) refreshAdminNotifsBtn.addEventListener('click', loadAdminNotifications);
+
+    const previewAdminNotifBtn = document.getElementById('previewAdminNotifBtn');
+    if (previewAdminNotifBtn) {
+      previewAdminNotifBtn.addEventListener('click', () => {
+        const title = (document.getElementById('adminNotifTitleInput')?.value || '').trim() || 'Sample Push Notification';
+        const message = (document.getElementById('adminNotifMsgInput')?.value || '').trim() || 'This is how your push notification will appear to users.';
+        const style = document.getElementById('adminNotifStyleSelect')?.value || 'info';
+        const link_url = (document.getElementById('adminNotifLinkInput')?.value || '').trim();
+        showLivePushNotificationCard({ title, message, style, link_url }, true);
+      });
+    }
+
+    const sendAdminNotifBtn = document.getElementById('sendAdminNotifBtn');
+    if (sendAdminNotifBtn) {
+      sendAdminNotifBtn.addEventListener('click', async () => {
+        const titleInp = document.getElementById('adminNotifTitleInput');
+        const msgInp = document.getElementById('adminNotifMsgInput');
+        const linkInp = document.getElementById('adminNotifLinkInput');
+        const styleSel = document.getElementById('adminNotifStyleSelect');
+        const statusEl = document.getElementById('adminNotifStatusMsg');
+
+        const title = (titleInp?.value || '').trim();
+        const message = (msgInp?.value || '').trim();
+        const linkUrl = (linkInp?.value || '').trim();
+        const style = styleSel?.value || 'info';
+
+        if (!title || !message) {
+          if (statusEl) {
+            statusEl.className = 'px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800';
+            statusEl.textContent = 'Please enter both a notification title and message.';
+            statusEl.classList.remove('hidden');
+          }
+          return;
+        }
+
+        const oldLabel = sendAdminNotifBtn.textContent;
+        sendAdminNotifBtn.disabled = true;
+        sendAdminNotifBtn.textContent = 'Sending...';
+        try {
+          const base = (typeof API_BASE !== 'undefined' && API_BASE) ? API_BASE : '';
+          const res = await fetch(`${base}/api/admin/notifications`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'x-admin-key': sessionAdminKey },
+            body: JSON.stringify({ title, message, linkUrl, style })
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok || !data.ok) {
+            throw new Error(data.error || 'Failed to send notification.');
+          }
+          if (titleInp) titleInp.value = '';
+          if (msgInp) msgInp.value = '';
+          if (linkInp) linkInp.value = '';
+          if (statusEl) {
+            statusEl.className = 'px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800';
+            statusEl.textContent = `Push notification broadcast live (${data.storage || 'D1'})!`;
+            statusEl.classList.remove('hidden');
+          }
+          showToast('Push notification sent to all users!');
+          loadAdminNotifications();
+        } catch (err) {
+          if (statusEl) {
+            statusEl.className = 'px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800';
+            statusEl.textContent = err.message || 'Could not send notification.';
+            statusEl.classList.remove('hidden');
+          }
+        } finally {
+          sendAdminNotifBtn.disabled = false;
+          sendAdminNotifBtn.textContent = oldLabel;
+        }
+      });
+    }
+
+    const adminNotifsListBox = document.getElementById('adminNotifsListContainer');
+    if (adminNotifsListBox) {
+      adminNotifsListBox.addEventListener('click', async e => {
+        const togBtn = e.target.closest('[data-toggle-notif]');
+        if (togBtn) {
+          const id = togBtn.getAttribute('data-toggle-notif');
+          const active = Number(togBtn.getAttribute('data-next-active')) === 1;
+          const base = (typeof API_BASE !== 'undefined' && API_BASE) ? API_BASE : '';
+          await fetch(`${base}/api/admin/notifications/toggle`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'x-admin-key': sessionAdminKey },
+            body: JSON.stringify({ id, active })
+          }).catch(() => {});
+          loadAdminNotifications();
+          return;
+        }
+        const delBtn = e.target.closest('[data-delete-notif]');
+        if (delBtn) {
+          const id = delBtn.getAttribute('data-delete-notif');
+          const base = (typeof API_BASE !== 'undefined' && API_BASE) ? API_BASE : '';
+          await fetch(`${base}/api/admin/notifications/delete`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'x-admin-key': sessionAdminKey },
+            body: JSON.stringify({ id })
+          }).catch(() => {});
+          showToast('Push notification deleted.');
+          loadAdminNotifications();
+        }
+      });
+    }
+
+    setTimeout(() => { pollLatestAdminNotification(); }, 2500);
+    setInterval(() => { pollLatestAdminNotification(); }, 300000);
+
+  </script>
 </body>
 </html>
