@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#f8fafc" id="metaThemeColor" />
   <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#f8fafc" id="metaThemeColor" />
   <link rel="icon" href="/icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/icon.svg" />
   <meta name="mobile-web-app-capable" content="yes" />
@@ -1189,8 +1189,8 @@
           <button id="setupTotpBtn" type="button" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition">
             <span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span id="setupTotpBtnLabel">Authenticator App</span></span>
           </button>
-          <button id="profileDownloadOfflineBtn" type="button" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition">
-            <span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span>Install App (Offline+Sync)</span></span>
+          <button id="profileInstallPwaBtn" type="button" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition">
+            <span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg><span>Install App (Offline+Sync)</span></span>
           </button>
           <button id="downloadLoginKeyBtn" type="button" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition">
             <span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 inline-block shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg><span>Download Login Key (.JSON)</span></span>
@@ -1374,6 +1374,31 @@
 
   <!-- Toast Notification -->
   <!-- User Notifications Inbox Modal (All Active 7-Day Notifications) -->
+
+  <!-- Admin Push Notification Full Preview & Confirm Modal -->
+  <div id="adminNotifFullPreviewModal" class="hidden fixed inset-0 z-[95] bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl overflow-hidden flex flex-col max-h-[88vh]">
+      <div class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2 bg-indigo-50/80 dark:bg-indigo-950/40">
+        <div>
+          <h3 class="text-sm font-extrabold text-slate-900 dark:text-white flex items-center gap-1.5">
+            <span>👁️</span> Full Notification Preview
+          </h3>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400">Review how users will see this full notification before sending.</p>
+        </div>
+        <button id="closeAdminNotifPreviewBtn" type="button" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-slate-800 transition" aria-label="Close preview">✕</button>
+      </div>
+      <div class="p-4 overflow-y-auto space-y-3">
+        <div class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">User Full Notification View</div>
+        <div id="adminNotifFullPreviewCard" class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 space-y-2.5"></div>
+        <div id="adminNotifPreviewError" class="hidden px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800"></div>
+      </div>
+      <div class="px-4 py-3 border-t border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/60 flex items-center justify-end gap-2">
+        <button id="cancelAdminNotifPreviewBtn" type="button" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 transition">Back to Edit</button>
+        <button id="confirmSendAdminNotifBtn" type="button" class="px-4 py-2 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm transition">Confirm &amp; Send Push</button>
+      </div>
+    </div>
+  </div>
+
   <div id="userNotifsModal" class="fixed inset-0 z-50 hidden bg-slate-950/75 flex items-start sm:items-center justify-center p-3 sm:p-4 overflow-y-auto">
     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-3.5 my-auto max-h-[85vh] flex flex-col">
       <div class="flex items-start justify-between gap-2 pb-2.5 border-b border-slate-200 dark:border-slate-800 shrink-0">
@@ -1388,6 +1413,10 @@
       </div>
       <div id="userNotifsModalList" class="overflow-y-auto flex-1 space-y-2.5 pr-0.5 text-xs">
         <div class="text-center text-slate-400 py-6">Loading notifications...</div>
+      </div>
+      <div id="userNotifDetailView" class="hidden overflow-y-auto flex-1 space-y-3 pr-0.5 text-xs">
+        <button id="backToUserNotifsListBtn" type="button" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">&larr; Back to All Notifications</button>
+        <div id="userNotifDetailCard" class="p-4 rounded-xl border border-indigo-200 dark:border-indigo-800/80 bg-slate-50/80 dark:bg-slate-800/60 space-y-2.5"></div>
       </div>
       <div class="flex items-center justify-between gap-2 pt-2.5 border-t border-slate-200 dark:border-slate-800 shrink-0">
         <button id="refreshUserNotifsBtn" type="button" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">Refresh</button>
@@ -1532,6 +1561,77 @@
         </div>
 
         <div id="adminProtectedContent" class="hidden space-y-4">
+        <!-- Admin Live Analytics & Filterable Counts Dashboard -->
+        <div class="p-3.5 rounded-xl bg-gradient-to-br from-indigo-50/80 via-white to-cyan-50/70 dark:from-indigo-950/35 dark:via-slate-900 dark:to-cyan-950/25 border border-indigo-200/80 dark:border-indigo-800/70 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <div class="font-extrabold text-indigo-950 dark:text-indigo-100 flex items-center gap-2 text-xs sm:text-sm">
+                <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> LIVE
+                </span>
+                <span>Platform Counts &amp; Analytics Dashboard</span>
+              </div>
+              <p id="adminStatsMetaLabel" class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Filter live users, accounts, logins, saved passwords, app downloads &amp; exports.</p>
+            </div>
+            <button id="refreshAdminStatsBtn" type="button" class="px-3 py-1.5 rounded-lg text-[11px] font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm transition">Refresh Counts</button>
+          </div>
+
+          <!-- Filter Bar: Timeframe + Source + Search -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Timeframe</label>
+              <select id="adminStatsRangeSelect" class="w-full px-2.5 py-1.5 rounded-lg text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 font-semibold">
+                <option value="all">All Time (Lifetime)</option>
+                <option value="today">Today (Last 24h)</option>
+                <option value="7d">Last 7 Days</option>
+                <option value="30d">Last 30 Days</option>
+                <option value="custom">Custom Date Range</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Platform / Source</label>
+              <select id="adminStatsSourceSelect" class="w-full px-2.5 py-1.5 rounded-lg text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 font-semibold">
+                <option value="all">All Platforms</option>
+                <option value="Website">Website</option>
+                <option value="Offline+Sync App">Offline+Sync App (PWA)</option>
+                <option value="Android APK">Android APK</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Filter Metric</label>
+              <input id="adminStatsSearchInput" type="search" placeholder="e.g. result, password, login, live, app..." class="w-full px-2.5 py-1.5 rounded-lg text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700" />
+            </div>
+          </div>
+
+          <!-- Optional Custom Date Range Row -->
+          <div id="adminStatsCustomDates" class="hidden flex flex-wrap items-end gap-2 p-2.5 rounded-lg bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700">
+            <div class="flex-1 min-w-[120px]">
+              <label class="block text-[10px] font-bold text-slate-500 mb-0.5">From Date</label>
+              <input id="adminStatsFromDate" type="date" class="w-full px-2 py-1 rounded-lg text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" />
+            </div>
+            <div class="flex-1 min-w-[120px]">
+              <label class="block text-[10px] font-bold text-slate-500 mb-0.5">To Date</label>
+              <input id="adminStatsToDate" type="date" class="w-full px-2 py-1 rounded-lg text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" />
+            </div>
+            <button id="applyAdminStatsDatesBtn" type="button" class="px-3 py-1.5 rounded-lg text-[11px] font-bold bg-indigo-600 hover:bg-indigo-500 text-white transition">Apply</button>
+          </div>
+
+          <!-- Category Filter Pills -->
+          <div id="adminStatsCatBar" class="flex flex-wrap items-center gap-1.5">
+            <button type="button" data-stats-cat="all" class="admin-stats-cat-btn px-2.5 py-1 rounded-lg text-[10px] font-bold bg-indigo-600 text-white transition">All Counts</button>
+            <button type="button" data-stats-cat="users" class="admin-stats-cat-btn px-2.5 py-1 rounded-lg text-[10px] font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition">Users &amp; Auth</button>
+            <button type="button" data-stats-cat="results" class="admin-stats-cat-btn px-2.5 py-1 rounded-lg text-[10px] font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition">Results &amp; Inputs</button>
+            <button type="button" data-stats-cat="passwords" class="admin-stats-cat-btn px-2.5 py-1 rounded-lg text-[10px] font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition">Passwords</button>
+            <button type="button" data-stats-cat="app" class="admin-stats-cat-btn px-2.5 py-1 rounded-lg text-[10px] font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition">App &amp; Exports</button>
+            <button type="button" data-stats-cat="engagement" class="admin-stats-cat-btn px-2.5 py-1 rounded-lg text-[10px] font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition">Engagement</button>
+          </div>
+
+          <!-- Metric Cards Grid -->
+          <div id="adminStatsCardsGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+            <div class="col-span-full text-center py-4 text-xs text-slate-500">Click "Refresh Counts" to load live platform counts.</div>
+          </div>
+        </div>
+
         <!-- Admin-Only Push Notification Center (Hidden from Regular Users) -->
         <div class="p-3.5 rounded-xl bg-fuchsia-50/60 dark:bg-fuchsia-950/20 border border-fuchsia-200/80 dark:border-fuchsia-900/60 space-y-2.5">
           <div class="flex flex-wrap items-center justify-between gap-2">
@@ -2114,6 +2214,8 @@
               sciState.ans = res;
               sciScreenInput.value = String(Number(res.toPrecision(12)));
               pushSciTape(raw, res);
+              if (typeof scheduleSupportPopupOnResult === 'function') scheduleSupportPopupOnResult();
+              if (typeof trackCalcResultInput === 'function') trackCalcResultInput('scientific', 'Scientific Calculator');
             } else {
               sciScreenInput.value = 'Error';
             }
@@ -4894,6 +4996,10 @@
         formulaBox.innerHTML = calc.id === 'item_slip' ? '' : res.formulaSteps.map(s => `<div>• ${s}</div>`).join('');
       }
       checkAndCelebrateGoodResult(calc, vals, res);
+      if (typeof hasUserInteracted !== 'undefined' && hasUserInteracted) {
+        if (typeof scheduleSupportPopupOnResult === 'function') scheduleSupportPopupOnResult();
+        if (typeof trackCalcResultInput === 'function') trackCalcResultInput(calc && calc.id, calc && calc.name);
+      }
     }
 
     // =========================================================================
@@ -9217,6 +9323,7 @@
       foot.classList.remove('hidden');
       foot.classList.add('flex');
       showToast('Admin panel unlocked!');
+      if (typeof loadAdminOverviewStats === 'function') loadAdminOverviewStats();
       if (typeof loadAdminNotifications === 'function') loadAdminNotifications();
     });
 
@@ -9993,6 +10100,30 @@
       try { sessionStorage.setItem('calcverse_support_seen', '1'); } catch (_) {}
     }
 
+    let supportResultPopupTimer = null;
+    function scheduleSupportPopupOnResult() {
+      let alreadySeen = false;
+      try { alreadySeen = sessionStorage.getItem('calcverse_support_seen') === '1'; } catch (_) {}
+      if (alreadySeen || supportResultPopupTimer) return;
+      supportResultPopupTimer = setTimeout(() => {
+        supportResultPopupTimer = null;
+        let seenNow = false;
+        try { seenNow = sessionStorage.getItem('calcverse_support_seen') === '1'; } catch (_) {}
+        if (seenNow) return;
+        const modalIds = ['authModal', 'adManagerModal', 'userNotifsModal', 'nostalgicPaperModal', 'downloadInfoModal', 'legalComplianceModal', 'feedbackModal'];
+        const anyOpen = modalIds.some(id => {
+          const el = document.getElementById(id);
+          return el && !el.classList.contains('hidden');
+        });
+        if (!anyOpen && typeof donateModal !== 'undefined' && donateModal) {
+          try { sessionStorage.setItem('calcverse_support_seen', '1'); } catch (_) {}
+          if (typeof donateThankYouBanner !== 'undefined' && donateThankYouBanner) donateThankYouBanner.classList.add('hidden');
+          if (typeof updateDonateUI === 'function') updateDonateUI();
+          donateModal.classList.remove('hidden');
+        }
+      }, 30000);
+    }
+
     document.getElementById('closeDonateModalBtn').addEventListener('click', dismissSupportPopup);
     document.getElementById('skipDonateModalBtn').addEventListener('click', dismissSupportPopup);
 
@@ -10310,20 +10441,6 @@
           const kInp = document.getElementById('adminKeyInput');
           if (kInp) kInp.focus();
         }, 150);
-      } else {
-        let alreadySeen = false;
-        try { alreadySeen = sessionStorage.getItem('calcverse_support_seen') === '1'; } catch (_) {}
-        if (!alreadySeen) {
-          setTimeout(() => {
-            const anyOpen = !document.getElementById('authModal').classList.contains('hidden') ||
-                            !document.getElementById('adManagerModal').classList.contains('hidden');
-            if (!anyOpen) {
-              donateThankYouBanner.classList.add('hidden');
-              updateDonateUI();
-              donateModal.classList.remove('hidden');
-            }
-          }, 1800);
-        }
       }
     })();
   
@@ -10622,16 +10739,33 @@
     const installPwaBtn = document.getElementById('installPwaAppBtn');
     const profInstallPwaBtn = document.getElementById('profileInstallPwaBtn');
     const handlePwaInstallClick = async () => {
+      const isStandalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || (window.navigator && window.navigator.standalone === true);
+      if (isStandalone) {
+        showToast('Checking for latest CalcVerse Pro update...');
+        try {
+          if ('serviceWorker' in navigator) {
+            const reg = await navigator.serviceWorker.getRegistration();
+            if (reg) await reg.update();
+          }
+          if ('caches' in window) {
+            const keys = await caches.keys();
+            await Promise.all(keys.map(k => caches.delete(k)));
+          }
+        } catch (_) {}
+        setTimeout(() => location.reload(), 450);
+        return;
+      }
       if (deferredPwaPrompt) {
         deferredPwaPrompt.prompt();
         const choice = await deferredPwaPrompt.userChoice;
         deferredPwaPrompt = null;
-        if (choice && choice.outcome === 'accepted') showToast('Installing CalcVerse Pro Offline+Sync App!');
+        if (choice && choice.outcome === 'accepted') { showToast('Installing CalcVerse Pro Offline+Sync App!'); if (typeof trackAppInstallEvent === 'function') trackAppInstallEvent('pwa_install'); }
       } else {
         showToast('Tap your browser menu (⋮) → "Add to Home screen" or "Install app".');
       }
     };
     if (profInstallPwaBtn) profInstallPwaBtn.addEventListener('click', handlePwaInstallClick);
+    if (installPwaBtn) installPwaBtn.addEventListener('click', handlePwaInstallClick);
     if (installPwaBtn) {
       installPwaBtn.addEventListener('click', async () => {
         if (deferredPwaPrompt) {
@@ -10850,7 +10984,7 @@
     // Automatic Update Sync:
     // 1) Installed PWA auto-updates silently via /sw.js network-first + reload on controllerchange
     // 2) Downloaded CalcVerse_Pro_Offline.html checks /api/config when online and shows a 1-tap Update banner
-    const LOCAL_APP_VERSION = '2026.11.21-r16';
+    const LOCAL_APP_VERSION = '2026.11.21-r28';
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
       navigator.serviceWorker.getRegistration().then(reg => { if (reg) reg.update().catch(() => {}); }).catch(() => {});
     }
@@ -10959,6 +11093,18 @@
     if (livePushCloseBtn) livePushCloseBtn.addEventListener('click', dismissLivePushNotification);
     if (livePushDismissBtn) livePushDismissBtn.addEventListener('click', dismissLivePushNotification);
     if (livePushActionBtn) livePushActionBtn.addEventListener('click', dismissLivePushNotification);
+    const livePushCardEl = document.getElementById('livePushNotifCard');
+    if (livePushCardEl) {
+      livePushCardEl.addEventListener('click', e => {
+        if (e.target.closest('button, a')) return;
+        const matched = cachedUserNotifs.find(n => n && n.id === currentLivePushNotifId);
+        if (matched && userNotifsModal) {
+          dismissLivePushNotification();
+          userNotifsModal.classList.remove('hidden');
+          openUserNotifDetail(matched);
+        }
+      });
+    }
 
 
     let cachedUserNotifs = [];
@@ -10970,20 +11116,72 @@
       return new Set(cleaned.map(e => e.id));
     }
 
+    function getNotifReaderId() {
+      let rid = safeGetStorage('calcverse_reader_id', '');
+      if (!rid) {
+        rid = 'rdr_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+        safeSetStorage('calcverse_reader_id', rid);
+      }
+      return String(rid);
+    }
+
+    function getServerReportedNotifIds() {
+      const nowMs = Date.now();
+      const raw = safeGetStorage('calcverse_server_read_notifs', []);
+      const cleaned = raw.filter(e => e && e.id && (!e.exp || e.exp > nowMs));
+      if (cleaned.length !== raw.length) safeSetStorage('calcverse_server_read_notifs', cleaned);
+      return new Set(cleaned.map(e => e.id));
+    }
+
+    function markServerReportedNotifId(id) {
+      if (!id) return;
+      const nowMs = Date.now();
+      const expMs = nowMs + (7 * 24 * 60 * 60 * 1000);
+      const existing = safeGetStorage('calcverse_server_read_notifs', []).filter(e => e && e.id && (!e.exp || e.exp > nowMs));
+      if (!existing.some(e => e.id === id)) {
+        existing.unshift({ id, exp: expMs });
+        safeSetStorage('calcverse_server_read_notifs', existing.slice(0, 100));
+      }
+    }
+
+    function reportNotifReadsToServer(ids) {
+      if (!Array.isArray(ids) || ids.length === 0) return;
+      if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
+      const base = (typeof API_BASE !== 'undefined' && API_BASE) ? API_BASE : '';
+      const readerId = getNotifReaderId();
+      const alreadyReported = getServerReportedNotifIds();
+      ids.forEach(id => {
+        if (!id || alreadyReported.has(id)) return;
+        fetch(`${base}/api/notifications/read`, {
+          method: 'POST',
+          keepalive: true,
+          credentials: typeof API_CRED_MODE !== 'undefined' ? API_CRED_MODE : 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, readerId })
+        }).then(res => {
+          if (res && res.ok) markServerReportedNotifId(id);
+        }).catch(() => {});
+      });
+    }
+
     function markUserNotifsAsRead(ids) {
       if (!Array.isArray(ids) || ids.length === 0) return;
       const nowMs = Date.now();
       const expMs = nowMs + (7 * 24 * 60 * 60 * 1000);
       const existing = safeGetStorage('calcverse_read_notifs', []).filter(e => e && e.id && (!e.exp || e.exp > nowMs));
       const seenSet = new Set(existing.map(e => e.id));
+      const validIds = [];
       ids.forEach(id => {
-        if (id && !seenSet.has(id)) {
+        if (!id) return;
+        validIds.push(id);
+        if (!seenSet.has(id)) {
           existing.unshift({ id, exp: expMs });
           seenSet.add(id);
         }
       });
       safeSetStorage('calcverse_read_notifs', existing.slice(0, 100));
       updateUserNotifBadge();
+      if (validIds.length > 0) reportNotifReadsToServer(validIds);
     }
 
     function updateUserNotifBadge() {
@@ -10997,6 +11195,54 @@
       } else {
         badge.classList.add('hidden');
       }
+    }
+
+    function showUserNotifsListView() {
+      const listEl = document.getElementById('userNotifsModalList');
+      const detailEl = document.getElementById('userNotifDetailView');
+      if (detailEl) detailEl.classList.add('hidden');
+      if (listEl) listEl.classList.remove('hidden');
+    }
+
+    function openUserNotifDetail(notif) {
+      if (!notif) return;
+      if (notif.id) markUserNotifsAsRead([notif.id]);
+      const listEl = document.getElementById('userNotifsModalList');
+      const detailEl = document.getElementById('userNotifDetailView');
+      const cardEl = document.getElementById('userNotifDetailCard');
+      if (!detailEl || !cardEl) return;
+
+      const styleBadge = {
+        info: 'bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300',
+        update: 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300',
+        alert: 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300',
+        promo: 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300'
+      };
+      const tagCls = styleBadge[notif.style] || styleBadge.info;
+      const rawLink = String(notif.link_url || notif.linkUrl || '').trim();
+      const hasValidLink = rawLink && /^(\/|https?:\/\/)/i.test(rawLink);
+      const sentLabel = notif.created_at ? new Date(notif.created_at).toLocaleString() : '';
+      const expLabel = notif.expires_at ? String(notif.expires_at).slice(0, 10) : '';
+
+      cardEl.innerHTML = `
+        <div class="flex items-start justify-between gap-2">
+          <h3 class="text-sm font-extrabold text-slate-900 dark:text-white break-words leading-snug">${escapeNotifHtml(notif.title)}</h3>
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase shrink-0 ${tagCls}">${escapeNotifHtml(notif.style || 'info')}</span>
+        </div>
+        <div class="text-[10px] text-slate-400 flex flex-wrap items-center gap-2 border-b border-slate-200 dark:border-slate-700/70 pb-2">
+          ${sentLabel ? `<span>Sent: ${escapeNotifHtml(sentLabel)}</span>` : ''}
+          ${expLabel ? `<span>• Auto-deletes: ${escapeNotifHtml(expLabel)}</span>` : ''}
+        </div>
+        <div class="text-xs sm:text-sm text-slate-700 dark:text-slate-200 whitespace-pre-wrap break-words leading-relaxed">${escapeNotifHtml(notif.message)}</div>
+        ${hasValidLink ? `
+          <div class="pt-2">
+            <a href="${escapeNotifHtml(rawLink)}" ${/^https?:\/\//i.test(rawLink) ? 'target="_blank" rel="noopener noreferrer"' : ''} class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm transition">Open Link &rarr;</a>
+          </div>
+        ` : (rawLink ? `<div class="pt-1 text-[11px] font-semibold text-indigo-600 dark:text-indigo-400 break-words">Ref: ${escapeNotifHtml(rawLink)}</div>` : '')}
+      `;
+      if (listEl) listEl.classList.add('hidden');
+      detailEl.classList.remove('hidden');
+      renderUserNotifsModalList();
     }
 
     function renderUserNotifsModalList() {
@@ -11013,13 +11259,13 @@
         alert: 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300',
         promo: 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300'
       };
-      listEl.innerHTML = cachedUserNotifs.map(n => {
+      listEl.innerHTML = cachedUserNotifs.map((n, idx) => {
         const isUnread = !readSet.has(n.id);
-        const rawLink = String(n.link_url || '').trim();
-        const hasValidLink = rawLink && /^(\/|https?:\/\/)/i.test(rawLink);
         const tagCls = styleBadge[n.style] || styleBadge.info;
+        const previewMsg = String(n.message || '');
+        const shortMsg = previewMsg.length > 90 ? previewMsg.slice(0, 90) + '…' : previewMsg;
         return `
-          <div class="p-3 rounded-xl border ${isUnread ? 'bg-indigo-50/50 dark:bg-indigo-950/30 border-indigo-200 dark:border-indigo-800/80' : 'bg-slate-50/70 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800'} space-y-1.5">
+          <button type="button" data-open-notif-idx="${idx}" class="w-full text-left p-3 rounded-xl border ${isUnread ? 'bg-indigo-50/60 dark:bg-indigo-950/35 border-indigo-200 dark:border-indigo-800/80' : 'bg-slate-50/70 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800'} hover:border-indigo-400 dark:hover:border-indigo-500 space-y-1.5 transition">
             <div class="flex items-start justify-between gap-2">
               <div class="flex items-center gap-1.5 min-w-0">
                 ${isUnread ? '<span class="w-2 h-2 rounded-full bg-rose-500 shrink-0"></span>' : ''}
@@ -11027,12 +11273,12 @@
               </div>
               <span class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase shrink-0 ${tagCls}">${escapeNotifHtml(n.style || 'info')}</span>
             </div>
-            <p class="text-xs text-slate-600 dark:text-slate-300 whitespace-pre-wrap break-words leading-relaxed">${escapeNotifHtml(n.message)}</p>
-            <div class="flex items-center justify-between gap-2 pt-1 text-[10px] text-slate-400">
+            <p class="text-xs text-slate-600 dark:text-slate-300 break-words leading-relaxed">${escapeNotifHtml(shortMsg)}</p>
+            <div class="flex items-center justify-between gap-2 pt-0.5 text-[10px] text-slate-400">
               <span>${escapeNotifHtml(String(n.created_at || '').slice(0, 10))}</span>
-              ${hasValidLink ? `<a href="${escapeNotifHtml(rawLink)}" ${/^https?:\/\//i.test(rawLink) ? 'target="_blank" rel="noopener noreferrer"' : ''} class="px-2 py-0.5 rounded-lg font-bold bg-indigo-600 hover:bg-indigo-500 text-white transition">Open</a>` : ''}
+              <span class="font-bold text-indigo-600 dark:text-indigo-400">Tap to read full &rarr;</span>
             </div>
-          </div>
+          </button>
         `;
       }).join('');
     }
@@ -11042,14 +11288,30 @@
     const closeUserNotifsModalBtn = document.getElementById('closeUserNotifsModalBtn');
     const refreshUserNotifsBtn = document.getElementById('refreshUserNotifsBtn');
     const markAllUserNotifsReadBtn = document.getElementById('markAllUserNotifsReadBtn');
+    const backToUserNotifsListBtn = document.getElementById('backToUserNotifsListBtn');
+    const userNotifsModalListEl = document.getElementById('userNotifsModalList');
+
+    if (userNotifsModalListEl) {
+      userNotifsModalListEl.addEventListener('click', e => {
+        const itemBtn = e.target.closest('[data-open-notif-idx]');
+        if (!itemBtn) return;
+        const idx = Number(itemBtn.getAttribute('data-open-notif-idx'));
+        if (cachedUserNotifs[idx]) {
+          openUserNotifDetail(cachedUserNotifs[idx]);
+        }
+      });
+    }
+    if (backToUserNotifsListBtn) {
+      backToUserNotifsListBtn.addEventListener('click', showUserNotifsListView);
+    }
 
     if (openUserNotifsBtn && userNotifsModal) {
       openUserNotifsBtn.addEventListener('click', async () => {
+        showUserNotifsListView();
         userNotifsModal.classList.remove('hidden');
         renderUserNotifsModalList();
         await pollLatestAdminNotification(true);
         renderUserNotifsModalList();
-        markUserNotifsAsRead(cachedUserNotifs.map(n => n.id));
       });
     }
     if (closeUserNotifsModalBtn && userNotifsModal) {
@@ -11112,6 +11374,354 @@
       } catch (_) {}
     }
 
+
+    // =========================================================================
+    // LIVE PRESENCE HEARTBEAT & APP INSTALL TRACKING (PRIVACY-SAFE COUNTS)
+    // =========================================================================
+    function getClientVisitorId() {
+      let vid = safeGetStorage('calcverse_visitor_id', '');
+      if (!vid) {
+        vid = 'vis_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+        safeSetStorage('calcverse_visitor_id', vid);
+      }
+      return String(vid);
+    }
+
+    function detectClientPlatformLabel() {
+      try {
+        if (window.Capacitor || /capacitor:\/\//i.test(location.href) || /;\s*wv\)/i.test(navigator.userAgent || '')) return 'Android APK';
+        const isStandalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || (window.navigator && window.navigator.standalone === true);
+        if (isStandalone) return 'Offline+Sync App';
+      } catch (_) {}
+      return 'Website';
+    }
+
+    function sendPresencePing() {
+      try {
+        if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
+        if (typeof document !== 'undefined' && document.visibilityState === 'hidden') return;
+        const base = (typeof API_BASE !== 'undefined' && API_BASE) ? API_BASE : '';
+        fetch(`${base}/api/presence/ping`, {
+          method: 'POST',
+          keepalive: true,
+          credentials: typeof API_CRED_MODE !== 'undefined' ? API_CRED_MODE : 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            visitorId: getClientVisitorId(),
+            source: detectClientPlatformLabel()
+          })
+        }).catch(() => {});
+      } catch (_) {}
+    }
+
+    function trackAppInstallEvent(method) {
+      try {
+        const key = 'calcverse_install_tracked_' + String(method || 'pwa');
+        if (safeGetStorage(key, false)) return;
+        if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
+        const base = (typeof API_BASE !== 'undefined' && API_BASE) ? API_BASE : '';
+        fetch(`${base}/api/app/install-track`, {
+          method: 'POST',
+          keepalive: true,
+          credentials: typeof API_CRED_MODE !== 'undefined' ? API_CRED_MODE : 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            visitorId: getClientVisitorId(),
+            method: String(method || 'pwa'),
+            source: detectClientPlatformLabel()
+          })
+        }).then(r => {
+          if (r && r.ok) safeSetStorage(key, true);
+        }).catch(() => {});
+      } catch (_) {}
+    }
+
+
+    let calcTrackDebounceTimer = null;
+    function trackCalcResultInput(calcId, calcName) {
+      try {
+        if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
+        if (calcTrackDebounceTimer) clearTimeout(calcTrackDebounceTimer);
+        calcTrackDebounceTimer = setTimeout(() => {
+          calcTrackDebounceTimer = null;
+          const base = (typeof API_BASE !== 'undefined' && API_BASE) ? API_BASE : '';
+          fetch(`${base}/api/calc/track`, {
+            method: 'POST',
+            keepalive: true,
+            credentials: typeof API_CRED_MODE !== 'undefined' ? API_CRED_MODE : 'same-origin',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              visitorId: getClientVisitorId(),
+              calcId: String(calcId || 'calculator').slice(0, 64),
+              calcName: String(calcName || calcId || 'Calculator').slice(0, 100),
+              source: detectClientPlatformLabel()
+            })
+          }).catch(() => {});
+        }, 2200);
+      } catch (_) {}
+    }
+
+    window.addEventListener('appinstalled', () => trackAppInstallEvent('pwa_install'));
+    setTimeout(() => {
+      sendPresencePing();
+      const plat = detectClientPlatformLabel();
+      if (plat === 'Android APK') trackAppInstallEvent('android_apk');
+      else if (plat === 'Offline+Sync App') trackAppInstallEvent('pwa_standalone');
+    }, 1800);
+    setInterval(sendPresencePing, 90000);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') sendPresencePing();
+    });
+
+    // =========================================================================
+    // ADMIN LIVE ANALYTICS & FILTERABLE COUNTS DASHBOARD
+    // =========================================================================
+    let cachedAdminStatsData = null;
+    let activeAdminStatsCat = 'all';
+
+    function renderAdminOverviewStats() {
+      const grid = document.getElementById('adminStatsCardsGrid');
+      const metaEl = document.getElementById('adminStatsMetaLabel');
+      if (!grid || !cachedAdminStatsData) return;
+
+      const s = cachedAdminStatsData.stats || {};
+      const searchQ = (document.getElementById('adminStatsSearchInput')?.value || '').trim().toLowerCase();
+
+      const cards = [
+        {
+          key: 'live_users',
+          cat: 'users',
+          label: 'Live Users Now',
+          value: Number(s.live_users || 0),
+          sub: `Online (5m) • ${Number(s.live_logged_in || 0)} logged in • Lifetime: ${Number(s.lifetime_visitors || 0).toLocaleString()}`,
+          badge: 'LIVE',
+          cls: 'border-emerald-300 dark:border-emerald-800 bg-emerald-50/70 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300'
+        },
+        {
+          key: 'total_users',
+          cat: 'users',
+          label: 'Open Accounts',
+          value: Number(s.total_users || 0),
+          sub: `In filter: +${Number(s.new_accounts || 0)} • Google: ${Number(s.google_users || 0)}`,
+          badge: 'ACCOUNTS',
+          cls: 'border-indigo-200 dark:border-indigo-800 bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-300'
+        },
+        {
+          key: 'user_logins',
+          cat: 'users',
+          label: 'User Logins',
+          value: Number(s.total_logins || 0),
+          sub: `${Number(s.unique_login_users || 0)} unique users`,
+          badge: 'AUTH',
+          cls: 'border-sky-200 dark:border-sky-800 bg-white dark:bg-slate-900 text-sky-700 dark:text-sky-300'
+        },
+        {
+          key: 'active_sessions',
+          cat: 'users',
+          label: 'Active Sessions',
+          value: Number(s.active_sessions || 0),
+          sub: `Deleted accts: ${Number(s.deleted_accounts || 0)}`,
+          badge: 'SESSIONS',
+          cls: 'border-cyan-200 dark:border-cyan-800 bg-white dark:bg-slate-900 text-cyan-700 dark:text-cyan-300'
+        },
+        {
+          key: 'people_input_result',
+          cat: 'results',
+          label: 'People Input for Result',
+          value: Number(s.unique_calc_users || 0),
+          sub: s.top_calculator ? `Top: ${s.top_calculator}` : 'Unique people who calculated',
+          badge: 'INPUTS',
+          cls: 'border-amber-300 dark:border-amber-800 bg-amber-50/70 dark:bg-amber-950/30 text-amber-800 dark:text-amber-300'
+        },
+        {
+          key: 'total_calc_results',
+          cat: 'results',
+          label: 'Total Results Computed',
+          value: Number(s.total_calc_runs || 0),
+          sub: Number(s.unique_calc_users || 0) > 0
+            ? `Avg ${(Number(s.total_calc_runs || 0) / Number(s.unique_calc_users || 1)).toFixed(1)} per person`
+            : 'All calculator runs',
+          badge: 'RESULTS',
+          cls: 'border-orange-200 dark:border-orange-800 bg-white dark:bg-slate-900 text-orange-700 dark:text-orange-300'
+        },
+        {
+          key: 'users_with_passwords',
+          cat: 'passwords',
+          label: 'Users Saved Password',
+          value: Number(s.users_with_passwords || 0),
+          sub: 'Unique vault users',
+          badge: 'VAULT',
+          cls: 'border-violet-200 dark:border-violet-800 bg-violet-50/60 dark:bg-violet-950/30 text-violet-700 dark:text-violet-300'
+        },
+        {
+          key: 'total_passwords',
+          cat: 'passwords',
+          label: 'All Saved Passwords',
+          value: Number(s.total_passwords || 0),
+          sub: 'Total encrypted entries',
+          badge: 'PASSWORDS',
+          cls: 'border-purple-200 dark:border-purple-800 bg-purple-50/60 dark:bg-purple-950/30 text-purple-700 dark:text-purple-300'
+        },
+        {
+          key: 'app_downloads',
+          cat: 'app',
+          label: 'App Downloads',
+          value: Number(s.app_downloads || 0),
+          sub: `PWA: ${Number(s.app_pwa_count || 0)} • APK: ${Number(s.app_apk_count || 0)} • File: ${Number(s.app_offline_count || 0)}`,
+          badge: 'APP',
+          cls: 'border-teal-200 dark:border-teal-800 bg-teal-50/60 dark:bg-teal-950/30 text-teal-700 dark:text-teal-300'
+        },
+        {
+          key: 'report_exports',
+          cat: 'app',
+          label: 'Report Exports',
+          value: Number(s.report_downloads || 0),
+          sub: 'PDF, Excel, PNG & Slips',
+          badge: 'EXPORTS',
+          cls: 'border-blue-200 dark:border-blue-800 bg-white dark:bg-slate-900 text-blue-700 dark:text-blue-300'
+        },
+        {
+          key: 'saved_slips',
+          cat: 'app',
+          label: 'Saved Slips',
+          value: Number(s.total_slips || 0),
+          sub: `${Number(s.users_with_slips || 0)} unique users`,
+          badge: 'SLIPS',
+          cls: 'border-amber-200 dark:border-amber-800 bg-white dark:bg-slate-900 text-amber-700 dark:text-amber-300'
+        },
+        {
+          key: 'notifications',
+          cat: 'engagement',
+          label: 'Notifications Read',
+          value: Number(s.notification_reads || 0),
+          sub: `${Number(s.notifications_sent || 0)} sent (Lifetime stored)`,
+          badge: 'PUSH',
+          cls: 'border-fuchsia-200 dark:border-fuchsia-800 bg-white dark:bg-slate-900 text-fuchsia-700 dark:text-fuchsia-300'
+        },
+        {
+          key: 'donations',
+          cat: 'engagement',
+          label: 'Donations',
+          value: Number(s.donations_count || 0),
+          sub: `Total: $${Number(s.donations_amount || 0).toFixed(2)}`,
+          badge: 'SUPPORT',
+          cls: 'border-emerald-200 dark:border-emerald-800 bg-white dark:bg-slate-900 text-emerald-700 dark:text-emerald-300'
+        },
+        {
+          key: 'feedback_contacts',
+          cat: 'engagement',
+          label: 'Feedback & Contacts',
+          value: Number(s.feedback_count || 0) + Number(s.contacts_count || 0),
+          sub: `Bugs/Tips: ${Number(s.feedback_count || 0)} • Contact: ${Number(s.contacts_count || 0)}`,
+          badge: 'INBOX',
+          cls: 'border-rose-200 dark:border-rose-800 bg-white dark:bg-slate-900 text-rose-700 dark:text-rose-300'
+        }
+      ];
+
+      const filtered = cards.filter(c => {
+        if (activeAdminStatsCat !== 'all' && c.cat !== activeAdminStatsCat) return false;
+        if (searchQ) {
+          const hay = (c.label + ' ' + c.sub + ' ' + c.badge + ' ' + c.key).toLowerCase();
+          if (!hay.includes(searchQ)) return false;
+        }
+        return true;
+      });
+
+      if (metaEl) {
+        const rangeLbl = cachedAdminStatsData.rangeLabel || 'All Time';
+        const srcLbl = cachedAdminStatsData.sourceFilter || 'All Platforms';
+        const updatedAt = cachedAdminStatsData.generatedAt ? new Date(cachedAdminStatsData.generatedAt).toLocaleTimeString() : '';
+        metaEl.textContent = `Showing ${filtered.length}/${cards.length} metrics • ${rangeLbl} • ${srcLbl} • Storage: ${cachedAdminStatsData.storage || 'D1'}${updatedAt ? ' • Updated ' + updatedAt : ''}`;
+      }
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '<div class="col-span-full text-center py-4 text-xs text-slate-500">No metrics match your current filter.</div>';
+        return;
+      }
+
+      grid.innerHTML = filtered.map(c => `
+        <div class="p-2.5 rounded-xl border ${c.cls} shadow-xs flex flex-col justify-between gap-1">
+          <div class="flex items-center justify-between gap-1">
+            <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 leading-tight">${escapeNotifHtml(c.label)}</span>
+            <span class="text-[8px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10 shrink-0">${escapeNotifHtml(c.badge)}</span>
+          </div>
+          <div class="text-xl sm:text-2xl font-extrabold font-mono-num tracking-tight">${c.value.toLocaleString()}</div>
+          <div class="text-[10px] text-slate-500 dark:text-slate-400 leading-tight break-words">${escapeNotifHtml(c.sub)}</div>
+        </div>
+      `).join('');
+    }
+
+    async function loadAdminOverviewStats() {
+      const grid = document.getElementById('adminStatsCardsGrid');
+      if (!grid) return;
+      grid.innerHTML = '<div class="col-span-full text-center py-4 text-xs text-slate-500">Loading live counts from Cloudflare D1...</div>';
+      try {
+        const range = document.getElementById('adminStatsRangeSelect')?.value || 'all';
+        const source = document.getElementById('adminStatsSourceSelect')?.value || 'all';
+        const fromDate = document.getElementById('adminStatsFromDate')?.value || '';
+        const toDate = document.getElementById('adminStatsToDate')?.value || '';
+        const params = new URLSearchParams({ range, source });
+        if (range === 'custom') {
+          if (fromDate) params.set('from', fromDate);
+          if (toDate) params.set('to', toDate);
+        }
+        const base = (typeof API_BASE !== 'undefined' && API_BASE) ? API_BASE : '';
+        const res = await fetch(`${base}/api/admin/stats?${params.toString()}`, {
+          method: 'GET',
+          headers: { 'x-admin-key': sessionAdminKey }
+        });
+        const data = await res.json();
+        if (!res.ok || !data || !data.ok) {
+          grid.innerHTML = `<div class="col-span-full text-center py-4 text-xs text-rose-500">${escapeNotifHtml((data && data.error) || 'Could not load stats.')}</div>`;
+          return;
+        }
+        cachedAdminStatsData = data;
+        renderAdminOverviewStats();
+      } catch (err) {
+        grid.innerHTML = '<div class="col-span-full text-center py-4 text-xs text-slate-500">Local preview mode (deploy worker.js to Cloudflare to view live D1 counts).</div>';
+      }
+    }
+
+    const refreshAdminStatsBtn = document.getElementById('refreshAdminStatsBtn');
+    if (refreshAdminStatsBtn) refreshAdminStatsBtn.addEventListener('click', loadAdminOverviewStats);
+
+    const adminStatsRangeSelect = document.getElementById('adminStatsRangeSelect');
+    if (adminStatsRangeSelect) {
+      adminStatsRangeSelect.addEventListener('change', () => {
+        const customRow = document.getElementById('adminStatsCustomDates');
+        if (adminStatsRangeSelect.value === 'custom') {
+          if (customRow) customRow.classList.remove('hidden');
+        } else {
+          if (customRow) customRow.classList.add('hidden');
+          loadAdminOverviewStats();
+        }
+      });
+    }
+    const applyAdminStatsDatesBtn = document.getElementById('applyAdminStatsDatesBtn');
+    if (applyAdminStatsDatesBtn) applyAdminStatsDatesBtn.addEventListener('click', loadAdminOverviewStats);
+
+    const adminStatsSourceSelect = document.getElementById('adminStatsSourceSelect');
+    if (adminStatsSourceSelect) adminStatsSourceSelect.addEventListener('change', loadAdminOverviewStats);
+
+    const adminStatsSearchInput = document.getElementById('adminStatsSearchInput');
+    if (adminStatsSearchInput) adminStatsSearchInput.addEventListener('input', renderAdminOverviewStats);
+
+    const adminStatsCatBar = document.getElementById('adminStatsCatBar');
+    if (adminStatsCatBar) {
+      adminStatsCatBar.addEventListener('click', e => {
+        const btn = e.target.closest('[data-stats-cat]');
+        if (!btn) return;
+        activeAdminStatsCat = btn.getAttribute('data-stats-cat') || 'all';
+        adminStatsCatBar.querySelectorAll('[data-stats-cat]').forEach(b => {
+          const isAct = (b.getAttribute('data-stats-cat') === activeAdminStatsCat);
+          b.className = isAct
+            ? 'admin-stats-cat-btn px-2.5 py-1 rounded-lg text-[10px] font-bold bg-indigo-600 text-white transition'
+            : 'admin-stats-cat-btn px-2.5 py-1 rounded-lg text-[10px] font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition';
+        });
+        renderAdminOverviewStats();
+      });
+    }
+
     async function loadAdminNotifications() {
       const box = document.getElementById('adminNotifsListContainer');
       if (!box) return;
@@ -11132,14 +11742,17 @@
           box.textContent = `No push notifications sent yet (Storage: ${data.storage || 'D1'}).`;
           return;
         }
-        box.innerHTML = `<div class="text-[10px] font-bold text-fuchsia-700 dark:text-fuchsia-300 mb-1">Total: ${list.length} notification(s) • Storage: ${escapeNotifHtml(data.storage || 'D1')}</div>` +
+        const totalReads = list.reduce((acc, item) => acc + Number(item.read_count || 0), 0);
+        box.innerHTML = `<div class="text-[10px] font-bold text-fuchsia-700 dark:text-fuchsia-300 mb-1">Total: ${list.length} notification(s) • Total Reads: ${totalReads} • Storage: ${escapeNotifHtml(data.storage || 'D1')}</div>` +
           list.map(n => {
             const isActive = Number(n.active) === 1;
+            const rc = Number(n.read_count || 0);
             return `
               <div class="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 space-y-1">
                 <div class="flex flex-wrap items-center justify-between gap-1.5">
                   <div class="flex items-center gap-1.5 min-w-0">
                     <span class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase ${isActive ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300' : 'bg-slate-200 dark:bg-slate-800 text-slate-500'}">${isActive ? 'Active' : 'Paused'}</span>
+                    <span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 shrink-0">👁️ Read: ${rc} ${rc === 1 ? 'user' : 'users'}</span>
                     <span class="font-bold text-slate-800 dark:text-white truncate">${escapeNotifHtml(n.title)}</span>
                   </div>
                   <div class="flex items-center gap-1 shrink-0">
@@ -11163,20 +11776,90 @@
     const refreshAdminNotifsBtn = document.getElementById('refreshAdminNotifsBtn');
     if (refreshAdminNotifsBtn) refreshAdminNotifsBtn.addEventListener('click', loadAdminNotifications);
 
+    let pendingAdminNotifPayload = null;
+    const adminNotifFullPreviewModal = document.getElementById('adminNotifFullPreviewModal');
+    const adminNotifFullPreviewCard = document.getElementById('adminNotifFullPreviewCard');
+    const adminNotifPreviewError = document.getElementById('adminNotifPreviewError');
+    const closeAdminNotifPreviewBtn = document.getElementById('closeAdminNotifPreviewBtn');
+    const cancelAdminNotifPreviewBtn = document.getElementById('cancelAdminNotifPreviewBtn');
+    const confirmSendAdminNotifBtn = document.getElementById('confirmSendAdminNotifBtn');
+
+    function closeAdminNotifFullPreview() {
+      if (adminNotifFullPreviewModal) adminNotifFullPreviewModal.classList.add('hidden');
+      if (adminNotifPreviewError) adminNotifPreviewError.classList.add('hidden');
+    }
+
+    function openAdminNotifFullPreview(payload, allowSend) {
+      if (!adminNotifFullPreviewModal || !adminNotifFullPreviewCard) return;
+      const styleBadge = {
+        info: 'bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300',
+        update: 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300',
+        alert: 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300',
+        promo: 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300'
+      };
+      const tagCls = styleBadge[payload.style] || styleBadge.info;
+      const rawLink = String(payload.linkUrl || '').trim();
+      const hasValidLink = rawLink && /^(\/|https?:\/\/)/i.test(rawLink);
+      const nowLabel = new Date().toLocaleString();
+      const expDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+
+      adminNotifFullPreviewCard.innerHTML = `
+        <div class="flex items-start justify-between gap-2">
+          <h3 class="text-sm font-extrabold text-slate-900 dark:text-white break-words leading-snug">${escapeNotifHtml(payload.title)}</h3>
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase shrink-0 ${tagCls}">${escapeNotifHtml(payload.style || 'info')}</span>
+        </div>
+        <div class="text-[10px] text-slate-400 flex flex-wrap items-center gap-2 border-b border-slate-200 dark:border-slate-700/70 pb-2">
+          <span>Sent: ${escapeNotifHtml(nowLabel)}</span>
+          <span>• Auto-deletes: ${escapeNotifHtml(expDate)}</span>
+        </div>
+        <div class="text-xs sm:text-sm text-slate-700 dark:text-slate-200 whitespace-pre-wrap break-words leading-relaxed">${escapeNotifHtml(payload.message)}</div>
+        ${hasValidLink ? `
+          <div class="pt-2">
+            <span class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-indigo-600 text-white shadow-sm">Open Link &rarr;</span>
+            <div class="text-[10px] font-mono text-slate-400 mt-1 break-all">${escapeNotifHtml(rawLink)}</div>
+          </div>
+        ` : (rawLink ? `<div class="pt-1 text-[11px] font-semibold text-indigo-600 dark:text-indigo-400 break-words">Ref: ${escapeNotifHtml(rawLink)}</div>` : '')}
+      `;
+      if (adminNotifPreviewError) adminNotifPreviewError.classList.add('hidden');
+      if (confirmSendAdminNotifBtn) {
+        if (allowSend) {
+          confirmSendAdminNotifBtn.classList.remove('hidden');
+        } else {
+          confirmSendAdminNotifBtn.classList.add('hidden');
+        }
+      }
+      adminNotifFullPreviewModal.classList.remove('hidden');
+    }
+
+    if (closeAdminNotifPreviewBtn) closeAdminNotifPreviewBtn.addEventListener('click', closeAdminNotifFullPreview);
+    if (cancelAdminNotifPreviewBtn) cancelAdminNotifPreviewBtn.addEventListener('click', closeAdminNotifFullPreview);
+    if (adminNotifFullPreviewModal) {
+      adminNotifFullPreviewModal.addEventListener('click', e => {
+        if (e.target === adminNotifFullPreviewModal) closeAdminNotifFullPreview();
+      });
+    }
+
     const previewAdminNotifBtn = document.getElementById('previewAdminNotifBtn');
     if (previewAdminNotifBtn) {
       previewAdminNotifBtn.addEventListener('click', () => {
-        const title = (document.getElementById('adminNotifTitleInput')?.value || '').trim() || 'Sample Push Notification';
-        const message = (document.getElementById('adminNotifMsgInput')?.value || '').trim() || 'This is how your push notification will appear to users.';
+        const title = (document.getElementById('adminNotifTitleInput')?.value || '').trim();
+        const message = (document.getElementById('adminNotifMsgInput')?.value || '').trim();
         const style = document.getElementById('adminNotifStyleSelect')?.value || 'info';
-        const link_url = (document.getElementById('adminNotifLinkInput')?.value || '').trim();
-        showLivePushNotificationCard({ title, message, style, link_url }, true);
+        const linkUrl = (document.getElementById('adminNotifLinkInput')?.value || '').trim();
+        const hasRealContent = Boolean(title && message);
+        pendingAdminNotifPayload = hasRealContent ? { title, message, linkUrl, style } : null;
+        openAdminNotifFullPreview({
+          title: title || 'Sample Push Notification',
+          message: message || 'This is how your full push notification will appear when a user taps to read it.',
+          style,
+          linkUrl
+        }, hasRealContent);
       });
     }
 
     const sendAdminNotifBtn = document.getElementById('sendAdminNotifBtn');
     if (sendAdminNotifBtn) {
-      sendAdminNotifBtn.addEventListener('click', async () => {
+      sendAdminNotifBtn.addEventListener('click', () => {
         const titleInp = document.getElementById('adminNotifTitleInput');
         const msgInp = document.getElementById('adminNotifMsgInput');
         const linkInp = document.getElementById('adminNotifLinkInput');
@@ -11196,10 +11879,24 @@
           }
           return;
         }
+        if (statusEl) statusEl.classList.add('hidden');
+        pendingAdminNotifPayload = { title, message, linkUrl, style };
+        openAdminNotifFullPreview(pendingAdminNotifPayload, true);
+      });
+    }
 
-        const oldLabel = sendAdminNotifBtn.textContent;
-        sendAdminNotifBtn.disabled = true;
-        sendAdminNotifBtn.textContent = 'Sending...';
+    if (confirmSendAdminNotifBtn) {
+      confirmSendAdminNotifBtn.addEventListener('click', async () => {
+        if (!pendingAdminNotifPayload) return;
+        const { title, message, linkUrl, style } = pendingAdminNotifPayload;
+        const titleInp = document.getElementById('adminNotifTitleInput');
+        const msgInp = document.getElementById('adminNotifMsgInput');
+        const linkInp = document.getElementById('adminNotifLinkInput');
+        const statusEl = document.getElementById('adminNotifStatusMsg');
+
+        const oldLabel = confirmSendAdminNotifBtn.textContent;
+        confirmSendAdminNotifBtn.disabled = true;
+        confirmSendAdminNotifBtn.textContent = 'Sending...';
         try {
           const base = (typeof API_BASE !== 'undefined' && API_BASE) ? API_BASE : '';
           const res = await fetch(`${base}/api/admin/notifications`, {
@@ -11211,6 +11908,8 @@
           if (!res.ok || !data.ok) {
             throw new Error(data.error || 'Failed to send notification.');
           }
+          pendingAdminNotifPayload = null;
+          closeAdminNotifFullPreview();
           if (titleInp) titleInp.value = '';
           if (msgInp) msgInp.value = '';
           if (linkInp) linkInp.value = '';
@@ -11222,14 +11921,13 @@
           showToast('Push notification sent to all users!');
           loadAdminNotifications();
         } catch (err) {
-          if (statusEl) {
-            statusEl.className = 'px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800';
-            statusEl.textContent = err.message || 'Could not send notification.';
-            statusEl.classList.remove('hidden');
+          if (adminNotifPreviewError) {
+            adminNotifPreviewError.textContent = err.message || 'Could not send notification.';
+            adminNotifPreviewError.classList.remove('hidden');
           }
         } finally {
-          sendAdminNotifBtn.disabled = false;
-          sendAdminNotifBtn.textContent = oldLabel;
+          confirmSendAdminNotifBtn.disabled = false;
+          confirmSendAdminNotifBtn.textContent = oldLabel;
         }
       });
     }
