@@ -9408,6 +9408,7 @@
                 if (r.ok) {
                   showToast(`Donation marked as ${status}`);
                   document.getElementById('refreshAdminDonationsBtn').click();
+                  if (typeof loadAdminOverviewStats === 'function') loadAdminOverviewStats();
                 }
               } catch (_) {}
               btn.disabled = false;
@@ -10984,7 +10985,7 @@
     // Automatic Update Sync:
     // 1) Installed PWA auto-updates silently via /sw.js network-first + reload on controllerchange
     // 2) Downloaded CalcVerse_Pro_Offline.html checks /api/config when online and shows a 1-tap Update banner
-    const LOCAL_APP_VERSION = '2026.11.21-r28';
+    const LOCAL_APP_VERSION = '2026.11.21-r29';
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
       navigator.serviceWorker.getRegistration().then(reg => { if (reg) reg.update().catch(() => {}); }).catch(() => {});
     }
@@ -11601,9 +11602,9 @@
         {
           key: 'donations',
           cat: 'engagement',
-          label: 'Donations',
+          label: 'Verified Donations',
           value: Number(s.donations_count || 0),
-          sub: `Total: $${Number(s.donations_amount || 0).toFixed(2)}`,
+          sub: `Verified Total: $${Number(s.donations_amount || 0).toFixed(2)}`,
           badge: 'SUPPORT',
           cls: 'border-emerald-200 dark:border-emerald-800 bg-white dark:bg-slate-900 text-emerald-700 dark:text-emerald-300'
         },
